@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './assets/styles/App.css';
+import { Outlet } from 'react-router-dom';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         >
           Learn React
         </a>
+        <Outlet />
       </header>
     </div>
   );
