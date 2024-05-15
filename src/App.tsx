@@ -1,26 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import './assets/styles/App.css';
-import { Outlet } from 'react-router-dom';
+import "./assets/styles/App.css";
+import { Outlet } from "react-router-dom";
+import DialogAuth from "../src/components/auth/auth";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Reactt
-        </a>
-        <Outlet />
+    <div className="App px-20">
+      <header className="flex bg-red-300 outline-2 h-16 justify-end fixed top-0 left-0 w-full px-10 py-2">
+        <DialogAuth />
       </header>
+      <Outlet />
     </div>
   );
 }
