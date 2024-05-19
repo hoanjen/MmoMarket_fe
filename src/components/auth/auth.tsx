@@ -6,6 +6,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import { TransitionProps } from "@mui/material/transitions";
 import MicrosoftIcon from "@mui/icons-material/Microsoft";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -193,23 +195,27 @@ function FormLogin() {
 
 function FormRegister() {
   const [values, setValues] = useState<{
+    username: string;
     email: string; 
-    password: string; 
-    confirmPassword: string
+    password: string;
+    term: boolean; 
   }>({
+    username:"",
     email: "",
     password: "",
-    confirmPassword: ""
+    term : false
   })
 
   const [invalidField, setInvalidField] = useState<{
+    username: boolean
     email: boolean; 
-    password: boolean; 
-    confirmPassword: boolean
+    password: boolean;
+    term: boolean; 
   }>({
+    username: false,
     email: false,
     password: false,
-    confirmPassword: false
+    term: false,
   })
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -222,26 +228,52 @@ function FormRegister() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (!values.email || !values.password) {
+    if (!values.email || !values.password || !values.username || !values.term) {
       setInvalidField({
         password: values.password ? invalidField.password : true,
         email: values.email ? invalidField.email : true,
-        confirmPassword: values.confirmPassword ? invalidField.confirmPassword: false
+        username: values.username ? invalidField.username: true,
+        term: values.term ? invalidField.term : true
       });
     }
 
   };
   return(
-    <div className="flex flex-col text-center">
-      <div className="font-bold text-black py-2">Đăng ký tài khoản mới</div>
+    <div className="flex flex-col justify-center space-y-4">
+      <div className="font-bold text-black text-center py-2">Đăng ký tài khoản mới</div>
       <OauthButton className="mt-4"></OauthButton>
-      <div className=" py-4">HOẶC</div>
+      <div className="text-center">HOẶC</div>
       <Box
         className="flex flex-col space-y-4"
         component="form"
         noValidate
         onSubmit={handleSubmit}
       >
+        <FormControl variant="outlined" size="small">
+          <InputLabel htmlFor="outlined-input-username">Username</InputLabel>
+          <OutlinedInput 
+          id="outlined-input-username"
+          required
+          label="Username"
+          error={invalidField.username}
+          value={values.username}
+          onChange={e =>{
+            setValues({...values, username: e.target.value})
+            if(values.username.length < 2){
+              setInvalidField({...invalidField, username: true})
+            }
+            else{
+              setInvalidField({...invalidField, username: false})
+            }
+          }}
+          name="username"
+          />
+          <FormHelperText id="outlined-helper-username">
+            <p className="text-red-500">
+              {invalidField.username ? "Username invalid" :""}
+            </p>
+          </FormHelperText>
+        </FormControl>
         <FormControl variant="outlined" size="small">
           <InputLabel htmlFor="outlined-input-email">Email</InputLabel>
           <OutlinedInput 
@@ -292,38 +324,44 @@ function FormRegister() {
             }
             label="Password"
           />
+          <FormHelperText id="outlined-helper-password">
+              <p className="text-red-500">
+                {invalidField.password ? "Password invalid" :""}
+              </p>
+          </FormHelperText>
         </FormControl>
-        <FormControl variant="outlined" size="small">
-          <InputLabel htmlFor="outlined-adornment-ConfirmPassword">Confirm password</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-ConfirmPassword"
-            type={showPassword ? 'text' : 'password'}
-            value={values.confirmPassword}
-            error={invalidField.confirmPassword}
-            onChange={e =>{
-              setValues({...values, confirmPassword: e.target.value})
-              if(values.password === e.target.value){
-                setInvalidField({...invalidField, confirmPassword: false})
-              }
-              else{
-                setInvalidField({...invalidField, confirmPassword: true})
-              }
-            }}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="ConfirmPassword"
+        <FormControl
+          required
+          component="fieldset"
+          sx={{ maxWidth:412, m: 3 , marginX: 0}}
+          variant="standard"
+        >
+          <FormControlLabel 
+            required ={false} 
+            control={
+              <Checkbox
+                checked = {values.term}
+                onClick={() =>{
+                  setValues({...values, term: !values.term})
+                  setInvalidField({...invalidField, term: values.term ? true: false})
+                }}
+                sx={{
+                  paddingBottom: 4
+                }}
+              />} 
+            label="Tôi đồng ý chia sẻ thông tin và đồng ý với Chính sách bảo mật dữ liệu cá nhân" 
           />
+          <FormHelperText 
+          sx={{
+                paddingLeft: 4
+              }}
+          >
+            <p className="text-red-500">
+              {invalidField.term? "You have not agreed" : ""}
+            </p>
+          </FormHelperText>
         </FormControl>
+
         <Button
           variant="contained"
           color="primary"
