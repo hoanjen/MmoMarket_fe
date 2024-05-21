@@ -1,12 +1,13 @@
 import "./assets/styles/App.css";
 import { Outlet } from "react-router-dom";
 import DialogAuth from "../src/components/auth/auth";
+import PageHeader from "../src/components/auth/PageHeader"
 
 function App() {
   return (
     <div className="App px-20">
-      <header className="flex bg-red-300 outline-2 h-16 justify-end fixed top-0 left-0 w-full px-10 py-2">
-        <DialogAuth />
+      <header className="flex flex-row bg-white items-center drop-shadow outline-2 h-16 fixed top-0 left-0 w-full px-10">
+        <PageHeader></PageHeader>
       </header>
       <Outlet />
     </div>
