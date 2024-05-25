@@ -1,7 +1,4 @@
 import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Popover from '@mui/material/Popover';
 import List from '@mui/material/List';
@@ -20,7 +17,6 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import { Link } from 'react-router-dom';
 
 function TabLists() {
   const [value, setValue] = React.useState(0);

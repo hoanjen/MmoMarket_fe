@@ -6,8 +6,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import { TransitionProps } from "@mui/material/transitions";
 import MicrosoftIcon from "@mui/icons-material/Microsoft";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -26,6 +26,8 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { isEmail } from "class-validator";
+import { AuthApi } from "../../api/auth/auth";
+import Cookies from "js-cookie";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -103,8 +105,20 @@ function FormLogin() {
         password: values.password ? invalidField.password : true,
         email: values.email ? invalidField.email : true,
       });
+    } else {
+      const data = await AuthApi.login({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (data && data.statusCode === 400) {
+        alert(data.message.join(""));
+      }
+      if (data && data.statusCode === 200) {
+        Cookies.set("access_token", data.data.access_token);
+        alert("Login success");
+      }
     }
-    console.log("SUBMITED");
   };
 
   return (
@@ -196,33 +210,35 @@ function FormLogin() {
 function FormRegister() {
   const [values, setValues] = useState<{
     username: string;
-    email: string; 
+    email: string;
     password: string;
-    term: boolean; 
+    term: boolean;
   }>({
-    username:"",
+    username: "",
     email: "",
     password: "",
-    term : false
-  })
+    term: false,
+  });
 
   const [invalidField, setInvalidField] = useState<{
-    username: boolean
-    email: boolean; 
+    username: boolean;
+    email: boolean;
     password: boolean;
-    term: boolean; 
+    term: boolean;
   }>({
     username: false,
     email: false,
     password: false,
     term: false,
-  })
+  });
 
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
   };
 
@@ -232,15 +248,16 @@ function FormRegister() {
       setInvalidField({
         password: values.password ? invalidField.password : true,
         email: values.email ? invalidField.email : true,
-        username: values.username ? invalidField.username: true,
-        term: values.term ? invalidField.term : true
+        username: values.username ? invalidField.username : true,
+        term: values.term ? invalidField.term : true,
       });
     }
-
   };
-  return(
+  return (
     <div className="flex flex-col justify-center space-y-4">
-      <div className="font-bold text-black text-center py-2">Đăng ký tài khoản mới</div>
+      <div className="font-bold text-black text-center py-2">
+        Đăng ký tài khoản mới
+      </div>
       <OauthButton className="mt-4"></OauthButton>
       <div className="text-center">HOẶC</div>
       <Box
@@ -251,63 +268,66 @@ function FormRegister() {
       >
         <FormControl variant="outlined" size="small">
           <InputLabel htmlFor="outlined-input-username">Username</InputLabel>
-          <OutlinedInput 
-          id="outlined-input-username"
-          required
-          label="Username"
-          error={invalidField.username}
-          value={values.username}
-          onChange={e =>{
-            setValues({...values, username: e.target.value})
-            if(values.username.length < 2){
-              setInvalidField({...invalidField, username: true})
-            }
-            else{
-              setInvalidField({...invalidField, username: false})
-            }
-          }}
-          name="username"
+          <OutlinedInput
+            id="outlined-input-username"
+            required
+            label="Username"
+            error={invalidField.username}
+            value={values.username}
+            onChange={(e) => {
+              setValues({ ...values, username: e.target.value });
+              if (values.username.length < 2) {
+                setInvalidField({ ...invalidField, username: true });
+              } else {
+                setInvalidField({ ...invalidField, username: false });
+              }
+            }}
+            name="username"
           />
           <FormHelperText id="outlined-helper-username">
             <p className="text-red-500">
-              {invalidField.username ? "Username invalid" :""}
+              {invalidField.username ? "Username invalid" : ""}
             </p>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
           <InputLabel htmlFor="outlined-input-email">Email</InputLabel>
-          <OutlinedInput 
-          id="outlined-input-email"
-          required
-          label="Email"
-          error={invalidField.email}
-          value={values.email}
-          onChange={e =>{
-            setValues({...values, email: e.target.value})
-            setInvalidField({...invalidField, email: !isEmail(values.email)})
-          }}
-          name="email"
+          <OutlinedInput
+            id="outlined-input-email"
+            required
+            label="Email"
+            error={invalidField.email}
+            value={values.email}
+            onChange={(e) => {
+              setValues({ ...values, email: e.target.value });
+              setInvalidField({
+                ...invalidField,
+                email: !isEmail(values.email),
+              });
+            }}
+            name="email"
           />
           <FormHelperText id="outlined-helper-email">
             <p className="text-red-500">
-              {invalidField.email ? "Email invalid" :""}
+              {invalidField.email ? "Email invalid" : ""}
             </p>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password">
+            Password
+          </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             value={values.password}
             error={invalidField.password}
-            onChange={e => {
-              setValues({...values, password: e.target.value})
-              if(values.password.length < 2){
-                setInvalidField({...invalidField, password: true})
-              }
-              else{
-                setInvalidField({...invalidField, password: false})
+            onChange={(e) => {
+              setValues({ ...values, password: e.target.value });
+              if (values.password.length < 2) {
+                setInvalidField({ ...invalidField, password: true });
+              } else {
+                setInvalidField({ ...invalidField, password: false });
               }
             }}
             endAdornment={
@@ -325,39 +345,43 @@ function FormRegister() {
             label="Password"
           />
           <FormHelperText id="outlined-helper-password">
-              <p className="text-red-500">
-                {invalidField.password ? "Password invalid" :""}
-              </p>
+            <p className="text-red-500">
+              {invalidField.password ? "Password invalid" : ""}
+            </p>
           </FormHelperText>
         </FormControl>
         <FormControl
           required
           component="fieldset"
-          sx={{ maxWidth:412, m: 3 , marginX: 0}}
+          sx={{ maxWidth: 412, m: 3, marginX: 0 }}
           variant="standard"
         >
-          <FormControlLabel 
-            required ={false} 
+          <FormControlLabel
+            required={false}
             control={
               <Checkbox
-                checked = {values.term}
-                onClick={() =>{
-                  setValues({...values, term: !values.term})
-                  setInvalidField({...invalidField, term: values.term ? true: false})
+                checked={values.term}
+                onClick={() => {
+                  setValues({ ...values, term: !values.term });
+                  setInvalidField({
+                    ...invalidField,
+                    term: values.term ? true : false,
+                  });
                 }}
                 sx={{
-                  paddingBottom: 4
+                  paddingBottom: 4,
                 }}
-              />} 
-            label="Tôi đồng ý chia sẻ thông tin và đồng ý với Chính sách bảo mật dữ liệu cá nhân" 
+              />
+            }
+            label="Tôi đồng ý chia sẻ thông tin và đồng ý với Chính sách bảo mật dữ liệu cá nhân"
           />
-          <FormHelperText 
-          sx={{
-                paddingLeft: 4
-              }}
+          <FormHelperText
+            sx={{
+              paddingLeft: 4,
+            }}
           >
             <p className="text-red-500">
-              {invalidField.term? "You have not agreed" : ""}
+              {invalidField.term ? "You have not agreed" : ""}
             </p>
           </FormHelperText>
         </FormControl>
@@ -368,10 +392,11 @@ function FormRegister() {
           type="submit"
           style={{ textTransform: "none", fontWeight: 600 }}
         >
-            Đăng ký</Button>
+          Đăng ký
+        </Button>
       </Box>
     </div>
-  )
+  );
 }
 
 export default function DialogAuth() {
@@ -443,7 +468,11 @@ export default function DialogAuth() {
             className="p-5"
           >
             <div>
-              {value === 1 ? <FormLogin></FormLogin> : <FormRegister></FormRegister>}
+              {value === 1 ? (
+                <FormLogin></FormLogin>
+              ) : (
+                <FormRegister></FormRegister>
+              )}
             </div>
           </DialogContentText>
         </DialogContent>

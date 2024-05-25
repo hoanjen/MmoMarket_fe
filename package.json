@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.2.17",
     "axios": "^1.7.1",
     "class-validator": "^0.14.1",
+    "dotenv": "^16.4.5",
     "js-cookie": "^3.0.5",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
