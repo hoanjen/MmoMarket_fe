@@ -1,14 +1,6 @@
 import axios from "../index";
+import { ResponseSignIn, ResponseSignUp } from "./types"
 
-export type ResponseSignIn = {
-  status: string;
-  statusCode: number;
-  data: {
-    access_token: string;
-    refresh_token: string;
-  };
-  message: string[];
-};
 
 export class AuthApi {
   public static async login({
@@ -25,4 +17,27 @@ export class AuthApi {
       })
       .then((_) => _.data);
   }
+  
+  public static async signUp({
+    username,
+    email,
+    password,
+    phone_number
+  }: {
+    username: string;
+    email: string;
+    password: string;
+    phone_number: string;
+  }): Promise<ResponseSignUp>{
+    
+    return axios.post("/auth/sign-up", {
+      username,
+      email,
+      password,
+      phone_number
+    })
+    .then((_) => _.data)
+  }
+
 }
+
