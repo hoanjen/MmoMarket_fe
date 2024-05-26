@@ -1,5 +1,4 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
-
 import Cookies from "js-cookie";
 
 const instance = axios.create({

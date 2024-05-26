@@ -28,6 +28,7 @@ import { useState } from "react";
 import { isEmail } from "class-validator";
 import { AuthApi } from "../../api/auth/auth";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -251,6 +252,21 @@ function FormRegister() {
         username: values.username ? invalidField.username : true,
         term: values.term ? invalidField.term : true,
       });
+    }
+    else{
+      const data = await AuthApi.signUp({
+        username: values.username,
+        email: values.email,
+        password: values.password,
+        phone_number: "0986666666"
+      })
+
+      if(data && data.statusCode === 200){
+        alert("sign up success")
+      }
+      if(data && data.statusCode === 400){
+        alert("sign up error")
+      }
     }
   };
   return (
