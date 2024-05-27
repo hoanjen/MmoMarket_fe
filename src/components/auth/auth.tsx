@@ -1,3 +1,5 @@
+import { Bounce, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -28,7 +30,6 @@ import { useState } from "react";
 import { isEmail } from "class-validator";
 import { AuthApi } from "../../api/auth/auth";
 import Cookies from "js-cookie";
-import axios from "axios";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -77,7 +78,13 @@ function OauthButton({ className }: { className?: string }) {
   );
 }
 
-function FormLogin() {
+function FormLogin({
+  setIsLogin,
+  handleClose,
+}: {
+  setIsLogin: React.Dispatch<boolean>;
+  handleClose: Function;
+}) {
   const [values, setValues] = useState<{ email: string; password: string }>({
     email: "",
     password: "",
@@ -113,11 +120,33 @@ function FormLogin() {
       });
 
       if (data && data.statusCode === 400) {
-        alert(data.message.join(""));
+        toast.error("email or password invalid!", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
       }
       if (data && data.statusCode === 200) {
         Cookies.set("access_token", data.data.access_token);
-        alert("Login success");
+        toast.success("Login successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        setIsLogin(true);
+        handleClose();
       }
     }
   };
@@ -252,20 +281,19 @@ function FormRegister() {
         username: values.username ? invalidField.username : true,
         term: values.term ? invalidField.term : true,
       });
-    }
-    else{
+    } else {
       const data = await AuthApi.signUp({
         username: values.username,
         email: values.email,
         password: values.password,
-        phone_number: "0986666666"
-      })
+        phone_number: "0986666666",
+      });
 
-      if(data && data.statusCode === 200){
-        alert("sign up success")
+      if (data && data.statusCode === 200) {
+        alert("sign up success");
       }
-      if(data && data.statusCode === 400){
-        alert("sign up error")
+      if (data && data.statusCode === 400) {
+        alert("sign up error");
       }
     }
   };
@@ -415,7 +443,11 @@ function FormRegister() {
   );
 }
 
-export default function DialogAuth() {
+export default function DialogAuth({
+  setIsLogin,
+}: {
+  setIsLogin: React.Dispatch<boolean>;
+}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -434,9 +466,27 @@ export default function DialogAuth() {
 
   return (
     <React.Fragment>
-      <Button variant="contained" onClick={handleClickOpen}>
-        Login
-      </Button>
+      <div className="flex gap-4">
+        <Button
+          variant="outlined"
+          onClick={() => {
+            handleClickOpen();
+            setValue(1);
+          }}
+        >
+          Đăng nhập
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => {
+            handleClickOpen();
+            setValue(2);
+          }}
+        >
+          Đăng ký
+        </Button>
+      </div>
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -485,7 +535,10 @@ export default function DialogAuth() {
           >
             <div>
               {value === 1 ? (
-                <FormLogin></FormLogin>
+                <FormLogin
+                  setIsLogin={setIsLogin}
+                  handleClose={handleClose}
+                ></FormLogin>
               ) : (
                 <FormRegister></FormRegister>
               )}
@@ -493,8 +546,8 @@ export default function DialogAuth() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose}>Agree</Button>
+          {/* <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose}>Agree</Button> */}
         </DialogActions>
       </Dialog>
     </React.Fragment>
