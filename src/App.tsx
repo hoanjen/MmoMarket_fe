@@ -1,10 +1,10 @@
 import "./assets/styles/App.css";
 import { Outlet } from "react-router-dom";
 import PageHeader from "./components/header/PageHeader";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+
 
 function App() {
-  const notify = () => toast("Wow so easy !");
   return (
     <div className="App px-20">
       <ToastContainer></ToastContainer>

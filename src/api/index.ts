@@ -13,10 +13,10 @@ const instance = axios.create({
 instance.interceptors.request.use(function (
   config: InternalAxiosRequestConfig
 ) {
-  //todo : if existed token
-  // instance.defaults.headers.common["Authorization"] = "Authorization";
-  const token = "abc";
-  config.headers.Authorization = `Bearer ${token}`;
+  const token = Cookies.get("access_token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
