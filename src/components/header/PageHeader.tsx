@@ -19,198 +19,87 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Cookies from "js-cookie";
 import DialogAuth from "../auth/auth";
+import { CategoryApi } from "../../api/category/category"
+
+type Category = {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  category_types: {
+      id: string;
+      name: string;
+      category_id: string;
+      created_at: string;
+      updated_at: string;
+      category: {
+          id: string;
+          name: string;
+          created_at: string;
+          updated_at: string;
+      }
+  }[]
+}
 
 function TabLists() {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(-1);
+  const [data, setData] = useState<Category[]>([]);
 
+  const fectchApi = async () => {
+    try {
+      const res = await CategoryApi.getCategory();
+      setData(res.data.results)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(()=>{
+    fectchApi()
+  },[])
   return (
-    <div className="flex flex-row w-1/2 justify-around h-full">
-      <div
-        className="relative inline p-4 hover:border-b-4 border-sky-500"
-        onMouseOver={() => {
-          setValue(1);
-        }}
-        onMouseOut={() => {
-          setValue(0);
-        }}
-      >
-        ITEM ONE
-        <div
-          className={
-            value === 1
-              ? "absolute top-[64px] left-0 "
-              : "absolute top-[50px] left-0  hidden"
-          }
-        >
-          <List
-            sx={{ width: "200px", maxWidth: 360, bgcolor: "white" }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-          >
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-          </List>
-        </div>
-      </div>
-      <div
-        className="relative inline p-4 hover:border-b-4 border-sky-500"
-        onMouseOver={() => {
-          setValue(2);
-        }}
-        onMouseOut={() => {
-          setValue(0);
-        }}
-      >
-        ITEM TWO
-        <div
-          className={
-            value === 2
-              ? "absolute top-[64px] left-0 "
-              : "absolute top-[50px] left-0  hidden"
-          }
-        >
-          <List
-            sx={{ width: "200px", maxWidth: 360, bgcolor: "white" }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-          >
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-          </List>
-        </div>
-      </div>
-      <div
-        className="relative inline p-4 hover:border-b-4 border-sky-500"
-        onMouseOver={() => {
-          setValue(3);
-        }}
-        onMouseOut={() => {
-          setValue(0);
-        }}
-      >
-        ITEM THREE
-        <div
-          className={
-            value === 3
-              ? "absolute top-[64px] left-0 "
-              : "absolute top-[50px] left-0  hidden"
-          }
-        >
-          <List
-            sx={{ width: "200px", maxWidth: 360, bgcolor: "white" }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-          >
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-          </List>
-        </div>
-      </div>
-      <div
-        className="relative inline p-4 hover:border-b-4 border-sky-500"
-        onMouseOver={() => {
-          setValue(4);
-        }}
-        onMouseOut={() => {
-          setValue(0);
-        }}
-      >
-        ITEM FOUR
-        <div
-          className={
-            value === 4
-              ? "absolute top-[64px] left-0 "
-              : "absolute top-[50px] left-0  hidden"
-          }
-        >
-          <List
-            sx={{ width: "200px", maxWidth: 360, bgcolor: "white" }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-          >
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-          </List>
-        </div>
-      </div>
-      <div
-        className="relative inline p-4 hover:border-b-4 border-sky-500"
-        onMouseOver={() => {
-          setValue(5);
-        }}
-        onMouseOut={() => {
-          setValue(0);
-        }}
-      >
-        ITEM FIVE
-        <div
-          className={
-            value === 5
-              ? "absolute top-[64px] left-0 "
-              : "absolute top-[50px] left-0  hidden"
-          }
-        >
-          <List
-            sx={{ width: "200px", maxWidth: 360, bgcolor: "white" }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-          >
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-          </List>
-        </div>
-      </div>
-      <div
-        className="relative inline p-4 hover:border-b-4 border-sky-500"
-        onMouseOver={() => {
-          setValue(6);
-        }}
-        onMouseOut={() => {
-          setValue(0);
-        }}
-      >
-        ITEM SIX
-        <div
-          className={
-            value === 6
-              ? "absolute top-[64px] left-0 "
-              : "absolute top-[50px] left-0  hidden"
-          }
-        >
-          <List
-            sx={{ width: "200px", maxWidth: 360, bgcolor: "white" }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-          >
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-            <ListItem className="hover:bg-slate-50">
-              <ListItemText primary="Single-line 2 item"></ListItemText>
-            </ListItem>
-          </List>
-        </div>
-      </div>
+    <div className="flex flex-row w-1/2 justify-around h-full cursor-pointer">
+      {data.map((item, index)=>{
+          return (
+            <div
+              key={index}
+              className="relative inline p-4 hover:border-b-4 border-sky-500"
+              onMouseOver={() => {
+                setValue(index);
+              }}
+              onMouseOut={() => {
+                setValue(-1);
+              }}
+            >
+              {item.name}
+              {item.category_types.length !== 0 ? 
+                <div
+                  className={
+                    value === index
+                      ? "absolute top-[64px] left-0 "
+                      : "absolute top-[64px] left-0  hidden"
+                  }
+                >
+                  <List
+                    className="bg-white"
+                    sx={{ width: "200px", maxWidth: 360, bgcolor: "white" }}
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                  >
+                    {item.category_types.map((item, index)=>{
+                      return (
+                      <ListItem key={index} className="hover:bg-slate-200 bg-white">
+                        <ListItemText primary={item.name}></ListItemText>
+                      </ListItem>
+                      )
+                    })}
+                  </List>
+                </div> 
+                :
+                ''
+              }
+            </div>
+          )
+      })}
     </div>
   );
 }
