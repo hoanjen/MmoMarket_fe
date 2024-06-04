@@ -20,35 +20,26 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Cookies from "js-cookie";
 import DialogAuth from "../auth/auth";
 import { CategoryApi } from "../../api/category/category"
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 type Category = {
   id: string;
   name: string;
   created_at: string;
   updated_at: string;
-  category_types: {
-      id: string;
-      name: string;
-      category_id: string;
-      created_at: string;
-      updated_at: string;
-      category: {
-          id: string;
-          name: string;
-          created_at: string;
-          updated_at: string;
-      }
-  }[]
 }
 
 function TabLists() {
   const [value, setValue] = useState(-1);
-  const [data, setData] = useState<Category[]>([]);
+  const [categoryProduct, setCategoryProduct] = useState<Category[]>([]);
+  const [categoryService, setCategoryService] = useState<Category[]>([]);
 
   const fectchApi = async () => {
     try {
       const res = await CategoryApi.getCategory();
-      setData(res.data.results)
+      setCategoryProduct(res.data.categoryProduct)
+      setCategoryService(res.data.categoryService)
     } catch (error) {
       console.log(error)
     }
@@ -58,48 +49,131 @@ function TabLists() {
   },[])
   return (
     <div className="flex flex-row w-1/2 justify-around h-full cursor-pointer">
-      {data.map((item, index)=>{
-          return (
-            <div
-              key={index}
-              className="relative inline p-4 hover:border-b-4 border-sky-500"
-              onMouseOver={() => {
-                setValue(index);
-              }}
-              onMouseOut={() => {
-                setValue(-1);
-              }}
+      <div
+        className="relative inline p-4 hover:border-b-4 border-sky-500 text-lg"
+        onMouseOver={() => {
+          setValue(1);
+        }}
+        onMouseOut={() => {
+          setValue(-1);
+        }}
+      >
+        Sản phẩm
+        {value === 1? <ExpandMoreIcon color="primary"/> : <ExpandLessIcon/>}
+
+          <div
+            className={
+              value === 1
+                ? "absolute top-[64px] left-0 "
+                : "absolute top-[64px] left-0 hidden"
+            }
+          >
+  
+            <List
+              className="bg-white"
+              sx={{ width: "200px", maxWidth: 360, bgcolor: "white" }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
             >
-              {item.name}
-              {item.category_types.length !== 0 ? 
-                <div
-                  className={
-                    value === index
-                      ? "absolute top-[64px] left-0 "
-                      : "absolute top-[64px] left-0  hidden"
-                  }
-                >
-                  <List
-                    className="bg-white"
-                    sx={{ width: "200px", maxWidth: 360, bgcolor: "white" }}
-                    component="nav"
-                    aria-labelledby="nested-list-subheader"
-                  >
-                    {item.category_types.map((item, index)=>{
-                      return (
-                      <ListItem key={index} className="hover:bg-slate-200 bg-white">
-                        <ListItemText primary={item.name}></ListItemText>
-                      </ListItem>
-                      )
-                    })}
-                  </List>
-                </div> 
-                :
-                ''
-              }
-            </div>
-          )
-      })}
+              {categoryProduct.map((item, index) =>{
+                return (
+                  <ListItem key={index} className="hover:bg-slate-200 bg-white">
+                    <ListItemText primary={item.name}></ListItemText>
+                  </ListItem>
+                )
+              })}
+            </List>
+          </div> 
+      </div>
+      <div
+        className="relative inline p-4 hover:border-b-4 border-sky-500  text-lg"
+        onMouseOver={() => {
+          setValue(2);
+        }}
+        onMouseOut={() => {
+          setValue(-1);
+        }}
+      >
+        Dịch vụ
+        {value === 2? <ExpandMoreIcon color="primary"/> : <ExpandLessIcon/>}
+          <div
+            className={
+              value === 2
+                ? "absolute top-[64px] left-0 "
+                : "absolute top-[64px] left-0 hidden"
+            }
+          >
+            <List
+              className="bg-white"
+              sx={{ width: "200px", maxWidth: 360, bgcolor: "white" }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+            >
+              {categoryService.map((item, index) =>{
+                return (
+                  <ListItem key={index} className="hover:bg-slate-200 bg-white">
+                    <ListItemText primary={item.name}></ListItemText>
+                  </ListItem>
+                )
+              })}
+            </List>
+          </div> 
+      </div>
+      <div
+        className="relative inline p-4 hover:border-b-4 border-sky-500  text-lg"
+        onMouseOver={() => {
+          setValue(3);
+        }}
+        onMouseOut={() => {
+          setValue(-1);
+        }}
+      >
+        Hỗ trợ
+      </div>
+      <div
+        className="relative inline p-4 hover:border-b-4 border-sky-500 text-lg"
+        onMouseOver={() => {
+          setValue(4);
+        }}
+        onMouseOut={() => {
+          setValue(-1);
+        }}
+      >
+        Chia sẻ
+      </div>
+      <div
+        className="relative inline p-4 hover:border-b-4 border-sky-500 text-lg"
+        onMouseOver={() => {
+          setValue(4);
+        }}
+        onMouseOut={() => {
+          setValue(-1);
+        }}
+      >
+        Công cụ
+      </div>
+      <div
+        className="relative inline p-4 hover:border-b-4 border-sky-500 text-lg"
+        onMouseOver={() => {
+          setValue(5);
+        }}
+        onMouseOut={() => {
+          setValue(-1);
+        }}
+      >
+        FAQs
+      </div>
+      <div
+        className="relative inline p-4 hover:border-b-4 border-sky-500 text-lg"
+        onMouseOver={() => {
+          setValue(6);
+        }}
+        onMouseOut={() => {
+          setValue(-1);
+        }}
+      >
+        Nạp tiền
+      </div>
     </div>
   );
 }

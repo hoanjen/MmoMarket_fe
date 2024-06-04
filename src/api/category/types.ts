@@ -3,24 +3,19 @@ export type ResponseCategory = {
     status: string;
     statusCode: number;
     data: {
-        results: {
+        categoryProduct: {
             id: string;
             name: string;
+            type: string;
             created_at: string;
             updated_at: string;
-            category_types: {
-                id: string;
-                name: string;
-                category_id: string;
-                created_at: string;
-                updated_at: string;
-                category: {
-                    id: string;
-                    name: string;
-                    created_at: string;
-                    updated_at: string;
-                }
-            }[]
+        }[],
+        categoryService:{
+            id: string;
+            name: string;
+            type: string;
+            created_at: string;
+            updated_at: string;
         }[]
     };
     message: string[];
