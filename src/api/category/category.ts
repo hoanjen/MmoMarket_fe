@@ -3,7 +3,7 @@ import { ResponseCategory } from "./types"
 
 export class CategoryApi {
     public static async getCategory():Promise<ResponseCategory>{
-        return axios.get("/category?limit=10&page=1&populate=CategoryType")
+        return axios.get("/category")
             .then((_) => _.data);
     }
 }
