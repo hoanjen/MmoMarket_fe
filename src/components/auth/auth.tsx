@@ -30,6 +30,7 @@ import { useState } from "react";
 import { isEmail } from "class-validator";
 import { AuthApi } from "../../api/auth/auth";
 import Cookies from "js-cookie";
+import { UseAppDispatch } from "../../stores/app/hook";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -147,6 +148,7 @@ function FormLogin({
         });
         setIsLogin(true);
         handleClose();
+        UseAppDispatch()
       }
     }
   };
