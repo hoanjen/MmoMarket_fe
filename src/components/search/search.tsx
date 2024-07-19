@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import { CategoryApi } from "../../api/category/category";
 import { CategoryTypeApi } from "../../api/categorytype/categorytype";
 
+
 type Category = {
     id: string;
     name: string;
