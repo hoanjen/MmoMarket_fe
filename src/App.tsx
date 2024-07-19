@@ -12,7 +12,7 @@ function App() {
         <PageHeader></PageHeader>
       </header>
 
-      <div className="mt-24 bg-zinc-200">
+      <div className="mt-24">
         <Outlet />
       </div>
     </div>

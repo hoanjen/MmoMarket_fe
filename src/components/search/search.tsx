@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import { CategoryApi } from "../../api/category/category";
 import { CategoryTypeApi } from "../../api/categorytype/categorytype";
 
+
 type Category = {
     id: string;
     name: string;
@@ -117,6 +118,7 @@ type Category = {
                   <FormControl 
                     fullWidth
                     size="small"
+                    disabled={categoryId === "" ? true: false}
                   >
                     <InputLabel id="demo-simple-select-label">Sản phẩm</InputLabel>
                     <Select
