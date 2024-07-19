@@ -117,6 +117,7 @@ type Category = {
                   <FormControl 
                     fullWidth
                     size="small"
+                    disabled={categoryId === "" ? true: false}
                   >
                     <InputLabel id="demo-simple-select-label">Sản phẩm</InputLabel>
                     <Select

@@ -22,6 +22,8 @@ import DialogAuth from "../auth/auth";
 import { CategoryApi } from "../../api/category/category"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
 type Category = {
   id: string;
@@ -34,7 +36,7 @@ function TabLists() {
   const [value, setValue] = useState(-1);
   const [categoryProduct, setCategoryProduct] = useState<Category[]>([]);
   const [categoryService, setCategoryService] = useState<Category[]>([]);
-
+  
   const fectchApi = async () => {
     try {
       const res = await CategoryApi.getCategory();
@@ -75,13 +77,20 @@ function TabLists() {
               component="nav"
               aria-labelledby="nested-list-subheader"
             >
-              {categoryProduct.map((item, index) =>{
+              {categoryProduct.length !== 0 ? categoryProduct.map((item, index) =>{
                 return (
                   <ListItem key={index} className="hover:bg-slate-200 bg-white">
                     <ListItemText primary={item.name}></ListItemText>
                   </ListItem>
                 )
-              })}
+              })
+              :
+              <Stack spacing={1}>
+                <Skeleton animation="wave" variant="rectangular" width={200} height={32} />
+                <Skeleton animation="wave" variant="rectangular" width={200} height={32} />
+                <Skeleton animation="wave" variant="rectangular" width={200} height={32} />
+              </Stack>
+            }
             </List>
           </div> 
       </div>
@@ -109,13 +118,20 @@ function TabLists() {
               component="nav"
               aria-labelledby="nested-list-subheader"
             >
-              {categoryService.map((item, index) =>{
+              {categoryService.length !== 0 ? categoryService.map((item, index) =>{
                 return (
                   <ListItem key={index} className="hover:bg-slate-200 bg-white">
                     <ListItemText primary={item.name}></ListItemText>
                   </ListItem>
                 )
-              })}
+              })
+              :
+              <Stack spacing={1}>
+                <Skeleton animation="wave" variant="rectangular" width={200} height={32} />
+                <Skeleton animation="wave" variant="rectangular" width={200} height={32} />
+                <Skeleton animation="wave" variant="rectangular" width={200} height={32} />
+              </Stack>
+            }
             </List>
           </div> 
       </div>
