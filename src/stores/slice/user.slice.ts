@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction, SerializedError } from "@reduxjs/toolkit";
-import { IUser } from "../../interfaces/user.interface";
+import { createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
+import { IUser } from '../../interfaces/user.interface';
 
-type IStatus = "idle" | "loading" | "complete";
+type IStatus = 'idle' | 'loading' | 'complete';
 
 export interface IInitialState {
   status: IStatus;
@@ -10,19 +10,16 @@ export interface IInitialState {
 }
 
 const initialState: IInitialState = {
-  status: "idle",
+  status: 'idle',
   data: null,
   error: null,
 };
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState: initialState,
   reducers: {
-    getUserInfoSuccessfully: (
-      state: IInitialState,
-      { payload }: PayloadAction<IUser>
-    ) => {
-      const status: IStatus = "complete";
+    getUserInfoSuccessfully: (state: IInitialState, { payload }: PayloadAction<IUser>) => {
+      const status: IStatus = 'complete';
 
       return {
         status: status,
@@ -31,7 +28,7 @@ const userSlice = createSlice({
       };
     },
     getUserInfoFailed: (state: IInitialState, action: any) => {
-      const status: IStatus = "complete";
+      const status: IStatus = 'complete';
       return {
         status: status,
         data: null,
@@ -41,8 +38,5 @@ const userSlice = createSlice({
   },
 });
 
-export const {
-  getUserInfoFailed,
-  getUserInfoSuccessfully,
-} = userSlice.actions;
+export const { getUserInfoFailed, getUserInfoSuccessfully } = userSlice.actions;
 export default userSlice.reducer;

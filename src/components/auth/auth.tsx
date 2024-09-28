@@ -1,19 +1,19 @@
-import { Bounce, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { TransitionProps } from "@mui/material/transitions";
-import MicrosoftIcon from "@mui/icons-material/Microsoft";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
+import { Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { TransitionProps } from '@mui/material/transitions';
+import MicrosoftIcon from '@mui/icons-material/Microsoft';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import GoogleIcon from '@mui/icons-material/Google';
 import {
   Box,
   FormControl,
@@ -24,35 +24,31 @@ import {
   OutlinedInput,
   Tab,
   Tabs,
-} from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useState } from "react";
-import { isEmail } from "class-validator";
-import { AuthApi } from "../../api/auth/auth";
-import Cookies from "js-cookie";
-import { UseAppDispatch } from "../../stores/app/hook";
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useState } from 'react';
+import { isEmail } from 'class-validator';
+import { AuthApi } from '../../api/auth/auth';
+import Cookies from 'js-cookie';
+import { UseAppDispatch } from '../../stores/app/hook';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;
   },
-  ref: React.Ref<unknown>
+  ref: React.Ref<unknown>,
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 function OauthButton({ className }: { className?: string }) {
   return (
-    <div
-      className={`flex justify-between gap-4 px-0 ${
-        className ? className : ""
-      }`}
-    >
+    <div className={`flex justify-between gap-4 px-0 ${className ? className : ''}`}>
       <Button
         variant="contained"
         color="primary"
         className="w-[120px] h-10 pl-1"
-        style={{ textTransform: "none", fontWeight: 600 }}
+        style={{ textTransform: 'none', fontWeight: 600 }}
         startIcon={<MicrosoftIcon></MicrosoftIcon>}
       >
         Microsoft
@@ -61,7 +57,7 @@ function OauthButton({ className }: { className?: string }) {
         variant="contained"
         color="error"
         className="w-[120px] h-10"
-        style={{ textTransform: "none", fontWeight: 600 }}
+        style={{ textTransform: 'none', fontWeight: 600 }}
         startIcon={<GoogleIcon></GoogleIcon>}
       >
         Google
@@ -70,7 +66,7 @@ function OauthButton({ className }: { className?: string }) {
         variant="contained"
         color="inherit"
         className="w-[120px] h-10 ml-1"
-        style={{ textTransform: "none", fontWeight: 600 }}
+        style={{ textTransform: 'none', fontWeight: 600 }}
         startIcon={<GitHubIcon></GitHubIcon>}
       >
         Github
@@ -79,16 +75,10 @@ function OauthButton({ className }: { className?: string }) {
   );
 }
 
-function FormLogin({
-  setIsLogin,
-  handleClose,
-}: {
-  setIsLogin: React.Dispatch<boolean>;
-  handleClose: Function;
-}) {
+function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boolean>; handleClose: Function }) {
   const [values, setValues] = useState<{ email: string; password: string }>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const [invalidField, setInvalidField] = useState<{
@@ -101,9 +91,7 @@ function FormLogin({
 
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
@@ -121,34 +109,34 @@ function FormLogin({
       });
 
       if (data && data.statusCode === 400) {
-        toast.error("email or password invalid!", {
-          position: "top-right",
+        toast.error('email or password invalid!', {
+          position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: 'light',
           transition: Bounce,
         });
       }
       if (data && data.statusCode === 200) {
-        Cookies.set("access_token", data.data.access_token);
-        toast.success("Login successfully", {
-          position: "top-right",
+        Cookies.set('access_token', data.data.access_token);
+        toast.success('Login successfully', {
+          position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: 'light',
           transition: Bounce,
         });
         setIsLogin(true);
         handleClose();
-        UseAppDispatch()
+        UseAppDispatch();
       }
     }
   };
@@ -158,12 +146,7 @@ function FormLogin({
       <h2 className="text-black font-bold py-2">Đăng nhập bằng tài khoản</h2>
       <OauthButton className="mt-4"></OauthButton>
       <p className="font-medium text-slate-500 my-4">HOẶC</p>
-      <Box
-        component="form"
-        className="flex flex-col space-y-4"
-        onSubmit={handleSubmit}
-        noValidate
-      >
+      <Box component="form" className="flex flex-col space-y-4" onSubmit={handleSubmit} noValidate>
         <FormControl variant="outlined" size="small">
           <InputLabel htmlFor="outlined-adornment-email">Email</InputLabel>
           <OutlinedInput
@@ -181,19 +164,15 @@ function FormLogin({
               });
             }}
           />
-          <FormHelperText sx={{ marginLeft: "4px" }}>
-            <p className="text-red-500">
-              {invalidField.email ? "Email invalid" : ""}
-            </p>
+          <FormHelperText sx={{ marginLeft: '4px' }}>
+            <p className="text-red-500">{invalidField.email ? 'Email invalid' : ''}</p>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
-          <InputLabel htmlFor="outlined-adornment-password">
-            Password
-          </InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             error={invalidField.password}
             value={values.password}
             onChange={(e) => {
@@ -219,17 +198,15 @@ function FormLogin({
             }
             label="Password"
           />
-          <FormHelperText sx={{ marginLeft: "4px" }}>
-            <p className="text-red-500">
-              {invalidField.password ? "Password invalid" : ""}
-            </p>
+          <FormHelperText sx={{ marginLeft: '4px' }}>
+            <p className="text-red-500">{invalidField.password ? 'Password invalid' : ''}</p>
           </FormHelperText>
         </FormControl>
         <Button
           variant="contained"
           color="primary"
           className="w-full h-10 pl-1"
-          style={{ textTransform: "none", fontWeight: 600 }}
+          style={{ textTransform: 'none', fontWeight: 600 }}
           type="submit"
         >
           Đăng nhập
@@ -246,9 +223,9 @@ function FormRegister() {
     password: string;
     term: boolean;
   }>({
-    username: "",
-    email: "",
-    password: "",
+    username: '',
+    email: '',
+    password: '',
     term: false,
   });
 
@@ -268,9 +245,7 @@ function FormRegister() {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
@@ -288,30 +263,23 @@ function FormRegister() {
         username: values.username,
         email: values.email,
         password: values.password,
-        phone_number: "0986666666",
+        phone_number: '0986666666',
       });
 
       if (data && data.statusCode === 200) {
-        alert("sign up success");
+        alert('sign up success');
       }
       if (data && data.statusCode === 400) {
-        alert("sign up error");
+        alert('sign up error');
       }
     }
   };
   return (
     <div className="flex flex-col justify-center space-y-4">
-      <div className="font-bold text-black text-center py-2">
-        Đăng ký tài khoản mới
-      </div>
+      <div className="font-bold text-black text-center py-2">Đăng ký tài khoản mới</div>
       <OauthButton className="mt-4"></OauthButton>
       <div className="text-center">HOẶC</div>
-      <Box
-        className="flex flex-col space-y-4"
-        component="form"
-        noValidate
-        onSubmit={handleSubmit}
-      >
+      <Box className="flex flex-col space-y-4" component="form" noValidate onSubmit={handleSubmit}>
         <FormControl variant="outlined" size="small">
           <InputLabel htmlFor="outlined-input-username">Username</InputLabel>
           <OutlinedInput
@@ -331,9 +299,7 @@ function FormRegister() {
             name="username"
           />
           <FormHelperText id="outlined-helper-username">
-            <p className="text-red-500">
-              {invalidField.username ? "Username invalid" : ""}
-            </p>
+            <p className="text-red-500">{invalidField.username ? 'Username invalid' : ''}</p>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
@@ -354,18 +320,14 @@ function FormRegister() {
             name="email"
           />
           <FormHelperText id="outlined-helper-email">
-            <p className="text-red-500">
-              {invalidField.email ? "Email invalid" : ""}
-            </p>
+            <p className="text-red-500">{invalidField.email ? 'Email invalid' : ''}</p>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
-          <InputLabel htmlFor="outlined-adornment-password">
-            Password
-          </InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             value={values.password}
             error={invalidField.password}
             onChange={(e) => {
@@ -391,17 +353,10 @@ function FormRegister() {
             label="Password"
           />
           <FormHelperText id="outlined-helper-password">
-            <p className="text-red-500">
-              {invalidField.password ? "Password invalid" : ""}
-            </p>
+            <p className="text-red-500">{invalidField.password ? 'Password invalid' : ''}</p>
           </FormHelperText>
         </FormControl>
-        <FormControl
-          required
-          component="fieldset"
-          sx={{ maxWidth: 412, m: 3, marginX: 0 }}
-          variant="standard"
-        >
+        <FormControl required component="fieldset" sx={{ maxWidth: 412, m: 3, marginX: 0 }} variant="standard">
           <FormControlLabel
             required={false}
             control={
@@ -426,18 +381,11 @@ function FormRegister() {
               paddingLeft: 4,
             }}
           >
-            <p className="text-red-500">
-              {invalidField.term ? "You have not agreed" : ""}
-            </p>
+            <p className="text-red-500">{invalidField.term ? 'You have not agreed' : ''}</p>
           </FormHelperText>
         </FormControl>
 
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          style={{ textTransform: "none", fontWeight: 600 }}
-        >
+        <Button variant="contained" color="primary" type="submit" style={{ textTransform: 'none', fontWeight: 600 }}>
           Đăng ký
         </Button>
       </Box>
@@ -445,11 +393,7 @@ function FormRegister() {
   );
 }
 
-export default function DialogAuth({
-  setIsLogin,
-}: {
-  setIsLogin: React.Dispatch<boolean>;
-}) {
+export default function DialogAuth({ setIsLogin }: { setIsLogin: React.Dispatch<boolean> }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -497,13 +441,13 @@ export default function DialogAuth({
         aria-describedby="alert-dialog-slide-description"
         sx={{ padding: 0 }}
       >
-        <DialogTitle sx={{ minWidth: "500px", padding: 0 }}>
-          <Box sx={{ width: "100%", height: "100%" }}>
+        <DialogTitle sx={{ minWidth: '500px', padding: 0 }}>
+          <Box sx={{ width: '100%', height: '100%' }}>
             <Tabs
               value={value}
               onChange={handleChange}
               TabIndicatorProps={{
-                style: { display: "none" },
+                style: { display: 'none' },
               }}
               textColor="primary"
             >
@@ -512,9 +456,7 @@ export default function DialogAuth({
                 value={1}
                 className=" w-1/2 h-full "
                 sx={{
-                  ...(value === 1
-                    ? { backgroundColor: "white" }
-                    : { backgroundColor: "#e7e7e7" }),
+                  ...(value === 1 ? { backgroundColor: 'white' } : { backgroundColor: '#e7e7e7' }),
                   fontWeight: 600,
                 }}
               />
@@ -523,7 +465,7 @@ export default function DialogAuth({
                 value={2}
                 className=" w-1/2 h-full"
                 sx={{
-                  backgroundColor: value === 2 ? "white" : "#e7e7e7",
+                  backgroundColor: value === 2 ? 'white' : '#e7e7e7',
                   fontWeight: 600,
                 }}
               />
@@ -531,16 +473,10 @@ export default function DialogAuth({
           </Box>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText
-            id="alert-dialog-slide-description"
-            className="p-5"
-          >
+          <DialogContentText id="alert-dialog-slide-description" className="p-5">
             <div>
               {value === 1 ? (
-                <FormLogin
-                  setIsLogin={setIsLogin}
-                  handleClose={handleClose}
-                ></FormLogin>
+                <FormLogin setIsLogin={setIsLogin} handleClose={handleClose}></FormLogin>
               ) : (
                 <FormRegister></FormRegister>
               )}
