@@ -1,25 +1,25 @@
-import App from "../App";
-import { createBrowserRouter } from "react-router-dom";
-import Auth from "../pages/auth/index";
-import Home from "../pages/home/Home"
+import App from '../App';
+import { createBrowserRouter } from 'react-router-dom';
+import Auth from '../pages/auth/index';
+import Home from '../pages/home/Home';
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <App />,
     children: [
       {
-        path: "/",
-        element: <Home></Home>
+        path: '/',
+        element: <Home></Home>,
       },
       {
-        path: "/auth",
+        path: '/auth',
         element: <Auth></Auth>,
       },
     ],
   },
   {
-    path: "/admin",
-    element: <div style={{ color: "red" }}>Hello world!</div>,
+    path: '/admin',
+    element: <div style={{ color: 'red' }}>Hello world!</div>,
   },
 ]);

@@ -1,8 +1,7 @@
-import "./assets/styles/App.css";
-import { Outlet } from "react-router-dom";
-import PageHeader from "./components/header/PageHeader";
-import { ToastContainer } from "react-toastify";
-
+import './assets/styles/App.css';
+import { Outlet } from 'react-router-dom';
+import PageHeader from './components/header/PageHeader';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
