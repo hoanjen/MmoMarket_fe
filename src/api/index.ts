@@ -2,7 +2,7 @@ import axios, { InternalAxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
 
 const instance = axios.create({
-  baseURL: process.env.BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -25,6 +25,7 @@ instance.interceptors.response.use(
   function (err) {
     if (err.response.status === 401) {
       console.log('logout');
+
     }
     return err && err.response;
   },
