@@ -165,6 +165,7 @@ function ButtonBaseDemo({ changeImage, avatar }: { changeImage: (e: any) => void
   );
 }
 export default function Profile() {
+  console.log(111111)
   const [isChange, setIsChange] = React.useState<boolean>(false);
   const [values, setValues] = React.useState<profile>({
     id: '',
