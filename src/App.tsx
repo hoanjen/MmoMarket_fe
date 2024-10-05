@@ -10,7 +10,7 @@ function App() {
       <header className="flex flex-row z-50 bg-white items-center drop-shadow outline-2 h-16 fixed top-0 left-0 w-full px-10">
         <PageHeader></PageHeader>
       </header>
-
+      <p className='text-blue-700'>ALALLALAALL</p>
       <div className="mt-24">
         <Outlet />
       </div>
