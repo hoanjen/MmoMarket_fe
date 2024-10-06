@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -124,19 +124,13 @@ function InputFileUpload({ changeImage }: { changeImage: (e: any) => void }) {
       <VisuallyHiddenInput
         type="file"
         accept="image/jpeg image/png image/jpg"
-        onChange={(e) => {
-          if (!e.target.files) return;
-          const file = e.target.files[0];
-          const image = URL.createObjectURL(file);
-          changeImage(image);
-          console.log(file);
-        }}
+        onChange={changeImage}
       />
     </Button>
   );
 }
 
-function ButtonBaseDemo({ changeImage, avatar }: { changeImage: (e: any) => void; avatar: string }) {
+function ButtonBaseDemo({ handleChangeImage, avatar }: { handleChangeImage: (e: any) => void; avatar: string }) {
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', width: 240, padding: 2, borderRadius: 8 }}>
       <ImageButton
@@ -156,7 +150,7 @@ function ButtonBaseDemo({ changeImage, avatar }: { changeImage: (e: any) => void
               position: 'relative',
             }}
           >
-            <InputFileUpload changeImage={changeImage} />
+            <InputFileUpload changeImage={handleChangeImage} />
             <ImageMarked className="MuiImageMarked-root" />
           </Typography>
         </Image>
@@ -165,9 +159,9 @@ function ButtonBaseDemo({ changeImage, avatar }: { changeImage: (e: any) => void
   );
 }
 export default function Profile() {
-  console.log(111111)
-  const [isChange, setIsChange] = React.useState<boolean>(false);
-  const [values, setValues] = React.useState<profile>({
+  const [avatar, setAvatar] = useState<File>();
+  const [isChange, setIsChange] = useState<boolean>(false);
+  const [values, setValues] = useState<profile>({
     id: '',
     email: '',
     full_name: '',
@@ -193,7 +187,7 @@ export default function Profile() {
       console.log(error);
     }
   };
-  React.useEffect(() => {
+  useEffect(() => {
     fectchApi();
   }, []);
 
@@ -201,10 +195,16 @@ export default function Profile() {
     setValues({ ...values, gender: event.target.value });
   };
 
-  const changeImage = (e: any) => {
-    setValues({ ...values, avatar: e });
+  const handleChangeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      try {
+        const res = await ProfileApi.uploadImage(event.target.files[0]);
+        setValues({...values, avatar: res[0].url})
+      } catch (error) {
+        toast.error('Error uploading image!');
+    }
   };
-
+  }
   const changeProfile = () => {
     setIsChange(!isChange);
   };
@@ -254,7 +254,7 @@ export default function Profile() {
     <div>
       <Card sx={{ minWidth: 400, display: 'flex', flexDirection: 'row', position: 'relative', 'margin-left': 'auto', 'margin-right': 'auto', 'max-width': '1200px'}}>
         {isChange ? (
-          <ButtonBaseDemo changeImage={changeImage} avatar={values.avatar} />
+          <ButtonBaseDemo handleChangeImage={handleChangeImage} avatar={values.avatar} />
         ) : (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', width: 240, padding: 2, borderRadius: 8 }}>
             <ImageButton

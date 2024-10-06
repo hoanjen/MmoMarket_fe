@@ -23,6 +23,12 @@ export type ResponseProfile = {
   message: [];
 };
 
+export type ResponseFileImage = {
+  url: string,
+  name: string,
+  size: number
+}[]
+
 export type RequestProfile = {
   full_name: string;
   first_name: string;
