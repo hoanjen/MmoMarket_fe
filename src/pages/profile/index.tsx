@@ -374,7 +374,7 @@ export default function Profile() {
               <div className="border-2 border-[#1976d2] px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
                 <ReportGmailerrorredOutlinedIcon fontSize={'large'}/>
                 <h2 className="title-font font-medium text-2xl text-gray-900">46</h2>
-                <p className="leading-relaxed">Số lượt khiếu nại</p>
+                <p className="leading-relaxed">Số lượt khiếu nại </p>
               </div>
             </div>
           </div>
