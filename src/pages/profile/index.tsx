@@ -15,7 +15,8 @@ import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import ReportGmailerrorredOutlinedIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
-
+import { useAppSelector } from '@stores/app/hook';
+import { useParams, Link } from 'react-router-dom';
 interface profile {
   id: string;
   email: string;
@@ -178,11 +179,14 @@ export default function Profile() {
     created_at: '',
     updated_at: '',
   });
-
+  const user = useAppSelector((state) => state.user);
+  const { id } = useParams<{ id: string }>()
   const fectchApi = async () => {
     try {
-      const res = await ProfileApi.getProfileByToken();
-      setValues(res.data.user);
+      if(id){
+        const res = await ProfileApi.getProfileById(id);
+        setValues(res.data.user);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -335,15 +339,23 @@ export default function Profile() {
           </div>
         </div>
         <div className="absolute right-0 bottom-0 flex flex-col items-end w-64">
-          {!isChange ? (
-            <Button onClick={changeProfile} sx={{ margin: 2 }} variant="outlined">
-              Chỉnh sửa
-            </Button>
-          ) : (
-            <Button onClick={onSubmit} sx={{ margin: 2 }} variant="contained">
-              Lưu lại
-            </Button>
-          )}
+            {
+              user.id === id ?
+              (!isChange ? (
+                  <Button onClick={changeProfile} sx={{ margin: 2 }} variant="outlined">
+                    Chỉnh sửa
+                  </Button>
+                ) : (
+                  <Button onClick={onSubmit} sx={{ margin: 2 }} variant="contained">
+                    Lưu lại
+                  </Button>
+                )
+              )
+              :
+              <Button sx={{ margin: 2 }} variant="contained">
+                <Link  to="/">Nhắn tin</Link>
+              </Button>
+            }
         </div>
       </Card>
       <section className="text-[#1976d2] body-font max-w-[1200px] mx-auto">
