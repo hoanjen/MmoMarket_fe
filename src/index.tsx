@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routers/index';
 import 'react-toastify/dist/ReactToastify.css';
-import store from './stores/app/store';
+import { store } from './stores/app/store';
 import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

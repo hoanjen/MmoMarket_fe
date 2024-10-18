@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAppSelector } from '@stores/app/hook';
 import Typography from '@mui/material/Typography';
 import Popover from '@mui/material/Popover';
 import List from '@mui/material/List';
@@ -24,6 +25,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
+import { Link } from 'react-router-dom';
 
 type Category = {
   id: string;
@@ -182,7 +184,7 @@ function TabLists() {
   );
 }
 
-function BasicPopover() {
+function BasicPopover({user} : any) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -199,7 +201,7 @@ function BasicPopover() {
   return (
     <div>
       <IconButton onClick={handleClick}>
-        <Avatar>H</Avatar>
+        <Avatar src={user?.avatar} ></Avatar>
       </IconButton>
       <Popover
         id={id}
@@ -212,14 +214,20 @@ function BasicPopover() {
         }}
       >
         <Typography sx={{ p: 2 }}>
-          <NestedList handleClose={handleClose}></NestedList>
+          <NestedList user={user} handleClose={handleClose}></NestedList>
         </Typography>
       </Popover>
     </div>
   );
 }
 
-function NestedList({ handleClose }: { handleClose: Function }) {
+function NestedList({ handleClose, user }: { handleClose: Function, user: any }) {
+  const setLogout = () =>{
+    if (Cookies.get('access_token')) {
+      Cookies.remove('access_token');
+      window.location.reload();
+    }
+  }
   return (
     <List
       sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
@@ -234,7 +242,7 @@ function NestedList({ handleClose }: { handleClose: Function }) {
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
-        <ListItemText primary="Thông tin cá nhân" />
+        <Link to={`/profile/${user.id}`}>Thông tin cá nhân</Link>
       </ListItemButton>
       <ListItemButton
         onClick={() => {
@@ -269,6 +277,7 @@ function NestedList({ handleClose }: { handleClose: Function }) {
       <ListItemButton
         onClick={() => {
           handleClose();
+          setLogout();
         }}
       >
         <ListItemIcon>
@@ -282,7 +291,7 @@ function NestedList({ handleClose }: { handleClose: Function }) {
 
 export default function PageHeader() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
-
+  const user = useAppSelector((state) => state.user);
   useEffect(() => {
     console.log('access_token', Cookies.get('access_token'));
     if (Cookies.get('access_token')) {
@@ -308,7 +317,7 @@ export default function PageHeader() {
           <IconButton>
             <NotificationsNoneIcon />
           </IconButton>
-          <BasicPopover></BasicPopover>
+          <BasicPopover user={user} ></BasicPopover>
         </div>
       ) : (
         <DialogAuth setIsLogin={setIsLogin} />

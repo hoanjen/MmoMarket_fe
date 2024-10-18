@@ -3,7 +3,7 @@ import { ResponseProfile, RequestProfile, ResponseFileImage } from './types';
 
 export class ProfileApi {
   public static async getProfileById(id: string): Promise<ResponseProfile> {
-    return axios.get(`/user/${id}`).then((_) => _.data);
+    return axios.get(`/user/{id}?user_id=${id}`).then((_) => _.data);
   }
 
   public static async getProfileByToken(): Promise<ResponseProfile> {

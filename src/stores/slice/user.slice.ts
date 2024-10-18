@@ -1,42 +1,41 @@
-import { createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
-import { IUser } from '../../interfaces/user.interface';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type IStatus = 'idle' | 'loading' | 'complete';
-
-export interface IInitialState {
-  status: IStatus;
-  data: IUser | null;
-  error: SerializedError | null;
+interface userState {
+  id: string;
+  email: string;
+  username: string;
+  avatar: string;
+  phone_number: string;
 }
 
-const initialState: IInitialState = {
-  status: 'idle',
-  data: null,
-  error: null,
+const initialState: userState = {
+  id: "",
+  email: "",
+  username: "",
+  avatar: "",
+  phone_number: "",
 };
+
 const userSlice = createSlice({
   name: 'user',
-  initialState: initialState,
+  initialState,
   reducers: {
-    getUserInfoSuccessfully: (state: IInitialState, { payload }: PayloadAction<IUser>) => {
-      const status: IStatus = 'complete';
 
-      return {
-        status: status,
-        data: payload,
-        error: null,
-      };
-    },
-    getUserInfoFailed: (state: IInitialState, action: any) => {
-      const status: IStatus = 'complete';
-      return {
-        status: status,
-        data: null,
-        error: action.e,
-      };
+      setUser: (state: userState, action: PayloadAction<userState>) => {
+        return { ...state, ...action.payload };
+      },
+  
+      resetUser: (state: userState) => {
+        return initialState;
+      },
+  
+      updateUser: (state: userState, action: PayloadAction<Partial<userState>>) => {
+        return { ...state, ...action.payload };
+      }
     },
   },
-});
+);
 
-export const { getUserInfoFailed, getUserInfoSuccessfully } = userSlice.actions;
+export const { setUser, resetUser, updateUser } = userSlice.actions;
+
 export default userSlice.reducer;
