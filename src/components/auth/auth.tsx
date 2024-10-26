@@ -154,7 +154,7 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
 
   return (
     <div className=" flex flex-col justify-center  text-center space-y-4">
-      <h2 className="text-black font-bold py-2">Đăng nhập bằng tài khoản</h2>
+      <p className="text-black font-bold py-2">Đăng nhập bằng tài khoản</p>
       <OauthButton className="mt-4"></OauthButton>
       <p className="font-medium text-slate-500 my-4">HOẶC</p>
       <Box component="form" className="flex flex-col space-y-4" onSubmit={handleSubmit} noValidate>
@@ -176,7 +176,7 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
             }}
           />
           <FormHelperText sx={{ marginLeft: '4px' }}>
-            <p className="text-red-500">{invalidField.email ? 'Email invalid' : ''}</p>
+            <span className="text-red-500">{invalidField.email ? 'Email invalid' : ''}</span>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
@@ -210,7 +210,7 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
             label="Password"
           />
           <FormHelperText sx={{ marginLeft: '4px' }}>
-            <p className="text-red-500">{invalidField.password ? 'Password invalid' : ''}</p>
+            <span className="text-red-500">{invalidField.password ? 'Password invalid' : ''}</span>
           </FormHelperText>
         </FormControl>
         <Button
@@ -287,7 +287,7 @@ function FormRegister() {
   };
   return (
     <div className="flex flex-col justify-center space-y-4">
-      <div className="font-bold text-black text-center py-2">Đăng ký tài khoản mới</div>
+      <p className="font-bold text-black text-center py-2">Đăng ký tài khoản mới</p>
       <OauthButton className="mt-4"></OauthButton>
       <div className="text-center">HOẶC</div>
       <Box className="flex flex-col space-y-4" component="form" noValidate onSubmit={handleSubmit}>
@@ -310,7 +310,7 @@ function FormRegister() {
             name="username"
           />
           <FormHelperText id="outlined-helper-username">
-            <p className="text-red-500">{invalidField.username ? 'Username invalid' : ''}</p>
+            <span className="text-red-500">{invalidField.username ? 'Username invalid' : ''}</span>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
@@ -331,7 +331,7 @@ function FormRegister() {
             name="email"
           />
           <FormHelperText id="outlined-helper-email">
-            <p className="text-red-500">{invalidField.email ? 'Email invalid' : ''}</p>
+            <span className="text-red-500">{invalidField.email ? 'Email invalid' : ''}</span>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
@@ -364,7 +364,7 @@ function FormRegister() {
             label="Password"
           />
           <FormHelperText id="outlined-helper-password">
-            <p className="text-red-500">{invalidField.password ? 'Password invalid' : ''}</p>
+            <span className="text-red-500">{invalidField.password ? 'Password invalid' : ''}</span>
           </FormHelperText>
         </FormControl>
         <FormControl required component="fieldset" sx={{ maxWidth: 412, m: 3, marginX: 0 }} variant="standard">
@@ -392,7 +392,7 @@ function FormRegister() {
               paddingLeft: 4,
             }}
           >
-            <p className="text-red-500">{invalidField.term ? 'You have not agreed' : ''}</p>
+            <span className="text-red-500">{invalidField.term ? 'You have not agreed' : ''}</span>
           </FormHelperText>
         </FormControl>
 
@@ -484,7 +484,7 @@ export default function DialogAuth({ setIsLogin }: { setIsLogin: React.Dispatch<
           </Box>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description" className="p-5">
+          <DialogContentText id="alert-dialog-slide-description" className="p-5" component={"span"}>
             <div>
               {value === 1 ? (
                 <FormLogin setIsLogin={setIsLogin} handleClose={handleClose}></FormLogin>
