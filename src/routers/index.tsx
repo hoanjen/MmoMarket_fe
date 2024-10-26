@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Auth from '../pages/auth/index';
 import Home from '../pages/home/index';
 import Profile from '../pages/profile/index';
+import Product from '@pages/product';
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
       {
         path: '/profile/:id',
         element: <Profile/>,
+      },
+      {
+        path: '/product',
+        element: <Product/>,
       },
     ],
   },
