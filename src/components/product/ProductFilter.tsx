@@ -4,6 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Button } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { KeyboardArrowDown } from '@mui/icons-material';
 
 interface ProductFilterProps {
   searchProduct: (id: string[]) => void;
@@ -11,6 +12,7 @@ interface ProductFilterProps {
 
 export default function ProductFilter(props: ProductFilterProps) {
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
+  const [isHidden, setIsHidden] = useState<boolean>(true);
   const test = [
     {
       id: 'abc',
@@ -53,40 +55,51 @@ export default function ProductFilter(props: ProductFilterProps) {
     props.searchProduct(filter);
   };
 
+  const clickSelector = () => {
+    setIsHidden(!isHidden);
+  };
+
   return (
     <div className="border flex flex-col">
       <div className="h-16 border leading-[64px] pl-5">
         <h1 className=" font-bold text-black text-[20px]">Bộ lọc</h1>
       </div>
-      <div className="pl-4 mt-2">
+      <div className={`pl-4 mt-3 transition-all duration-1000 ease-out delay-100`}>
         <Button
-          endIcon={<KeyboardArrowUpIcon />}
+          endIcon={isHidden ? <KeyboardArrowUpIcon /> : <KeyboardArrowDown />}
           color="inherit"
           style={{
             textTransform: 'none',
             textAlign: 'left',
             fontWeight: 700,
-            fontSize: '16px',
+            fontSize: '15px',
             background: '#f2f2f2',
           }}
+          onClick={() => clickSelector()}
         >
           Chọn 1 hoặc nhiều sản phẩm
         </Button>
-        <FormGroup className="pl-4">
-          {test.map((item,index) => {
-            return (
-              <FormControlLabel
-                control={<Checkbox />}
-                label={item.name}
-                key={index}
-                onChange={() => handleChange(item.id)}
-              />
-            );
-          })}
-        </FormGroup>
+        {isHidden ? (
+          <FormGroup className="pl-4 mt-1">
+            {test.map((item, index) => {
+              return (
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label={item.name}
+                  key={index}
+                  onChange={() => handleChange(item.id)}
+                  sx={{ typography: 'body1', fontSize: '15px', '& .MuiSvgIcon-root': { fontSize: 20 } }} //
+                />
+              );
+            })}
+          </FormGroup>
+        ) : (
+          <></>
+        )}
+
         <Button
           variant="contained"
-          size="large"
+          size="medium"
           style={{
             color: '#fff',
             borderColor: '#47991f',

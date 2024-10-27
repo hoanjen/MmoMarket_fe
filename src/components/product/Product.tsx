@@ -2,7 +2,7 @@ import Rating from '@mui/material/Rating';
 
 export function Product() {
   return (
-    <div className="grid grid-cols-7 w-full border-[1.5px] h-64 py-4 px-6 shadow-md">
+    <div className="grid grid-cols-7 w-full border-[1.5px] h-auto py-4 px-6 shadow-md">
       <div className="col-span-2 flex flex-col justify-center text-center">
         <img
           src="https://taphoammo.net/img/telegram-ngam-lau-3-6-thang-chi-file-session_7144937.png"
@@ -25,21 +25,27 @@ export function Product() {
           <Rating name="read-only" value={4.5} readOnly size="small" precision={0.5} />
           <span className="text-[14px] text-[#b3b3b3]">1196 Reviews | Đã bán: 266935 | Khiếu nại: 0.0%</span>
         </div>
-        <div className='text-[14px]'>
-          <p>
-            Người bán: <span> dangtrungkienprovip</span>
-          </p>
-          <p>
-            Sản phẩm : <span>Tài Khoản Telegram</span>
-          </p>
-          <ul>
+        <div className="text-[14px]">
+          <div>
+            <p>
+              Người bán: <span> dangtrungkienprovip</span>
+            </p>
+            <p>
+              Sản phẩm : <span>Tài Khoản Telegram</span>
+            </p>
+          </div>
+          <ul style={{ listStyleType: 'circle', paddingLeft: '20px' }}>
             <li>
-              Vui Lòng Mua Sản Phẩm Đọc Chính Sách Bảo Hành Ạ ( LOGIN TELEGRAM MỚI MỖI NGÀY KIỂM TRA VÀ CẬP NHẬT TRÁNH
-              BỊ BANER)
+              <p>
+                Vui Lòng Mua Sản Phẩm Đọc Chính Sách Bảo Hành Ạ ( LOGIN TELEGRAM MỚI MỖI NGÀY KIỂM TRA VÀ CẬP NHẬT TRÁNH
+                BỊ BANER)
+              </p>
             </li>
             <li>
-              NT ĐƯỢC. | +84 : TDATA/SESSION BH SIM 1 NĂM T9/2025 | +880: TÀI KHOẢN QUA SD,YÊU CẦU PROXY,KHÔNG NT ĐƯỢC..
-              | +855 : TDATA/SESSION NEW ( DÙNG TDATA ) | +84 :TDATA/SESSION NEW T10 ( DÙNG TDATA )
+              <p>
+                NT ĐƯỢC. | +84 : TDATA/SESSION BH SIM 1 NĂM T9/2025 | +880: TÀI KHOẢN QUA SD,YÊU CẦU PROXY,KHÔNG NT
+                ĐƯỢC.. | +855 : TDATA/SESSION NEW ( DÙNG TDATA ) | +84 :TDATA/SESSION NEW T10 ( DÙNG TDATA )
+              </p>
             </li>
           </ul>
         </div>
