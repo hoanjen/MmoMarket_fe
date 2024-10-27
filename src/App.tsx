@@ -11,7 +11,7 @@ function App() {
       <header className="flex flex-row z-50 bg-white items-center drop-shadow outline-2 h-16 fixed top-0 left-0 w-full px-10">
         <PageHeader></PageHeader>
       </header>
-      <div className={'mt-24' + (location.pathname === '/product' ? '' : 'px-60')}>
+      <div className={'mt-24 ' + (location.pathname === '/product' ? '' : 'px-60')}>
         <Outlet />
       </div>
     </div>
