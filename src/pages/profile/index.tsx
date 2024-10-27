@@ -160,7 +160,6 @@ function ButtonBaseDemo({ handleChangeImage, avatar }: { handleChangeImage: (e: 
   );
 }
 export default function Profile() {
-  const [avatar, setAvatar] = useState<File>();
   const [isChange, setIsChange] = useState<boolean>(false);
   const [values, setValues] = useState<profile>({
     id: '',
@@ -185,7 +184,7 @@ export default function Profile() {
     try {
       if(id){
         const res = await ProfileApi.getProfileById(id);
-        setValues(res.data.user);
+        setValues(res.data);
       }
     } catch (error) {
       console.log(error);
@@ -255,7 +254,7 @@ export default function Profile() {
     setIsChange(!isChange);
   };
   return (
-    <div>
+    <div className='mt-24'>
       <Card sx={{ minWidth: 400, display: 'flex', flexDirection: 'row', position: 'relative', 'margin-left': 'auto', 'margin-right': 'auto', 'max-width': '1200px'}}>
         {isChange ? (
           <ButtonBaseDemo handleChangeImage={handleChangeImage} avatar={values.avatar} />

@@ -3,7 +3,13 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './arrow.css';
 
-export default function CategorySlider({ type }: { type: string }) {
+type data = {
+  name: string,
+  img: string,
+  review: string,
+}[]
+
+export default function CategorySlider({ type, data }: { type: string, data: data }) {
   const settings = {
     infinite: true,
     speed: 500,
@@ -23,7 +29,7 @@ export default function CategorySlider({ type }: { type: string }) {
                 <img src={d.img} alt="" className="h-28 w-28 rounded-full" />
               </div>
               <div className="flex flex-col items-center justify-center gap-4 p-4">
-                <p className="text-xl font-normal">{d.name}</p>
+                <p className="text-xl font-normal text-[#1976d2]">{d.name}</p>
               </div>
             </div>
           ))}
@@ -32,31 +38,3 @@ export default function CategorySlider({ type }: { type: string }) {
     </div>
   );
 }
-
-const data = [
-  {
-    name: `John Morgan`,
-    img: `/students/John_Morgan.jpg`,
-    review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-  },
-  {
-    name: `Ellie Anderson`,
-    img: `/students/Ellie_Anderson.jpg`,
-    review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-  },
-  {
-    name: `Nia Adebayo`,
-    img: `/students/Nia_Adebayo.jpg`,
-    review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-  },
-  {
-    name: `Rigo Louie`,
-    img: `/students/Rigo_Louie.jpg`,
-    review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-  },
-  {
-    name: `Mia Williams`,
-    img: `/students/Mia_Williams.jpg`,
-    review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-  },
-];
