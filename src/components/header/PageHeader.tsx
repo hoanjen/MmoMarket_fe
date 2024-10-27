@@ -26,7 +26,9 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom';
-
+import { ProfileApi } from '../../api/profile/profile';
+import { setUser } from '../../stores/slice/user.slice';
+import { useAppDispatch } from '../../stores/app/hook';
 type Category = {
   id: string;
   name: string;
@@ -291,11 +293,23 @@ function NestedList({ handleClose, user }: { handleClose: Function, user: any })
 
 export default function PageHeader() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const getUserInfo = async () =>{
+    const userInfor = await ProfileApi.getProfileByToken();
+    dispatch(setUser({
+      id: userInfor.data.user.id,
+      email: userInfor.data.user.email,
+      username: userInfor.data.user.username,
+      avatar: userInfor.data.user.avatar,
+      phone_number: userInfor.data.user.phone_number,
+    }));
+  }
   const user = useAppSelector((state) => state.user);
   useEffect(() => {
     console.log('access_token', Cookies.get('access_token'));
     if (Cookies.get('access_token')) {
       setIsLogin(true);
+      getUserInfo();
     }
   }, []);
 

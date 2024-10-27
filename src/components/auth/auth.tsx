@@ -29,10 +29,10 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useState } from 'react';
 import { isEmail } from 'class-validator';
 import { AuthApi } from '../../api/auth/auth';
-import { ProfileApi } from '../../api/profile/profile';
+
 import Cookies from 'js-cookie';
-import { useAppDispatch } from '../../stores/app/hook';
-import { setUser } from '../../stores/slice/user.slice';
+
+
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -97,8 +97,6 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
     event.preventDefault();
   };
 
-  const dispatch = useAppDispatch();
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!values.email || !values.password) {
@@ -140,14 +138,6 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
         });
         setIsLogin(true);
         handleClose();
-        const user = await ProfileApi.getProfileByToken();
-        dispatch(setUser({
-          id: user.data.user.id,
-          email: user.data.user.email,
-          username: user.data.user.username,
-          avatar: user.data.user.avatar,
-          phone_number: user.data.user.phone_number,
-        }));
       }
     }
   };

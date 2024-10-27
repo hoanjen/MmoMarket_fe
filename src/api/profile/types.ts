@@ -23,6 +23,29 @@ export type ResponseProfile = {
   message: [];
 };
 
+export type ResponseProfileById = {
+  status: string;
+  statusCode: number;
+  data: {
+    id: string;
+    email: string;
+    full_name: string;
+    first_name: string;
+    last_name: string;
+    middle_name: string;
+    username: string;
+    phone_number: string;
+    google_id: string;
+    dob: string;
+    gender: string;
+    avatar: string;
+    cover_image: string;
+    created_at: string;
+    updated_at: string;
+  };
+  message: [];
+};
+
 export type ResponseFileImage = {
   url: string,
   name: string,

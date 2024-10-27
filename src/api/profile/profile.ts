@@ -1,9 +1,9 @@
 import axios from '../index';
-import { ResponseProfile, RequestProfile, ResponseFileImage } from './types';
+import { ResponseProfile, RequestProfile, ResponseFileImage, ResponseProfileById } from './types';
 
 export class ProfileApi {
-  public static async getProfileById(id: string): Promise<ResponseProfile> {
-    return axios.get(`/user/{id}?user_id=${id}`).then((_) => _.data);
+  public static async getProfileById(id: string): Promise<ResponseProfileById> {
+    return axios.get(`/user/get-by?user_id=${id}`).then((_) => _.data);
   }
 
   public static async getProfileByToken(): Promise<ResponseProfile> {
