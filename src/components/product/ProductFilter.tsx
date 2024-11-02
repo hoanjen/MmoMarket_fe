@@ -1,44 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Button } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { KeyboardArrowDown } from '@mui/icons-material';
+import { CategoryApi } from '@api/category/category';
 
-interface ProductFilterProps {
+type ProductFilterProps = {
   searchProduct: (id: string[]) => void;
-}
+};
 
 export default function ProductFilter(props: ProductFilterProps) {
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({});
   const [isHidden, setIsHidden] = useState<boolean>(true);
-  const test = [
-    {
-      id: 'abc',
-      name: 'Dịch vụ tiền ảo',
-    },
-    {
-      id: 'def',
-      name: 'Dịch vụ code tool',
-    },
-    {
-      id: 'ght',
-      name: 'Tài khoản FB',
-    },
-    {
-      id: 'aad',
-      name: 'Thẻ Nạp',
-    },
-    {
-      id: 'dada',
-      name: 'Phần Mềm FB',
-    },
-    {
-      id: 'vvv',
-      name: 'Tài Khoản BM',
-    },
-  ];
+  const [categoryType, setCategoryType] = useState<{ id: string; name: string }[]>([]);
+
+  useEffect(() => {
+    getCategoryType();
+  }, []);
+
+  const getCategoryType = async () => {
+    const response = await CategoryApi.queryCategoryType({});
+    setCategoryType(
+      response.data.listCategoryType.map((el) => {
+        return {
+          id: el.id,
+          name: el.name,
+        };
+      }),
+    );
+  };
 
   const handleChange = (id: string) => {
     setCheckedItems((prev) => ({
@@ -81,7 +73,7 @@ export default function ProductFilter(props: ProductFilterProps) {
         </Button>
         {isHidden ? (
           <FormGroup className="pl-4 mt-1">
-            {test.map((item, index) => {
+            {categoryType.map((item, index) => {
               return (
                 <FormControlLabel
                   control={<Checkbox />}
