@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { CategoryApi } from '../../api/category/category';
 import { CategoryTypeApi } from '../../api/categorytype/categorytype';
+import { useNavigate } from 'react-router-dom';
 
 type Category = {
   id: string;
@@ -51,6 +52,7 @@ export default function Search() {
   React.useEffect(() => {
     fetchCategoryListApi();
   }, []);
+  const navigate = useNavigate();
 
   const fetchCategoryTypeListApi = async (id: string) => {
     try {
@@ -71,6 +73,15 @@ export default function Search() {
 
   const handleChangeCategoryTypeId = (event: SelectChangeEvent) => {
     setCategoryTypeId(event.target.value as string);
+  };
+
+  const searchProduct = () => {
+    const queryParams = new URLSearchParams({
+      keyword,
+      categoryId,
+      categoryTypeId,
+    });
+    navigate(`/product?${queryParams}`);
   };
 
   const handleSubmit = async (event: any) => {
@@ -145,6 +156,7 @@ export default function Search() {
           style={{ textTransform: 'none', fontWeight: 600 }}
           type="submit"
           variant="contained"
+          onClick={() => searchProduct()}
         >
           Tìm kiếm
         </Button>

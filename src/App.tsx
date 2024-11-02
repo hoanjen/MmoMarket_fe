@@ -2,6 +2,7 @@ import './assets/styles/App.css';
 import { Outlet, useLocation } from 'react-router-dom';
 import PageHeader from './components/header/PageHeader';
 import { ToastContainer } from 'react-toastify';
+import { Footer } from '@components/footer/Footer';
 
 function App() {
   const location = useLocation();
@@ -14,6 +15,7 @@ function App() {
       <div className={'mt-24 ' + (location.pathname === '/product' ? '' : 'px-60')}>
         <Outlet />
       </div>
+      <Footer></Footer>
     </div>
   );
 }
