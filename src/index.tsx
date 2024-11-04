@@ -7,14 +7,15 @@ import { router } from './routers/index';
 import 'react-toastify/dist/ReactToastify.css';
 import { store } from './stores/app/store';
 import { Provider } from 'react-redux';
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-    </Provider>
-  </React.StrictMode>,
+    </QueryClientProvider>
+  </Provider>,
 );
 
 reportWebVitals();

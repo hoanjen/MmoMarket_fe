@@ -23,10 +23,11 @@ instance.interceptors.response.use(
     return response;
   },
   function (err) {
-    if (err.response.status === 401) {
+    if (err.response?.status === 401) {
       console.log('logout');
-
+      window.location.href = 'http://localhost:3000/';
     }
+
     return err && err.response;
   },
 );

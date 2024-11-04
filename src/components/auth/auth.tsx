@@ -32,8 +32,6 @@ import { AuthApi } from '../../api/auth/auth';
 
 import Cookies from 'js-cookie';
 
-
-
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;
@@ -109,7 +107,6 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
         email: values.email,
         password: values.password,
       });
-
       if (data && data.statusCode === 400) {
         toast.error('email or password invalid!', {
           position: 'top-right',
@@ -125,6 +122,8 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
       }
       if (data && data.statusCode === 200) {
         Cookies.set('access_token', data.data.access_token);
+        Cookies.set('refresh_token', data.data.refresh_token);
+        Cookies.set('user_id', data.data.user_id);
         toast.success('Login successfully', {
           position: 'top-right',
           autoClose: 2000,
@@ -474,7 +473,7 @@ export default function DialogAuth({ setIsLogin }: { setIsLogin: React.Dispatch<
           </Box>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description" className="p-5" component={"span"}>
+          <DialogContentText id="alert-dialog-slide-description" className="p-5" component={'span'}>
             <div>
               {value === 1 ? (
                 <FormLogin setIsLogin={setIsLogin} handleClose={handleClose}></FormLogin>
