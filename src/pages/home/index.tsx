@@ -46,7 +46,7 @@ export default function Home() {
     },
   ];
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mt-8 mx-36">
       <Search />
       <CategorySlider type="SẢN PHẢM" data={dataProduct} />
       <CategorySlider type="DỊCH VỤ" data={dataService}/>

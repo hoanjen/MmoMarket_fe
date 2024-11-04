@@ -186,7 +186,7 @@ function TabLists() {
   );
 }
 
-function BasicPopover({user} : any) {
+function BasicPopover({ user }: any) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -203,7 +203,7 @@ function BasicPopover({user} : any) {
   return (
     <div>
       <IconButton onClick={handleClick}>
-        <Avatar src={user?.avatar} ></Avatar>
+        <Avatar src={user?.avatar}></Avatar>
       </IconButton>
       <Popover
         id={id}
@@ -223,13 +223,13 @@ function BasicPopover({user} : any) {
   );
 }
 
-function NestedList({ handleClose, user }: { handleClose: Function, user: any }) {
-  const setLogout = () =>{
+function NestedList({ handleClose, user }: { handleClose: Function; user: any }) {
+  const setLogout = () => {
     if (Cookies.get('access_token')) {
       Cookies.remove('access_token');
       window.location.reload();
     }
-  }
+  };
   return (
     <List
       sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
@@ -294,19 +294,20 @@ function NestedList({ handleClose, user }: { handleClose: Function, user: any })
 export default function PageHeader() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const getUserInfo = async () =>{
+  const getUserInfo = async () => {
     const userInfor = await ProfileApi.getProfileByToken();
-    dispatch(setUser({
-      id: userInfor.data.user.id,
-      email: userInfor.data.user.email,
-      username: userInfor.data.user.username,
-      avatar: userInfor.data.user.avatar,
-      phone_number: userInfor.data.user.phone_number,
-    }));
-  }
+    dispatch(
+      setUser({
+        id: userInfor.data.user.id,
+        email: userInfor.data.user.email,
+        username: userInfor.data.user.username,
+        avatar: userInfor.data.user.avatar,
+        phone_number: userInfor.data.user.phone_number,
+      }),
+    );
+  };
   const user = useAppSelector((state) => state.user);
   useEffect(() => {
-    console.log('access_token', Cookies.get('access_token'));
     if (Cookies.get('access_token')) {
       setIsLogin(true);
       getUserInfo();
@@ -314,24 +315,32 @@ export default function PageHeader() {
   }, []);
 
   return (
-    <div className="flex flex-row w-full justify-between items-center h-16">
-      <div className="logo bg-black w-32 h-14"></div>
+    <div className="flex flex-row w-full justify-between items-center h-16 bg-[#21bf73] text-white font-medium">
+      <Link to={`/`} className="logo w-32 h-16 overflow-hidden flex justify-center items-center ml-60">
+        <img
+          className="w-64"
+          src="https://mmomarket.s3.amazonaws.com/image/1730041035280-dad08553-fa36-426f-a13b-c54ebb7519e9-z5973472124256_8ce6ac2daaa7807748f7db6108be0681.jpg"
+          alt=""
+        />
+      </Link>
       <TabLists></TabLists>
       {isLogin ? (
         <div className="flex flex-row justify-between w-60">
-          <IconButton>
+          <IconButton color="inherit">
             <HelpOutlineIcon />
           </IconButton>
-          <IconButton>
+          <IconButton color="inherit">
             <MailOutlineIcon />
           </IconButton>
-          <IconButton>
-            <QuestionAnswerIcon />
+          <IconButton color="inherit">
+            <Link to={'/chat-box'}>
+              <QuestionAnswerIcon />
+            </Link>
           </IconButton>
-          <IconButton>
+          <IconButton color="inherit">
             <NotificationsNoneIcon />
           </IconButton>
-          <BasicPopover user={user} ></BasicPopover>
+          <BasicPopover user={user}></BasicPopover>
         </div>
       ) : (
         <DialogAuth setIsLogin={setIsLogin} />

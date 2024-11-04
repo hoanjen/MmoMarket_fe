@@ -4,6 +4,8 @@ import Auth from '../pages/auth/index';
 import Home from '../pages/home/index';
 import Profile from '../pages/profile/index';
 import Product from '@pages/product';
+import ChatBox from '../pages/chatbox/ChatBox';
+import ChatComponent from '@components/chatbox/test';
 
 export const router = createBrowserRouter([
   {
@@ -12,16 +14,22 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home/>,
+        element: <Home />,
       },
       {
         path: '/profile/:id',
-        element: <Profile/>,
+        element: <Profile />,
+      },
+      {
+        path: '/chat-box',
+        element: <ChatBox />,
       },
       {
         path: '/product',
-        element: <Product/>,
+        element: <Product />,
       },
+      { path: '/error', element: <Home></Home> },
+      { path: '/test', element: <ChatComponent></ChatComponent> },
     ],
   },
   {
