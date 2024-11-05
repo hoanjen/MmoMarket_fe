@@ -19,7 +19,7 @@ export class ProductApi {
     page?: number;
     sortBy?: string;
   }): Promise<ResponseProduct> {
-    console.log('111', category_type_ids, keyword, limit, page, sortBy);
+ 
     return axios
       .get(`product/query-product`, {
         params: {

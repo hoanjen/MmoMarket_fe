@@ -14,7 +14,7 @@ export class CategoryApi {
     category_type_ids?: string[];
   }): Promise<ResponseQueryCategoryType> {
     return axios
-      .get('product/query-category-type', {
+      .get('category-type/query-category-type', {
         params: {
           category_id,
           category_type_ids,

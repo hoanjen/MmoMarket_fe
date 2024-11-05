@@ -15,6 +15,10 @@ export type ResponseProduct = {
       user_id: string;
       created_at: string;
       updated_at: string;
+      user: {
+        id: string;
+        full_name: string;
+      };
       vans_products: {
         id: string;
         title: string;
@@ -26,6 +30,8 @@ export type ResponseProduct = {
     previousPage: number | null;
     nextPage: number | null;
     totalPages: number;
+    currentPage: number;
+    totalDocs: number;
   };
 
   message: [];

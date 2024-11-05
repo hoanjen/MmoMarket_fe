@@ -34,7 +34,7 @@ export function Product(props: { product: productSchema }) {
         <div className="text-[14px]">
           <div>
             <p>
-              Người bán: <span className="text-green-500"> dangtrungkienprovip</span>
+              Người bán: <span className="text-green-500"> {props.product.user.full_name ?? ''}</span>
             </p>
             <p>
               Sản phẩm : <span className="text-green-500">Tài Khoản Telegram</span>
