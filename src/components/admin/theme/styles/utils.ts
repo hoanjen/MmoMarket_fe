@@ -77,8 +77,7 @@ export function createPaletteChannel(hexPalette: Record<string, string>) {
  * Color with alpha channel
  */
 export function varAlpha(color: string, opacity = 1, page?: string) {
-  console.log('colorAlpha', color , page);
-  console.log('page:', page);
+
   const unsupported =
     color.startsWith('#') ||
     color.startsWith('rgb') ||
@@ -99,6 +98,6 @@ export function varAlpha(color: string, opacity = 1, page?: string) {
        `
     );
   }
-  console.log('colorAlpha', color);
+
   return `rgba(${color} / ${opacity})`;
 }

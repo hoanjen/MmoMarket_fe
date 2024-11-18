@@ -1,27 +1,31 @@
 import { Label } from '../components/label';
 import { SvgColor } from '../components/svg-color';
+import IconAnalytics from '@assets/icons/navbar/ic-analytics.svg';
+import IconUser from '@assets/icons/navbar/ic-user.svg';
+import IconCart from '@assets/icons/navbar/ic-cart.svg';
+import IconBlog from '@assets/icons/navbar/ic-blog.svg';
+import IconLock from '@assets/icons/navbar/ic-lock.svg';
+import IconDisable from '@assets/icons/navbar/ic-disabled.svg';
 
 // ----------------------------------------------------------------------
 
-const icon = (name: string) => (
-  <SvgColor width="100%" height="100%" src={`/assets/icons/navbar/${name}.svg`} />
-);
+const icon = (source: string) => <SvgColor width="100%" height="100%" src={source} />;
 
 export const navData = [
   {
     title: 'Dashboard',
-    path: '/',
-    icon: icon('ic-analytics'),
+    path: '/admin/dashboard',
+    icon: icon(IconAnalytics),
   },
   {
     title: 'User',
-    path: '/user',
-    icon: icon('ic-user'),
+    path: '/admin/user',
+    icon: icon(IconUser),
   },
   {
     title: 'Product',
-    path: '/products',
-    icon: icon('ic-cart'),
+    path: '/admin/products',
+    icon: icon(IconCart),
     info: (
       <Label color="error" variant="inverted">
         +3
@@ -30,17 +34,17 @@ export const navData = [
   },
   {
     title: 'Blog',
-    path: '/blog',
-    icon: icon('ic-blog'),
+    path: '/admin/blog',
+    icon: icon(IconBlog),
   },
   {
     title: 'Sign in',
-    path: '/sign-in',
-    icon: icon('ic-lock'),
+    path: '/admin/sign-in',
+    icon: icon(IconLock),
   },
   {
     title: 'Not found',
-    path: '/404',
-    icon: icon('ic-disabled'),
+    path: '/admin/404',
+    icon: icon(IconDisable),
   },
 ];

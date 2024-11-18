@@ -9,9 +9,6 @@ import type { ChartOptions } from './types';
 export function useChart(options?: ChartOptions): ChartOptions {
   const theme = useTheme();
 
-  console.log('chart-theme1',theme)
-
-  console.log('chart-theme',theme.vars)
 
   const LABEL_TOTAL = {
     show: true,

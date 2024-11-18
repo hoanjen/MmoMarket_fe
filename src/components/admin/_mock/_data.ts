@@ -16,7 +16,7 @@ import {
 export const _myAccount = {
   displayName: 'Jaydon Frankie',
   email: 'demo@minimals.cc',
-  photoURL: '/assets/images/avatar/avatar-25.webp',
+  photoURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPG2GzyhdOtLAofRJFKWoMF_pxxyMCgH-aiQ&s',
 };
 
 // ----------------------------------------------------------------------
