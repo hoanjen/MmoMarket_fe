@@ -11,6 +11,7 @@ import {
   _productNames,
 } from './_mock';
 
+
 // ----------------------------------------------------------------------
 
 export const _myAccount = {
@@ -49,7 +50,7 @@ export const _posts = [...Array(23)].map((_, index) => ({
   id: _id(index),
   title: _postTitles(index),
   description: _description(index),
-  coverUrl: `/assets/images/cover/cover-${index + 1}.webp`,
+  coverUrl: `https://i.pinimg.com/736x/0a/ce/02/0ace02d0f19c205612baace33a586fdb.jpg`,
   totalViews: 8829,
   totalComments: 7977,
   totalShares: 8556,
@@ -57,22 +58,13 @@ export const _posts = [...Array(23)].map((_, index) => ({
   postedAt: _times(index),
   author: {
     name: _fullName(index),
-    avatarUrl: `/assets/images/avatar/avatar-${index + 1}.webp`,
+    avatarUrl: `https://i.pinimg.com/736x/0a/ce/02/0ace02d0f19c205612baace33a586fdb.jpg`,
   },
 }));
 
 // ----------------------------------------------------------------------
 
-const COLORS = [
-  '#00AB55',
-  '#000000',
-  '#FFFFFF',
-  '#FFC0CB',
-  '#FF4842',
-  '#1890FF',
-  '#94D82D',
-  '#FFC107',
-];
+const COLORS = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107'];
 
 export const _products = [...Array(24)].map((_, index) => {
   const setIndex = index + 1;
@@ -91,8 +83,7 @@ export const _products = [...Array(24)].map((_, index) => {
       (setIndex === 23 && COLORS.slice(4, 6)) ||
       (setIndex === 24 && COLORS.slice(5, 6)) ||
       COLORS,
-    status:
-      ([1, 3, 5].includes(setIndex) && 'sale') || ([4, 8, 12].includes(setIndex) && 'new') || '',
+    status: ([1, 3, 5].includes(setIndex) && 'sale') || ([4, 8, 12].includes(setIndex) && 'new') || '',
   };
 });
 
@@ -102,18 +93,18 @@ export const _langs = [
   {
     value: 'en',
     label: 'English',
-    icon: '/assets/icons/flags/ic-flag-en.svg',
+    icon: `/assets/icons/flags/ic-flag-en.svg`,
   },
   {
     value: 'de',
     label: 'German',
-    icon: '/assets/icons/flags/ic-flag-de.svg',
+    icon: `/assets/icons/flags/ic-flag-de.svg`,
   },
-  {
-    value: 'fr',
-    label: 'French',
-    icon: '/assets/icons/flags/ic-flag-fr.svg',
-  },
+  // {
+  //   value: 'fr',
+  //   label: 'French',
+  //   icon: '/assets/icons/flags/ic-flag-fr.svg',
+  // },
 ];
 
 // ----------------------------------------------------------------------

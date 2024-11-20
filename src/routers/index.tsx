@@ -13,6 +13,8 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import { varAlpha } from '@components/admin/theme/styles';
 import { Suspense } from 'react';
 import { ThemeProvider } from '@components/admin/theme/theme-provider';
+import UserPage from '@pages/admin/user';
+import ProductPage from '@pages/admin/product';
 
 const renderFallback = (
   <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
@@ -63,8 +65,10 @@ export const router = createBrowserRouter([
         </DashboardLayout>
       </ThemeProvider>
     ),
-    children:[
+    children: [
       { element: <AdminHomePage />, index: true },
-    ]
+      { path: '/admin/user', element: <UserPage /> },
+      { path: '/admin/product', element: <ProductPage /> },
+    ],
   },
 ]);

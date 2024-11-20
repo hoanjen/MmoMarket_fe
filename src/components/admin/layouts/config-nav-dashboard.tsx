@@ -14,18 +14,18 @@ const icon = (source: string) => <SvgColor width="100%" height="100%" src={sourc
 export const navData = [
   {
     title: 'Dashboard',
-    path: '/admin/dashboard',
-    icon: icon(IconAnalytics),
+    path: '/admin',
+    icon: icon(`/assets/icons/navbar/ic-analytics.svg`),
   },
   {
     title: 'User',
     path: '/admin/user',
-    icon: icon(IconUser),
+    icon: icon(`/assets/icons/navbar/ic-user.svg`),
   },
   {
     title: 'Product',
-    path: '/admin/products',
-    icon: icon(IconCart),
+    path: '/admin/product',
+    icon: icon(`/assets/icons/navbar/ic-cart.svg`),
     info: (
       <Label color="error" variant="inverted">
         +3
@@ -35,16 +35,16 @@ export const navData = [
   {
     title: 'Blog',
     path: '/admin/blog',
-    icon: icon(IconBlog),
+    icon: icon(`/assets/icons/navbar/ic-blog.svg`),
   },
   {
     title: 'Sign in',
     path: '/admin/sign-in',
-    icon: icon(IconLock),
+    icon: icon(`/assets/icons/navbar/ic-lock.svg`),
   },
   {
     title: 'Not found',
     path: '/admin/404',
-    icon: icon(IconDisable),
+    icon: icon(`/assets/icons/navbar/ic-disabled.svg`),
   },
 ];
