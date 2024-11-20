@@ -13,10 +13,6 @@ import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 import { AnalyticsTrafficBySite } from '../analytics-traffic-by-site';
 import { AnalyticsCurrentSubject } from '../analytics-current-subject';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
-import glassBagIcon from '@assets/icons/glass/ic-glass-bag.svg';
-import glassUserIcon from '@assets/icons/glass/ic-glass-users.svg';
-import glassBuyIcon from '@assets/icons/glass/ic-glass-buy.svg';
-import glassMessageIcon from '@assets/icons/glass/ic-glass-message.svg';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +30,7 @@ export function OverviewAnalyticsView() {
             title="Weekly sales"
             percent={2.6}
             total={714000}
-            icon={<img alt="icon" src={glassBagIcon} />}
+            icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-bag.svg`} />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [22, 8, 35, 50, 82, 84, 77, 12],
@@ -48,7 +44,7 @@ export function OverviewAnalyticsView() {
             percent={-0.1}
             total={1352831}
             color="secondary"
-            icon={<img alt="icon" src={glassUserIcon} />}
+            icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-users.svg`} />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [56, 47, 40, 62, 73, 30, 23, 54],
@@ -62,7 +58,7 @@ export function OverviewAnalyticsView() {
             percent={2.8}
             total={1723315}
             color="warning"
-            icon={<img alt="icon" src={glassBuyIcon}/>}
+            icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-buy.svg`}/>}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [40, 70, 50, 28, 70, 75, 7, 64],
@@ -76,7 +72,7 @@ export function OverviewAnalyticsView() {
             percent={3.6}
             total={234}
             color="error"
-            icon={<img alt="icon" src={glassMessageIcon} />}
+            icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-message.svg`} />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [56, 30, 23, 54, 47, 40, 62, 73],
