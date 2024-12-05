@@ -227,7 +227,7 @@ function NestedList({ handleClose, user }: { handleClose: Function; user: any })
   const setLogout = () => {
     if (Cookies.get('access_token')) {
       Cookies.remove('access_token');
-      window.location.reload();
+      location.reload();
     }
   };
   return (
@@ -306,6 +306,7 @@ export default function PageHeader() {
       }),
     );
   };
+
   const user = useAppSelector((state) => state.user);
   useEffect(() => {
     if (Cookies.get('access_token')) {
