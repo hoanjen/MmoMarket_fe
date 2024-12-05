@@ -13,6 +13,10 @@ export type ResponseProduct = {
       id: string;
       category_type_id: string;
       user_id: string;
+      user: {
+        id: string;
+        full_name: string;
+      };
       created_at: string;
       updated_at: string;
       vans_products: {
@@ -26,6 +30,8 @@ export type ResponseProduct = {
     previousPage: number | null;
     nextPage: number | null;
     totalPages: number;
+    currentPage: number;
+    totalDocs: number;
   };
 
   message: [];
