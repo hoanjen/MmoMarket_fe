@@ -254,7 +254,7 @@ function NestedList({ handleClose, user }: { handleClose: Function; user: any })
         <ListItemIcon>
           <LocalGroceryStoreIcon />
         </ListItemIcon>
-        <ListItemText primary="Đơn hàng đã mua" />
+        <Link to={`/order-history/1`}>Đơn hàng đã mua</Link>
       </ListItemButton>
       <ListItemButton
         onClick={() => {
@@ -274,7 +274,7 @@ function NestedList({ handleClose, user }: { handleClose: Function; user: any })
         <ListItemIcon>
           <ContentPasteIcon />
         </ListItemIcon>
-        <ListItemText primary="Quản lý nội dung" />
+        <Link to={`/booth-manage`}>Quản lý gian hàng</Link>
       </ListItemButton>
       <ListItemButton
         onClick={() => {

@@ -1,5 +1,5 @@
 import axios from '../index';
-import { ResponseProduct, ResponseProductDetail } from './types';
+import { ResponseProduct, ResponseProductDetail, ResponseCreateProuct } from './types';
 
 export class ProductApi {
   public static async getProduct({ id }: { id: string }): Promise<ResponseProduct> {
@@ -34,7 +34,35 @@ export class ProductApi {
   }
   public static async getProductDetail(id: string ): Promise<ResponseProductDetail> {
     return axios
-    .get(`/product/product-detail?product_id=${id}`)
+    .get(`/product/${id}`)
+    .then((_) => _.data);
+  }
+
+  public static async createProduct({
+    title,
+    sub_title,
+    description,
+    category_type_id,
+    image,
+  }:{
+    title: string,
+    sub_title: string,
+    description: string,
+    category_type_id: string,
+    image: string,
+  }): Promise<ResponseCreateProuct> {
+    return axios
+    .post(`/product`,
+      {
+        title,
+        sub_title,
+        description,
+        category_type_id,
+        image,
+      }
+    )
     .then((_) => _.data);
   }
 }
+
+

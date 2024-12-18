@@ -67,3 +67,7 @@ export type ResponseProductDetail = {
 
   message: [];
 };
+
+export type ResponseCreateProuct ={
+  statusCode: number,
+}
