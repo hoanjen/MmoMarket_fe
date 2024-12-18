@@ -28,3 +28,46 @@ export type ResponseBuyVansProduct = {
 
   message: [];
 };
+
+export type ResponseOrderHistory = {
+  statusCode: number;
+  data: {
+  orders: 
+    {
+      id: string,
+      user_id: string,
+      discount_id: string,
+      vans_product_id: string,
+      quantity: number,
+      price: number,
+      created_at: string,
+      vans_product: {
+        price: number,
+        quantity: 2,
+        product_id: string,
+        product: {
+          user_id: string,
+        }
+      }
+    }[],
+    previousPage: number,
+    totalPages: number,
+    nextPage: number,
+    currentPage: number,
+    totalDocs: number,
+  };
+};
+
+export type ResponseOrderDetail = {
+  statusCode: number;
+  data: {
+    data_product_orders: 
+    {
+      data_product: {
+        id: string,
+        account: string,
+        password: string,
+      }
+    }[]
+  };
+};

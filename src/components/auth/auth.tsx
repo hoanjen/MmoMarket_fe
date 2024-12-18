@@ -136,6 +136,7 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
           transition: Bounce,
         });
         setIsLogin(true);
+        location.reload()
         handleClose();
       }
     }

@@ -1,5 +1,6 @@
 import Rating from '@mui/material/Rating';
 import { productSchema } from './ProductList';
+import { Link } from 'react-router-dom';
 
 export function Product(props: { product: productSchema }) {
   const quantity = props.product.vans_products.reduce((acc, current) => {
@@ -23,7 +24,7 @@ export function Product(props: { product: productSchema }) {
       <div className="col-span-5 flex flex-col space-y-2">
         <a className="font-semibold text-[16px] hover:text-green-500">
           <span className="px-1 py-[1px] text-[14px]  bg-green-500 text-white mr-1">Sản phẩm</span>
-          <span>{props.product.title}</span>
+          <Link to={`/product-detail/${props.product.id}`}><span>{props.product.title}</span></Link>
         </a>
         <div className="flex items-center">
           <Rating name="read-only" value={4.5} readOnly size="small" precision={0.5} />

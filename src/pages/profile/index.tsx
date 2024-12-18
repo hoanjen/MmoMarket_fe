@@ -17,6 +17,7 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import ReportGmailerrorredOutlinedIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 import { useAppSelector } from '@stores/app/hook';
 import { useParams, Link } from 'react-router-dom';
+
 interface profile {
   id: string;
   email: string;
@@ -255,7 +256,7 @@ export default function Profile() {
   };
   return (
     <div className='mt-24'>
-      <Card sx={{ minWidth: 400, display: 'flex', flexDirection: 'row', position: 'relative', 'margin-left': 'auto', 'margin-right': 'auto', 'max-width': '1200px'}}>
+      <Card sx={{ minWidth: 400, display: 'flex', flexDirection: 'row', position: 'relative', 'marginLeft': 'auto', 'marginRight': 'auto', 'maxWidth': '1200px'}}>
         {isChange ? (
           <ButtonBaseDemo handleChangeImage={handleChangeImage} avatar={values.avatar} />
         ) : (

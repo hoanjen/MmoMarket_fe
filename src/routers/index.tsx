@@ -5,6 +5,7 @@ import Home from '../pages/home/index';
 import Profile from '../pages/profile/index';
 import Product from '@pages/product';
 import ChatBox from '../pages/chatbox/ChatBox';
+import OrderHistory from '@pages/orderHistory';
 import ChatComponent from '@components/chatbox/test';
 import AdminHomePage from '../pages/admin/home';
 import { DashboardLayout } from '@components/admin/layouts/dashboard';
@@ -15,7 +16,9 @@ import { Suspense } from 'react';
 import { ThemeProvider } from '@components/admin/theme/theme-provider';
 import UserPage from '@pages/admin/user';
 import ProductPage from '@pages/admin/product';
-
+import ProductDetail from '@pages/productDetail';
+import OrderDetail from '@pages/orderDetail'
+import BoothManage from '@pages/boothManage';
 const renderFallback = (
   <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
     <LinearProgress
@@ -49,6 +52,22 @@ export const router = createBrowserRouter([
       {
         path: '/product',
         element: <Product />,
+      },
+      {
+        path: '/product-detail/:id',
+        element: <ProductDetail />,
+      },
+      {
+        path: '/order-history/:page',
+        element: <OrderHistory />,
+      },
+      {
+        path: '/order-detail/:id',
+        element: <OrderDetail />,
+      },
+      {
+        path: '/booth-manage',
+        element: <BoothManage />,
       },
       { path: '/error', element: <Home></Home> },
       { path: '/test', element: <ChatComponent></ChatComponent> },

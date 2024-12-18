@@ -100,10 +100,20 @@ export default function Product() {
         setOrder({...order, vans_product_id: id});
     };
     const increaseNumber = () =>{
+        const newQuantity = Number(order.quantity + 1);
         setOrder({...order, quantity: order.quantity + 1});
+        setOrderValid((prevOrderValid) => ({
+            ...prevOrderValid,
+            quantity: vansProduct.quantity >= newQuantity && newQuantity > 0,
+        }));
     }
     const decreaseNumber = () =>{
+        const newQuantity = Number(order.quantity - 1);
         setOrder({...order, quantity: order.quantity - 1});
+        setOrderValid((prevOrderValid) => ({
+            ...prevOrderValid,
+            quantity: vansProduct.quantity >= newQuantity && newQuantity > 0,
+        }));
     }
     const handleChange = (event: React.SyntheticEvent, newTab: string) => {
         setTab(newTab);
@@ -113,7 +123,7 @@ export default function Product() {
         e.preventDefault();
         if(orderValid.vans_product_id && orderValid.quantity){
             const res = await OrderApi.buyVansProduct({...order});
-            if (res.data && res.statusCode === 400) {
+            if (res.statusCode === 400) {
                 toast.error('Mua hàng thất bại!', {
                   position: 'top-right',
                   autoClose: 2000,
@@ -140,7 +150,6 @@ export default function Product() {
                 });
               }
         }
-
     }
     useEffect(() => {
         const selectedProduct = values.vans_products.find(
@@ -153,6 +162,11 @@ export default function Product() {
                 description: selectedProduct.description,
                 price: selectedProduct.price
             });
+            const newQuantity = Number(1);
+            setOrderValid((prevOrderValid) => ({
+                ...prevOrderValid,
+                quantity: !(vansProduct.quantity >= newQuantity && newQuantity > 0),
+            }));
         }
     }, [order.vans_product_id]);
     useEffect(() => {
@@ -181,6 +195,7 @@ export default function Product() {
         const interval = setInterval(fectchApi, 5000);
         return () => clearInterval(interval);
     }, []);
+
     return (
     <>
         {isLoading? 
@@ -250,7 +265,6 @@ export default function Product() {
                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
                             <p className="text-gray-600 font-bold text-sm ml-1">
-                                4.96
                                 <span className="text-gray-500 font-normal">(76 đánh giá)</span>
                             </p>
                         </div>
@@ -261,7 +275,7 @@ export default function Product() {
                             <span className="text-gray-500 font-normal">({values.quantity_sold} đã bán)</span>
                         </p>
                     </div>
-                    <h3 className="font-black text-gray-800 md:text-3xl text-xl">{values.title}</h3>
+                    <h3 className="font-bold text-gray-800 md:text-3xl text-xl">{values.title}</h3>
                     <p className="md:text-lg text-gray-500 text-base">{values.sub_title}</p>
                     <p className="md:text-lg text-gray-500 text-base">Người bán: A</p>
                     <p className="md:text-lg text-gray-500 text-base">Sản phẩm: B</p>
