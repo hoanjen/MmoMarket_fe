@@ -22,6 +22,8 @@ import { HeaderSection } from '../core/header-section';
 import { AccountPopover } from '../components/account-popover';
 import { LanguagePopover } from '../components/language-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
+import { useAppSelector } from '@stores/app/hook';
+import { useLocation } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +41,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
   const [navOpen, setNavOpen] = useState(false);
 
   const layoutQuery: Breakpoint = 'lg';
+  const user = useAppSelector((state) => state.user);
 
   return (
     <LayoutSection
@@ -70,12 +73,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                     [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
                   }}
                 />
-                <NavMobile
-                  data={navData}
-                  open={navOpen}
-                  onClose={() => setNavOpen(false)}
-                  workspaces={_workspaces}
-                />
+                <NavMobile data={navData} open={navOpen} onClose={() => setNavOpen(false)} workspaces={_workspaces} />
               </>
             ),
             rightArea: (
@@ -86,19 +84,14 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                 <AccountPopover
                   data={[
                     {
-                      label: 'Home',
+                      label: 'Trang chủ',
                       href: '/',
                       icon: <Iconify width={22} icon="solar:home-angle-bold-duotone" />,
                     },
                     {
-                      label: 'Profile',
-                      href: '#',
+                      label: 'Thông tin cá nhân',
+                      href: `/profile/${user.id}`,
                       icon: <Iconify width={22} icon="solar:shield-keyhole-bold-duotone" />,
-                    },
-                    {
-                      label: 'Settings',
-                      href: '#',
-                      icon: <Iconify width={22} icon="solar:settings-bold-duotone" />,
                     },
                   ]}
                 />
@@ -110,9 +103,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
       /** **************************************
        * Sidebar
        *************************************** */
-      sidebarSection={
-        <NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={_workspaces} />
-      }
+      sidebarSection={<NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={_workspaces} />}
       /** **************************************
        * Footer
        *************************************** */

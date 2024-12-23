@@ -32,19 +32,4 @@ export const navData = [
       </Label>
     ),
   },
-  {
-    title: 'Blog',
-    path: '/admin/blog',
-    icon: icon(`/assets/icons/navbar/ic-blog.svg`),
-  },
-  {
-    title: 'Sign in',
-    path: '/admin/sign-in',
-    icon: icon(`/assets/icons/navbar/ic-lock.svg`),
-  },
-  {
-    title: 'Not found',
-    path: '/admin/404',
-    icon: icon(`/assets/icons/navbar/ic-disabled.svg`),
-  },
 ];

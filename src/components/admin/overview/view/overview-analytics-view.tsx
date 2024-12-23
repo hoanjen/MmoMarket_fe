@@ -13,10 +13,64 @@ import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 import { AnalyticsTrafficBySite } from '../analytics-traffic-by-site';
 import { AnalyticsCurrentSubject } from '../analytics-current-subject';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
+import { useEffect, useState } from 'react';
+import { AdminApi } from '@api/admin/admin';
 
 // ----------------------------------------------------------------------
+export type DashboardOverview = {
+  revenue: {
+    growth: number;
+    total: number;
+  };
+  userStats: {
+    growth: number;
+    total: number;
+  };
+  orderStats: {
+    growth: number;
+    total: number;
+  };
+  productStats: {
+    growth: number;
+    total: number;
+  };
+};
 
 export function OverviewAnalyticsView() {
+  const startDate = new Date().toISOString();
+  const endDate = new Date(new Date().getTime() + 7 * 24 * 3600 * 1000).toISOString();
+  const [overView, setOverView] = useState<DashboardOverview>({
+    revenue: {
+      growth: 0,
+      total: 0,
+    },
+    userStats: {
+      growth: -100,
+      total: 0,
+    },
+    orderStats: {
+      growth: 0,
+      total: 0,
+    },
+    productStats: {
+      growth: -100,
+      total: 0,
+    },
+  });
+  const fetchApi = async () => {
+    try {
+      const res = await AdminApi.dashboardOverview(startDate, endDate);
+      if (res) {
+        setOverView(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchApi();
+  }, []);
+
   return (
     // <div></div>
     <DashboardContent maxWidth="xl">
@@ -58,7 +112,7 @@ export function OverviewAnalyticsView() {
             percent={2.8}
             total={1723315}
             color="warning"
-            icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-buy.svg`}/>}
+            icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-buy.svg`} />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [40, 70, 50, 28, 70, 75, 7, 64],
@@ -108,57 +162,6 @@ export function OverviewAnalyticsView() {
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={8}>
-          <AnalyticsConversionRates
-            title="Conversion rates"
-            subheader="(+43%) than last year"
-            chart={{
-              categories: ['Italy', 'Japan', 'China', 'Canada', 'France'],
-              series: [
-                { name: '2022', data: [44, 55, 41, 64, 22] },
-                { name: '2023', data: [53, 32, 33, 52, 13] },
-              ],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AnalyticsCurrentSubject
-            title="Current subject"
-            chart={{
-              categories: ['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math'],
-              series: [
-                { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
-                { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-                { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
-              ],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <AnalyticsNews title="News" list={_posts.slice(0, 5)} />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AnalyticsOrderTimeline title="Order timeline" list={_timeline} />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AnalyticsTrafficBySite
-            title="Traffic by site"
-            list={[
-              { value: 'facebook', label: 'Facebook', total: 323234 },
-              { value: 'google', label: 'Google', total: 341212 },
-              { value: 'linkedin', label: 'Linkedin', total: 411213 },
-              { value: 'twitter', label: 'Twitter', total: 443232 },
-            ]}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <AnalyticsTasks title="Tasks" list={_tasks} />
-        </Grid>
       </Grid>
     </DashboardContent>
   );

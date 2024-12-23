@@ -107,6 +107,19 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
         email: values.email,
         password: values.password,
       });
+      if (!data) {
+        toast.error('email or password invalid!', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+          transition: Bounce,
+        });
+      }
       if (data && data.statusCode === 400) {
         toast.error('email or password invalid!', {
           position: 'top-right',
@@ -136,7 +149,7 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
           transition: Bounce,
         });
         setIsLogin(true);
-        location.reload()
+        location.reload();
         handleClose();
       }
     }
@@ -158,10 +171,11 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
             value={values.email}
             name="email"
             onChange={(e) => {
+              console.log('value', e.target.value);
               setValues({ ...values, email: e.target.value });
               setInvalidField({
                 ...invalidField,
-                email: !isEmail(values.email),
+                email: !isEmail(e.target.value),
               });
             }}
           />
@@ -178,7 +192,7 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
             value={values.password}
             onChange={(e) => {
               setValues({ ...values, password: e.target.value });
-              if (values.password.length < 2) {
+              if (e.target.value && e.target.value.length < 2) {
                 setInvalidField({ ...invalidField, password: true });
               } else {
                 setInvalidField({ ...invalidField, password: false });

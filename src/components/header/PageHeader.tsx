@@ -29,6 +29,8 @@ import { Link } from 'react-router-dom';
 import { ProfileApi } from '../../api/profile/profile';
 import { setUser } from '../../stores/slice/user.slice';
 import { useAppDispatch } from '../../stores/app/hook';
+import SettingsIcon from '@mui/icons-material/Settings';
+
 type Category = {
   id: string;
   name: string;
@@ -246,6 +248,20 @@ function NestedList({ handleClose, user }: { handleClose: Function; user: any })
         </ListItemIcon>
         <Link to={`/profile/${user.id}`}>Thông tin cá nhân</Link>
       </ListItemButton>
+      {user.role === 'ADMIN' ? (
+        <ListItemButton
+          onClick={() => {
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <Link to={`/admin`}>Trang Quản trị</Link>
+        </ListItemButton>
+      ) : (
+        ''
+      )}
       <ListItemButton
         onClick={() => {
           handleClose();
@@ -303,6 +319,7 @@ export default function PageHeader() {
         username: userInfor.data.user.username,
         avatar: userInfor.data.user.avatar,
         phone_number: userInfor.data.user.phone_number,
+        role: userInfor.data.user.role,
       }),
     );
   };

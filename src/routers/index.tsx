@@ -17,7 +17,7 @@ import { ThemeProvider } from '@components/admin/theme/theme-provider';
 import UserPage from '@pages/admin/user';
 import ProductPage from '@pages/admin/product';
 import ProductDetail from '@pages/productDetail';
-import OrderDetail from '@pages/orderDetail'
+import OrderDetail from '@pages/orderDetail';
 import BoothManage from '@pages/boothManage';
 const renderFallback = (
   <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">

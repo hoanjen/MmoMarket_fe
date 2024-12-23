@@ -1,6 +1,6 @@
 import type { IconButtonProps } from '@mui/material/IconButton';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,7 +14,10 @@ import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
 import { useRouter, usePathname } from '../../routes/hooks';
 
-import { _myAccount } from '../../_mock';
+import { useAppDispatch, useAppSelector } from '@stores/app/hook';
+import { setUser } from '@stores/slice/user.slice';
+import Cookies from 'js-cookie';
+import { ProfileApi } from '@api/profile/profile';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +31,28 @@ export type AccountPopoverProps = IconButtonProps & {
 };
 
 export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps) {
+  const dispatch = useAppDispatch();
+  const getUserInfo = async () => {
+    const userInfor = await ProfileApi.getProfileByToken();
+    dispatch(
+      setUser({
+        id: userInfor.data.user.id,
+        email: userInfor.data.user.email,
+        username: userInfor.data.user.username,
+        avatar: userInfor.data.user.avatar,
+        phone_number: userInfor.data.user.phone_number,
+        role: userInfor.data.user.role,
+      }),
+    );
+  };
+
+  const user = useAppSelector((state) => state.user);
+  useEffect(() => {
+    if (Cookies.get('access_token')) {
+      getUserInfo();
+    }
+  }, []);
+
   const router = useRouter();
 
   const pathname = usePathname();
@@ -47,7 +72,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
       handleClosePopover();
       router.push(path);
     },
-    [handleClosePopover, router]
+    [handleClosePopover, router],
   );
 
   return (
@@ -64,8 +89,8 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
         }}
         {...other}
       >
-        <Avatar src={_myAccount.photoURL} alt={_myAccount.displayName} sx={{ width: 1, height: 1 }}>
-          {_myAccount.displayName.charAt(0).toUpperCase()}
+        <Avatar src={user.avatar} alt={user.username} sx={{ width: 1, height: 1 }}>
+          {user.username.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
 
@@ -83,11 +108,11 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
       >
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {_myAccount?.displayName}
+            {user?.username}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {_myAccount?.email}
+            {user?.email}
           </Typography>
         </Box>
 

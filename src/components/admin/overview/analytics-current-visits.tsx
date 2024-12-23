@@ -57,14 +57,14 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
 
-      <Chart
+      {/* <Chart
         type="pie"
         series={chartSeries}
         options={chartOptions}
         width={{ xs: 240, xl: 260 }}
         height={{ xs: 240, xl: 260 }}
         sx={{ my: 6, mx: 'auto' }}
-      />
+      /> */}
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 

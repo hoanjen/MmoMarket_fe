@@ -13,6 +13,7 @@ import { varAlpha, bgGradient } from '../theme/styles';
 import { Iconify } from '../components/iconify';
 import { SvgColor } from '../components/svg-color';
 import { Chart, useChart } from '../components/chart';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -29,16 +30,7 @@ type Props = CardProps & {
   };
 };
 
-export function AnalyticsWidgetSummary({
-  icon,
-  title,
-  total,
-  chart,
-  percent,
-  color = 'primary',
-  sx,
-  ...other
-}: Props) {
+export function AnalyticsWidgetSummary({ icon, title, total, chart, percent, color = 'primary', sx, ...other }: Props) {
   const theme = useTheme();
 
   const chartColors = [theme.palette[color].dark];
@@ -79,7 +71,9 @@ export function AnalyticsWidgetSummary({
       </Box>
     </Box>
   );
-
+  useEffect(() => {
+    console.log(111);
+  }, []);
   return (
     <Card
       sx={{
@@ -112,13 +106,7 @@ export function AnalyticsWidgetSummary({
           <Box sx={{ typography: 'h4' }}>{fShortenNumber(total)}</Box>
         </Box>
 
-        <Chart
-          type="line"
-          series={[{ data: chart.series }]}
-          options={chartOptions}
-          width={84}
-          height={56}
-        />
+        {/* <Chart type="line" series={[{ data: chart.series }]} options={chartOptions} width={84} height={56} /> */}
       </Box>
 
       <SvgColor

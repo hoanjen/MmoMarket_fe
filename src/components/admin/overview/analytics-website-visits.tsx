@@ -55,13 +55,13 @@ export function AnalyticsWebsiteVisits({ title, subheader, chart, ...other }: Pr
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
 
-      <Chart
+      {/* <Chart
         type="bar"
         series={chart.series}
         options={chartOptions}
         height={364}
         sx={{ py: 2.5, pl: 1, pr: 2.5 }}
-      />
+      /> */}
     </Card>
   );
 }
