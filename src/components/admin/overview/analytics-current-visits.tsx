@@ -7,8 +7,18 @@ import { useTheme } from '@mui/material/styles';
 import CardHeader from '@mui/material/CardHeader';
 
 import { fNumber } from '../utils/format-number';
+import * as React from 'react';
+import { PieChart, PieChartProps } from '@mui/x-charts/PieChart';
 
 import { Chart, useChart, ChartLegends } from '../components/chart';
+import { pieArcLabelClasses, PieValueType } from '@mui/x-charts';
+import { Box, BoxProps } from '@mui/material';
+import { chartClasses } from '../components/chart/classes';
+import { current } from '@reduxjs/toolkit';
+
+const normalize = (v: number, v2: number) => Number.parseFloat(((v * v2) / 100).toFixed(2));
+
+export const valueFormatter = (item: { value: number }) => `${item.value}%`;
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +39,10 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
   const theme = useTheme();
 
   const chartSeries = chart.series.map((item) => item.value);
+
+  const sumSeries = chartSeries.reduce((acc, curr) => {
+    return acc + curr;
+  }, 0);
 
   const chartColors = chart.colors ?? [
     theme.palette.primary.main,
@@ -56,15 +70,22 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
-
-      {/* <Chart
-        type="pie"
-        series={chartSeries}
-        options={chartOptions}
+      <BasicPie
+        series={[
+          {
+            data: chart.series.map((item, index) => {
+              return {
+                id: index,
+                value: Number.parseFloat(((item.value / sumSeries) * 100).toFixed(2)),
+              };
+            }),
+          },
+        ]}
+        chartColors={chartColors}
         width={{ xs: 240, xl: 260 }}
         height={{ xs: 240, xl: 260 }}
-        sx={{ my: 6, mx: 'auto' }}
-      /> */}
+        sx={{ my: 6, mx: 6 }}
+      ></BasicPie>
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 
@@ -76,3 +97,51 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
     </Card>
   );
 }
+
+export default function BasicPie({
+  sx,
+  series,
+  height,
+  className,
+  width = '100%',
+  chartColors,
+  ...other
+}: BoxProps & { series: PieChartProps['series']; chartColors: string[] }) {
+  return (
+    <Box
+      dir="ltr"
+      className={chartClasses.root.concat(className ? ` ${className}` : '')}
+      sx={{
+        width,
+        height,
+        flexShrink: 0,
+        borderRadius: 1.5,
+        position: 'relative',
+        ...sx,
+      }}
+      {...other}
+    >
+      <PieChart
+        series={[
+          {
+            arcLabel: (item) => `${item.value}%`,
+            arcLabelRadius: '60%',
+            data: series[0].data,
+            valueFormatter,
+          },
+        ]}
+        colors={chartColors}
+        sx={{
+          [`& .${pieArcLabelClasses.root}`]: {
+            fontWeight: 'bold',
+          },
+        }}
+        {...size}
+      />
+    </Box>
+  );
+}
+const size = {
+  width: 450,
+  height: 300,
+};

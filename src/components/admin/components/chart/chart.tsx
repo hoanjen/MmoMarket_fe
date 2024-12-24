@@ -21,9 +21,7 @@ export function Chart({
   width = '100%',
   ...other
 }: BoxProps & ChartProps) {
-  useEffect(() => {
-    console.log(111);
-  }, []);
+
   return (
     <Box
       dir="ltr"

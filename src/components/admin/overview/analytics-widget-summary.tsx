@@ -71,9 +71,7 @@ export function AnalyticsWidgetSummary({ icon, title, total, chart, percent, col
       </Box>
     </Box>
   );
-  useEffect(() => {
-    console.log(111);
-  }, []);
+
   return (
     <Card
       sx={{

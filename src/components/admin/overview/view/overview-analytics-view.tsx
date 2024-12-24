@@ -37,15 +37,15 @@ export type DashboardOverview = {
 };
 
 export function OverviewAnalyticsView() {
-  const startDate = new Date().toISOString();
-  const endDate = new Date(new Date().getTime() + 7 * 24 * 3600 * 1000).toISOString();
+  const endDate = new Date().toISOString();
+  const startDate = new Date(new Date().getTime() - 7 * 24 * 3600 * 1000).toISOString();
   const [overView, setOverView] = useState<DashboardOverview>({
     revenue: {
       growth: 0,
       total: 0,
     },
     userStats: {
-      growth: -100,
+      growth: 0,
       total: 0,
     },
     orderStats: {
@@ -53,7 +53,7 @@ export function OverviewAnalyticsView() {
       total: 0,
     },
     productStats: {
-      growth: -100,
+      growth: 0,
       total: 0,
     },
   });
@@ -82,8 +82,8 @@ export function OverviewAnalyticsView() {
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
             title="Weekly sales"
-            percent={2.6}
-            total={714000}
+            percent={overView.revenue.growth}
+            total={overView.revenue.total}
             icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-bag.svg`} />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
@@ -95,8 +95,8 @@ export function OverviewAnalyticsView() {
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
             title="New users"
-            percent={-0.1}
-            total={1352831}
+            percent={overView.userStats.growth}
+            total={overView.userStats.total}
             color="secondary"
             icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-users.svg`} />}
             chart={{
@@ -109,8 +109,8 @@ export function OverviewAnalyticsView() {
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
             title="Purchase orders"
-            percent={2.8}
-            total={1723315}
+            percent={overView.orderStats.growth}
+            total={overView.orderStats.total}
             color="warning"
             icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-buy.svg`} />}
             chart={{
@@ -122,9 +122,9 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Messages"
-            percent={3.6}
-            total={234}
+            title="Products"
+            percent={overView.productStats.growth}
+            total={overView.productStats.total}
             color="error"
             icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-message.svg`} />}
             chart={{
