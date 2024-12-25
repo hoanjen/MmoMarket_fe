@@ -36,6 +36,10 @@ export type DashboardOverview = {
   };
 };
 
+export type CategoryStats = {
+  label: string;
+  value: number;
+};
 export function OverviewAnalyticsView() {
   const endDate = new Date().toISOString();
   const startDate = new Date(new Date().getTime() - 7 * 24 * 3600 * 1000).toISOString();
@@ -57,12 +61,18 @@ export function OverviewAnalyticsView() {
       total: 0,
     },
   });
+  const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
   const fetchApi = async () => {
     try {
       const res = await AdminApi.dashboardOverview(startDate, endDate);
+      const dataCategory = await AdminApi.categoryStats();
       if (res) {
         setOverView(res);
       }
+      if (dataCategory) {
+        setCategoryStats(dataCategory);
+      }
+      console.log('setCategoryStats', dataCategory);
     } catch (error) {
       console.log(error);
     }
@@ -136,14 +146,14 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} md={6} lg={4}>
           <AnalyticsCurrentVisits
-            title="Current visits"
+            title="Current Category"
             chart={{
-              series: [
-                { label: 'America', value: 3500 },
-                { label: 'Asia', value: 2500 },
-                { label: 'Europe', value: 1500 },
-                { label: 'Africa', value: 500 },
-              ],
+              series: categoryStats.map((el) => {
+                return {
+                  label: el.label,
+                  value: el.value,
+                };
+              }),
             }}
           />
         </Grid>
@@ -161,7 +171,6 @@ export function OverviewAnalyticsView() {
             }}
           />
         </Grid>
-
       </Grid>
     </DashboardContent>
   );

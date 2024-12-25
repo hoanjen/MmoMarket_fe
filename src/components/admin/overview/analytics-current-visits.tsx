@@ -126,6 +126,7 @@ export default function BasicPie({
           {
             arcLabel: (item) => `${item.value}%`,
             arcLabelRadius: '60%',
+            arcLabelMinAngle: 5,
             data: series[0].data,
             valueFormatter,
           },

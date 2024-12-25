@@ -16,3 +16,8 @@ export type ResponseDashboardOverview = {
     total: number;
   };
 };
+
+export type ResponseCategoryStats = {
+  label: string;
+  value: number;
+}[];

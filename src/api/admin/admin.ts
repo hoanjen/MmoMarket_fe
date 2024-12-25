@@ -1,5 +1,5 @@
 import axios from '../index';
-import { ResponseDashboardOverview } from './type';
+import { ResponseCategoryStats, ResponseDashboardOverview } from './type';
 
 export class AdminApi {
   public static async dashboardOverview(startDate: string, endDate: string): Promise<ResponseDashboardOverview> {
@@ -11,5 +11,9 @@ export class AdminApi {
         },
       })
       .then((_) => _.data);
+  }
+
+  public static async categoryStats(): Promise<ResponseCategoryStats> {
+    return axios.get('/admin/dashboard/category-stats').then((_) => _.data);
   }
 }
