@@ -40,6 +40,11 @@ export type CategoryStats = {
   label: string;
   value: number;
 };
+
+export type ResponseOrderRevenue = {
+  growthRevenue: number;
+  revenue: { month: string; revenue: string | number }[];
+};
 export function OverviewAnalyticsView() {
   const endDate = new Date().toISOString();
   const startDate = new Date(new Date().getTime() - 7 * 24 * 3600 * 1000).toISOString();
@@ -62,17 +67,24 @@ export function OverviewAnalyticsView() {
     },
   });
   const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
+  const [orderRevenue, setOrderRevenue] = useState<ResponseOrderRevenue>({
+    growthRevenue: 0,
+    revenue: [{ month: 'Jan', revenue: 0 }],
+  });
   const fetchApi = async () => {
     try {
       const res = await AdminApi.dashboardOverview(startDate, endDate);
       const dataCategory = await AdminApi.categoryStats();
+      const dataOrderRevenue = await AdminApi.getOrderRevenueByYear();
       if (res) {
         setOverView(res);
       }
       if (dataCategory) {
         setCategoryStats(dataCategory);
       }
-      console.log('setCategoryStats', dataCategory);
+      if (orderRevenue) {
+        setOrderRevenue(dataOrderRevenue);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -95,10 +107,6 @@ export function OverviewAnalyticsView() {
             percent={overView.revenue.growth}
             total={overView.revenue.total}
             icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-bag.svg`} />}
-            chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-              series: [22, 8, 35, 50, 82, 84, 77, 12],
-            }}
           />
         </Grid>
 
@@ -109,10 +117,6 @@ export function OverviewAnalyticsView() {
             total={overView.userStats.total}
             color="secondary"
             icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-users.svg`} />}
-            chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-              series: [56, 47, 40, 62, 73, 30, 23, 54],
-            }}
           />
         </Grid>
 
@@ -123,10 +127,6 @@ export function OverviewAnalyticsView() {
             total={overView.orderStats.total}
             color="warning"
             icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-buy.svg`} />}
-            chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-              series: [40, 70, 50, 28, 70, 75, 7, 64],
-            }}
           />
         </Grid>
 
@@ -137,10 +137,6 @@ export function OverviewAnalyticsView() {
             total={overView.productStats.total}
             color="error"
             icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-message.svg`} />}
-            chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-              series: [56, 30, 23, 54, 47, 40, 62, 73],
-            }}
           />
         </Grid>
 
@@ -160,14 +156,15 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} md={6} lg={8}>
           <AnalyticsWebsiteVisits
-            title="Website visits"
-            subheader="(+43%) than last year"
+            title="Revenue By year"
+            subheader={`(+${orderRevenue.growthRevenue}%) than last year`}
             chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-              series: [
-                { name: 'Team A', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
-                { name: 'Team B', data: [51, 70, 47, 67, 40, 37, 24, 70, 24] },
-              ],
+              series: orderRevenue.revenue.map((item) => {
+                return {
+                  month: item.month,
+                  revenue: Number(item.revenue),
+                };
+              }),
             }}
           />
         </Grid>

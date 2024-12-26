@@ -19,8 +19,8 @@ type Props = CardProps & {
     colors?: string[];
     categories?: string[];
     series: {
-      name: string;
-      data: number[];
+      month: string;
+      revenue: number;
     }[];
     options?: ChartOptions;
   };
@@ -78,7 +78,10 @@ export const dataset = [
 ];
 
 export function valueFormatter(value: number | null) {
-  return `${value}$`;
+  if (value && value >= 1000) {
+    return `${(value / 1000).toFixed(0)}K`;
+  }
+  return value ? value.toString() : "";
 }
 
 export function AnalyticsWebsiteVisits({ title, subheader, chart, ...other }: Props) {
@@ -86,38 +89,16 @@ export function AnalyticsWebsiteVisits({ title, subheader, chart, ...other }: Pr
 
   const chartColors = chart.colors ?? [theme.palette.primary.dark, hexAlpha(theme.palette.primary.light, 0.64)];
 
-  const chartOptions = useChart({
-    colors: chartColors,
-    stroke: {
-      width: 2,
-      colors: ['transparent'],
-    },
-    xaxis: {
-      categories: chart.categories,
-    },
-    legend: {
-      show: true,
-    },
-    tooltip: {
-      y: {
-        formatter: (value: number) => `${value} visits`,
-      },
-    },
-    ...chart.options,
-  });
-
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
 
-      {/* <Chart
-        type="bar"
-        series={chart.series}
-        options={chartOptions}
-        height={364}
-        sx={{ py: 2.5, pl: 1, pr: 2.5 }}
-      /> */}
-      <BasicBars chartColors={chartColors} height={400} sx={{ py: 2.5, pl: 1, pr: 2.5 }}></BasicBars>
+      <BasicBars
+        dataset={chart.series}
+        chartColors={chartColors}
+        height={400}
+        sx={{ py: 2.5, pl: 2, ml: 1, pr: 2.5 }}
+      ></BasicBars>
     </Card>
   );
 }
@@ -128,8 +109,9 @@ export default function BasicBars({
   className,
   width = '100%',
   chartColors,
+  dataset,
   ...other
-}: BoxProps & { chartColors: string[] }) {
+}: BoxProps & { chartColors: string[]; dataset: { month: string; revenue: number }[] }) {
   return (
     <Box
       dir="ltr"
@@ -148,9 +130,15 @@ export default function BasicBars({
         series={[{ dataKey: 'revenue', label: 'Revenue MMO Market', valueFormatter }]}
         yAxis={[
           {
-            label: 'Revenue ($)',
+            valueFormatter: (value) => {
+              if (value >= 1000) {
+                return `${(value / 1000).toFixed(0)}K`;
+              }
+              return value.toString();
+            },
           },
         ]}
+     
         xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
         dataset={dataset}
         colors={chartColors}

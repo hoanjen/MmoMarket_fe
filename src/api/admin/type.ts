@@ -21,3 +21,8 @@ export type ResponseCategoryStats = {
   label: string;
   value: number;
 }[];
+
+export type ResponseOrderRevenueByYear = {
+  growthRevenue: number;
+  revenue: { month: string; revenue: number }[];
+};

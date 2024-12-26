@@ -23,35 +23,12 @@ type Props = CardProps & {
   percent: number;
   color?: ColorType;
   icon: React.ReactNode;
-  chart: {
-    series: number[];
-    categories: string[];
-    options?: ChartOptions;
-  };
 };
 
-export function AnalyticsWidgetSummary({ icon, title, total, chart, percent, color = 'primary', sx, ...other }: Props) {
+export function AnalyticsWidgetSummary({ icon, title, total, percent, color = 'primary', sx, ...other }: Props) {
   const theme = useTheme();
 
   const chartColors = [theme.palette[color].dark];
-
-  const chartOptions = useChart({
-    chart: { sparkline: { enabled: true } },
-    colors: chartColors,
-    xaxis: { categories: chart.categories },
-    grid: {
-      padding: {
-        top: 6,
-        left: 6,
-        right: 6,
-        bottom: 6,
-      },
-    },
-    tooltip: {
-      y: { formatter: (value: number) => fNumber(value), title: { formatter: () => '' } },
-    },
-    ...chart.options,
-  });
 
   const renderTrending = (
     <Box
