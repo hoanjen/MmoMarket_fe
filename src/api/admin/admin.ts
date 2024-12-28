@@ -1,5 +1,5 @@
 import axios from '../index';
-import { ResponseCategoryStats, ResponseDashboardOverview, ResponseOrderRevenueByYear } from './type';
+import { ResponseCategoryStats, ResponseDashboardOverview, ResponseListUser, ResponseOrderRevenueByYear } from './type';
 
 export class AdminApi {
   public static async dashboardOverview(startDate: string, endDate: string): Promise<ResponseDashboardOverview> {
@@ -19,5 +19,12 @@ export class AdminApi {
 
   public static async getOrderRevenueByYear(): Promise<ResponseOrderRevenueByYear> {
     return axios.get('/admin/order/revenue').then((_) => _.data);
+  }
+  public static async getListUser({ search }: { search?: string }): Promise<ResponseListUser> {
+    return axios
+      .get('/admin/users', {
+        params: { search },
+      })
+      .then((_) => _.data);
   }
 }

@@ -12,35 +12,15 @@ import { visuallyHidden } from './utils';
 type UserTableHeadProps = {
   orderBy: string;
   rowCount: number;
-  numSelected: number;
   order: 'asc' | 'desc';
   onSort: (id: string) => void;
   headLabel: Record<string, any>[];
-  onSelectAllRows: (checked: boolean) => void;
 };
 
-export function UserTableHead({
-  order,
-  onSort,
-  orderBy,
-  rowCount,
-  headLabel,
-  numSelected,
-  onSelectAllRows,
-}: UserTableHeadProps) {
+export function UserTableHead({ order, onSort, orderBy, headLabel }: UserTableHeadProps) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              onSelectAllRows(event.target.checked)
-            }
-          />
-        </TableCell>
-
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -56,9 +36,7 @@ export function UserTableHead({
             >
               {headCell.label}
               {orderBy === headCell.id ? (
-                <Box sx={{ ...visuallyHidden }}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
+                <Box sx={{ ...visuallyHidden }}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</Box>
               ) : null}
             </TableSortLabel>
           </TableCell>
@@ -67,3 +45,5 @@ export function UserTableHead({
     </TableHead>
   );
 }
+
+//user table header

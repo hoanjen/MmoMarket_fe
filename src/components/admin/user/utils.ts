@@ -36,14 +36,14 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 export function getComparator<Key extends keyof any>(
   order: 'asc' | 'desc',
-  orderBy: Key
+  orderBy: Key,
 ): (
   a: {
     [key in Key]: number | string;
   },
   b: {
     [key in Key]: number | string;
-  }
+  },
 ) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -71,7 +71,9 @@ export function applyFilter({ inputData, comparator, filterName }: ApplyFilterPr
 
   if (filterName) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      (user) =>
+        user.username.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
+        user.email.toLowerCase().indexOf(filterName.toLowerCase()) !== -1,
     );
   }
 

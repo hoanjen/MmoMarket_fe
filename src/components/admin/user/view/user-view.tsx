@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -23,6 +23,7 @@ import { UserTableToolbar } from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 import type { UserProps } from '../user-table-row';
+import { AdminApi } from '@api/admin/admin';
 
 // ----------------------------------------------------------------------
 
@@ -30,9 +31,52 @@ export function UserView() {
   const table = useTable();
 
   const [filterName, setFilterName] = useState('');
+  const [users, setUsers] = useState<
+    {
+      id: string;
+      email: string;
+      full_name: string;
+      last_name: string;
+      first_name: string;
+      avatar: string;
+      username: string;
+      phone_number: string;
+      roles: {
+        id: string;
+        name: string;
+      }[];
+    }[]
+  >([]);
+
+  const fetchApi = async () => {
+    try {
+      const userData = await AdminApi.getListUser({});
+      setUsers(userData.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchApi();
+  }, []);
+
+  // fetchApi();
 
   const dataFiltered: UserProps[] = applyFilter({
-    inputData: _users,
+    inputData: users.map((item) => {
+      return {
+        id: item.id,
+        name: item.full_name || item.first_name + ' ' + item.last_name,
+        avatarUrl: item.avatar ?? '',
+        email: item.email,
+        isVerified: true,
+        role: item.roles[0].name,
+        phone_number: item.phone_number,
+        status: 'active',
+        username: item.username,
+      };
+    }),
     comparator: getComparator(table.order, table.orderBy),
     filterName,
   });
@@ -45,13 +89,6 @@ export function UserView() {
         <Typography variant="h4" flexGrow={1}>
           Users
         </Typography>
-        <Button
-          variant="contained"
-          color="inherit"
-          startIcon={<Iconify icon="mingcute:add-line" />}
-        >
-          New user
-        </Button>
       </Box>
 
       <Card>
@@ -64,60 +101,41 @@ export function UserView() {
           }}
         />
 
-        <Scrollbar>
-          <TableContainer sx={{ overflow: 'unset' }}>
-            <Table sx={{ minWidth: 800 }}>
-              <UserTableHead
-                order={table.order}
-                orderBy={table.orderBy}
-                rowCount={_users.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(
-                    checked,
-                    _users.map((user) => user.id)
-                  )
-                }
-                headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
-                  { id: '' },
-                ]}
-              />
-              <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row) => (
-                    <UserTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                    />
-                  ))}
+        <TableContainer sx={{ overflow: 'unset' }}>
+          <Table sx={{ minWidth: 800 }}>
+            <UserTableHead
+              order={table.order}
+              orderBy={table.orderBy}
+              rowCount={users.length}
+              onSort={table.onSort}
+              headLabel={[
+                { id: 'name', label: 'Name' },
+                { id: 'username', label: 'Username' },
+                { id: 'email', label: 'Email' },
+                { id: 'phone', label: 'Phone number' },
+                { id: 'role', label: 'Role' },
+                { id: 'isVerified', label: 'Verified', align: 'center' },
+                { id: '' },
+              ]}
+            />
+            <TableBody>
+              {dataFiltered
+                .slice(table.page * table.rowsPerPage, table.page * table.rowsPerPage + table.rowsPerPage)
+                .map((row) => (
+                  <UserTableRow key={row.id} row={row} />
+                ))}
 
-                <TableEmptyRows
-                  height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
-                />
+              <TableEmptyRows height={68} emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)} />
 
-                {notFound && <TableNoData searchQuery={filterName} />}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
+              {notFound && <TableNoData searchQuery={filterName} />}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
         <TablePagination
           component="div"
           page={table.page}
-          count={_users.length}
+          count={users.length}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           rowsPerPageOptions={[5, 10, 25]}
@@ -143,7 +161,7 @@ export function useTable() {
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(id);
     },
-    [order, orderBy]
+    [order, orderBy],
   );
 
   const onSelectAllRows = useCallback((checked: boolean, newSelecteds: string[]) => {
@@ -162,7 +180,7 @@ export function useTable() {
 
       setSelected(newSelected);
     },
-    [selected]
+    [selected],
   );
 
   const onResetPage = useCallback(() => {
@@ -178,7 +196,7 @@ export function useTable() {
       setRowsPerPage(parseInt(event.target.value, 10));
       onResetPage();
     },
-    [onResetPage]
+    [onResetPage],
   );
 
   return {
@@ -195,3 +213,5 @@ export function useTable() {
     onChangeRowsPerPage,
   };
 }
+
+// user-view

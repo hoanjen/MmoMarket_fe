@@ -26,3 +26,27 @@ export type ResponseOrderRevenueByYear = {
   growthRevenue: number;
   revenue: { month: string; revenue: number }[];
 };
+
+export type ResponseListUser = {
+  pageDetail: {
+    previousPage: number;
+    totalPages: number;
+    nextPage: number;
+    currentPage: number;
+    totalDocs: number;
+  };
+  user: {
+    id: string;
+    email: string;
+    full_name: string;
+    last_name: string;
+    phone_number: string;
+    avatar: string;
+    username:string;
+    first_name: string;
+    roles: {
+      id: string;
+      name: string;
+    }[];
+  }[];
+};
