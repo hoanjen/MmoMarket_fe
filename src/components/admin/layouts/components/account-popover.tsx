@@ -75,6 +75,13 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
     [handleClosePopover, router],
   );
 
+  const setLogout = () => {
+    if (Cookies.get('access_token')) {
+      Cookies.remove('access_token');
+      location.reload();
+    }
+  };
+
   return (
     <>
       <IconButton
@@ -154,7 +161,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Box sx={{ p: 1 }}>
-          <Button fullWidth color="error" size="medium" variant="text">
+          <Button fullWidth color="error" size="medium" variant="text" onClick={setLogout}>
             Logout
           </Button>
         </Box>

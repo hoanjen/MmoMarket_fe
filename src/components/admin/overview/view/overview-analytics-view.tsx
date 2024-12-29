@@ -97,13 +97,13 @@ export function OverviewAnalyticsView() {
     // <div></div>
     <DashboardContent maxWidth="xl">
       <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
-        Hi, Welcome back 👋
+       Xin chào, Chào mừng trở lại 👋
       </Typography>
 
       <Grid container spacing={3}>
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Weekly sales"
+            title="Doanh thu"
             percent={overView.revenue.growth}
             total={overView.revenue.total}
             icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-bag.svg`} />}
@@ -112,7 +112,7 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="New users"
+            title="Người dùng mới"
             percent={overView.userStats.growth}
             total={overView.userStats.total}
             color="secondary"
@@ -122,7 +122,7 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Purchase orders"
+            title="Mua hàng"
             percent={overView.orderStats.growth}
             total={overView.orderStats.total}
             color="warning"
@@ -132,7 +132,7 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Products"
+            title="Sản phẩm"
             percent={overView.productStats.growth}
             total={overView.productStats.total}
             color="error"
@@ -142,7 +142,7 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} md={6} lg={4}>
           <AnalyticsCurrentVisits
-            title="Current Category"
+            title="Danh mục hiện tại "
             chart={{
               series: categoryStats.map((el) => {
                 return {
@@ -156,8 +156,8 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} md={6} lg={8}>
           <AnalyticsWebsiteVisits
-            title="Revenue By year"
-            subheader={`(+${orderRevenue.growthRevenue}%) than last year`}
+            title="Doanh thu của năm"
+            subheader={`(+${orderRevenue.growthRevenue}%) so với năm ngoái`}
             chart={{
               series: orderRevenue.revenue.map((item) => {
                 return {

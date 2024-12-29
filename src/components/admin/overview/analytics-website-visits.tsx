@@ -127,7 +127,7 @@ export default function BasicBars({
       {...other}
     >
       <BarChart
-        series={[{ dataKey: 'revenue', label: 'Revenue MMO Market', valueFormatter }]}
+        series={[{ dataKey: 'revenue', label: 'Danh thu MMO Market', valueFormatter }]}
         yAxis={[
           {
             valueFormatter: (value) => {

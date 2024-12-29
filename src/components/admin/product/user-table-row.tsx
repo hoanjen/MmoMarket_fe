@@ -14,19 +14,25 @@ import { Label } from '../components/label';
 import { Iconify } from '../components/iconify';
 import { AdminApi } from '@api/admin/admin';
 import { Bounce, toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
 export type UserProps = {
   id: string;
-  name: string;
-  role: string;
-  status: string;
-  email: string;
-  phone_number: string;
-  username: string;
-  avatarUrl: string;
-  isVerified: boolean;
+  title: string;
+  sub_title: string;
+  description: string;
+  quantity_sold: number;
+  image: string;
+  minPrice: string;
+  maxPrice: string;
+  deleted: boolean;
+  user: {
+    id: string;
+    email: string;
+    username: string;
+  };
 };
 
 type UserTableRowProps = {
@@ -48,9 +54,10 @@ export function UserTableRow({ row, onAction, isReloadData }: UserTableRowProps)
 
   const fetchApi = async (): Promise<void> => {
     try {
-      await AdminApi.kickUser({ id: row.id });
-      if (row.role !== 'KICK') {
-        toast.success('Kick người dùng thành công', {
+      await AdminApi.deleteProduct({ id: row.id });
+
+      if (!row.deleted) {
+        toast.success('Xóa sản phẩm thành công', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
@@ -62,7 +69,7 @@ export function UserTableRow({ row, onAction, isReloadData }: UserTableRowProps)
           transition: Bounce,
         });
       } else {
-        toast.success('Khôi phục người dùng thành công', {
+        toast.success('Khôi phục sản phẩm thành công', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
@@ -75,7 +82,6 @@ export function UserTableRow({ row, onAction, isReloadData }: UserTableRowProps)
         });
       }
     } catch (error) {
-      console.log(error);
       toast.error('Thất bại', {
         position: 'top-right',
         autoClose: 2000,
@@ -87,6 +93,7 @@ export function UserTableRow({ row, onAction, isReloadData }: UserTableRowProps)
         theme: 'light',
         transition: Bounce,
       });
+      console.log(error);
     }
   };
 
@@ -107,74 +114,71 @@ export function UserTableRow({ row, onAction, isReloadData }: UserTableRowProps)
         </TableCell> */}
         <TableCell component="th" scope="row">
           <Box gap={2} display="flex" alignItems="center">
-            <Avatar alt={row.name} src={row.avatarUrl} />
-            {row.name}
+            <Avatar alt={row.title} src={row.image} />
+            {row.title}
           </Box>
         </TableCell>
 
-        <TableCell>{row.username}</TableCell>
+        <TableCell>{row.quantity_sold}</TableCell>
 
-        <TableCell>{row.email}</TableCell>
-        <TableCell>{row.phone_number}</TableCell>
+        <TableCell>{row.user.email}</TableCell>
+        <TableCell>{`${row.minPrice} - ${row.maxPrice} `}</TableCell>
+        {/* <TableCell>{row.deleted}</TableCell> */}
 
         <TableCell>
-          <Label color={row.role === 'ADMIN' ? 'info' : row.role === 'USER' ? 'success' : 'error'}>{row.role}</Label>
+          <Label color={row.deleted === true ? 'error' : 'success'}>
+            {row.deleted === false ? 'Hoạt động' : 'Đã xóa'}
+          </Label>
         </TableCell>
 
-        <TableCell align="center">
-          {row.isVerified ? <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} /> : '-'}
+        <TableCell align="right">
+          <IconButton onClick={handleOpenPopover}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
         </TableCell>
-
-        {row.role !== 'ADMIN' ? (
-          <TableCell align="right">
-            <IconButton onClick={handleOpenPopover}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
-          </TableCell>
-        ) : (
-          <></>
-        )}
       </TableRow>
-      {row.role !== 'ADMIN' ? (
-        <Popover
-          open={!!openPopover}
-          anchorEl={openPopover}
-          onClose={handleClosePopover}
-          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      <Popover
+        open={!!openPopover}
+        anchorEl={openPopover}
+        onClose={handleClosePopover}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <MenuList
+          disablePadding
+          sx={{
+            p: 0.5,
+            gap: 0.5,
+            width: 150,
+            display: 'flex',
+            flexDirection: 'column',
+            [`& .${menuItemClasses.root}`]: {
+              px: 1,
+              gap: 2,
+              borderRadius: 0.75,
+              [`&.${menuItemClasses.selected}`]: { bgcolor: 'action.selected' },
+            },
+          }}
         >
-          <MenuList
-            disablePadding
-            sx={{
-              p: 0.5,
-              gap: 0.5,
-              width: 140,
-              display: 'flex',
-              flexDirection: 'column',
-              [`& .${menuItemClasses.root}`]: {
-                px: 1,
-                gap: 2,
-                borderRadius: 0.75,
-                [`&.${menuItemClasses.selected}`]: { bgcolor: 'action.selected' },
-              },
-            }}
-          >
-            {row.role === 'KICK' ? (
-              <MenuItem onClick={handleAction}>
-                <Iconify icon="mingcute:add-line" />
-                Un Kick
-              </MenuItem>
-            ) : (
-              <MenuItem onClick={handleAction} sx={{ color: 'error.main' }}>
-                <Iconify icon="solar:trash-bin-trash-bold" />
-                Kick
-              </MenuItem>
-            )}
-          </MenuList>
-        </Popover>
-      ) : (
-        <></>
-      )}
+          <MenuItem>
+            <Iconify icon="solar:share-bold" />
+            <Link target="_blank" to={`/product-detail/${row.id}`}>
+              Xem sản phẩm
+            </Link>
+          </MenuItem>
+          {row.deleted === false ? (
+            <MenuItem onClick={handleAction} sx={{ color: 'error.main' }}>
+              <Iconify icon="solar:trash-bin-trash-bold" />
+              Xóa
+            </MenuItem>
+          ) : (
+            <MenuItem onClick={handleAction}>
+              <Iconify icon="mingcute:add-line" />
+              Khôi phục
+            </MenuItem>
+          )}
+        </MenuList>
+      </Popover>
     </>
   );
 }

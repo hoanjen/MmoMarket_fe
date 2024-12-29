@@ -26,10 +26,10 @@ export const navData = [
     title: 'Product',
     path: '/admin/product',
     icon: icon(`/assets/icons/navbar/ic-cart.svg`),
-    info: (
-      <Label color="error" variant="inverted">
-        +3
-      </Label>
-    ),
+    // info: (
+    //   <Label color="error" variant="inverted">
+    //     +3
+    //   </Label>
+    // ),
   },
 ];

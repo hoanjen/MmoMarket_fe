@@ -42,11 +42,30 @@ export type ResponseListUser = {
     last_name: string;
     phone_number: string;
     avatar: string;
-    username:string;
+    username: string;
     first_name: string;
     roles: {
       id: string;
       name: string;
     }[];
+  }[];
+};
+
+export type ResponseListProduct = {
+  product: {
+    id: string;
+    title: string;
+    sub_title: string;
+    description: string;
+    quantity_sold: number;
+    image: string;
+    minPrice: string;
+    maxPrice: string;
+    deleted: boolean;
+    user: {
+      id: string;
+      email: string;
+      username: string;
+    };
   }[];
 };

@@ -31,6 +31,7 @@ export function UserView() {
   const table = useTable();
 
   const [filterName, setFilterName] = useState('');
+  const [isReloadData, setIsReloadData] = useState<boolean>(false);
   const [users, setUsers] = useState<
     {
       id: string;
@@ -48,7 +49,7 @@ export function UserView() {
     }[]
   >([]);
 
-  const fetchApi = async () => {
+  const fetchApi = async (): Promise<void> => {
     try {
       const userData = await AdminApi.getListUser({});
       setUsers(userData.user);
@@ -59,7 +60,7 @@ export function UserView() {
 
   useEffect(() => {
     fetchApi();
-  }, []);
+  }, [isReloadData]);
 
   // fetchApi();
 
@@ -109,12 +110,12 @@ export function UserView() {
               rowCount={users.length}
               onSort={table.onSort}
               headLabel={[
-                { id: 'name', label: 'Name' },
+                { id: 'name', label: 'Tên người dùng' },
                 { id: 'username', label: 'Username' },
                 { id: 'email', label: 'Email' },
-                { id: 'phone', label: 'Phone number' },
-                { id: 'role', label: 'Role' },
-                { id: 'isVerified', label: 'Verified', align: 'center' },
+                { id: 'phone', label: 'Số điện thoại' },
+                { id: 'role', label: 'Quyền' },
+                { id: 'isVerified', label: 'Xác minh', align: 'center' },
                 { id: '' },
               ]}
             />
@@ -122,7 +123,7 @@ export function UserView() {
               {dataFiltered
                 .slice(table.page * table.rowsPerPage, table.page * table.rowsPerPage + table.rowsPerPage)
                 .map((row) => (
-                  <UserTableRow key={row.id} row={row} />
+                  <UserTableRow key={row.id} row={row} isReloadData={isReloadData} onAction={setIsReloadData} />
                 ))}
 
               <TableEmptyRows height={68} emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)} />
