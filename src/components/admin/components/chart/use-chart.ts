@@ -9,7 +9,6 @@ import type { ChartOptions } from './types';
 export function useChart(options?: ChartOptions): ChartOptions {
   const theme = useTheme();
 
-
   const LABEL_TOTAL = {
     show: true,
     label: 'Total',
@@ -98,11 +97,11 @@ export function useChart(options?: ChartOptions): ChartOptions {
       ...options?.states,
       hover: {
         ...options?.states?.hover,
-        filter: { type: 'darken', value: 0.88, ...options?.states?.hover?.filter },
+        filter: { type: 'darken', ...options?.states?.hover?.filter },
       },
       active: {
         ...options?.states?.active,
-        filter: { type: 'darken', value: 0.88, ...options?.states?.active?.filter },
+        filter: { type: 'darken', ...options?.states?.active?.filter },
       },
     },
 
@@ -268,7 +267,7 @@ export function useChart(options?: ChartOptions): ChartOptions {
         track: {
           margin: -8,
           strokeWidth: '50%',
-          background: varAlpha(theme.vars.palette.grey['500Channel'], 0.16,'user-chart'),
+          background: varAlpha(theme.vars.palette.grey['500Channel'], 0.16, 'user-chart'),
           ...options?.plotOptions?.radialBar?.track,
         },
         dataLabels: {

@@ -15,6 +15,7 @@ export type ResponseProfile = {
       dob: string;
       gender: string;
       avatar: string;
+      role: string;
       cover_image: string;
       created_at: string;
       updated_at: string;
@@ -47,10 +48,10 @@ export type ResponseProfileById = {
 };
 
 export type ResponseFileImage = {
-  url: string,
-  name: string,
-  size: number
-}[]
+  url: string;
+  name: string;
+  size: number;
+}[];
 
 export type RequestProfile = {
   full_name: string;

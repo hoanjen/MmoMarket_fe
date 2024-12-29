@@ -26,25 +26,10 @@ export const navData = [
     title: 'Product',
     path: '/admin/product',
     icon: icon(`/assets/icons/navbar/ic-cart.svg`),
-    info: (
-      <Label color="error" variant="inverted">
-        +3
-      </Label>
-    ),
-  },
-  {
-    title: 'Blog',
-    path: '/admin/blog',
-    icon: icon(`/assets/icons/navbar/ic-blog.svg`),
-  },
-  {
-    title: 'Sign in',
-    path: '/admin/sign-in',
-    icon: icon(`/assets/icons/navbar/ic-lock.svg`),
-  },
-  {
-    title: 'Not found',
-    path: '/admin/404',
-    icon: icon(`/assets/icons/navbar/ic-disabled.svg`),
+    // info: (
+    //   <Label color="error" variant="inverted">
+    //     +3
+    //   </Label>
+    // ),
   },
 ];

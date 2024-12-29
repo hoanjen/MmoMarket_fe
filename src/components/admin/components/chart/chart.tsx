@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import { chartClasses } from './classes';
 
 import type { ChartProps } from './types';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ export function Chart({
   width = '100%',
   ...other
 }: BoxProps & ChartProps) {
+
   return (
     <Box
       dir="ltr"
