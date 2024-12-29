@@ -17,8 +17,9 @@ import { ThemeProvider } from '@components/admin/theme/theme-provider';
 import UserPage from '@pages/admin/user';
 import ProductPage from '@pages/admin/product';
 import ProductDetail from '@pages/productDetail';
-import OrderDetail from '@pages/orderDetail'
+import OrderDetail from '@pages/orderDetail';
 import BoothManage from '@pages/boothManage';
+import Deposit from '@pages/deposit';
 const renderFallback = (
   <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
     <LinearProgress
@@ -68,6 +69,10 @@ export const router = createBrowserRouter([
       {
         path: '/booth-manage',
         element: <BoothManage />,
+      },
+      {
+        path: '/deposit',
+        element: <Deposit />,
       },
       { path: '/error', element: <Home></Home> },
       { path: '/test', element: <ChatComponent></ChatComponent> },
