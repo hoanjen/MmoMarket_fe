@@ -376,7 +376,6 @@ export default function BoothManage() {
         <div className=" flex justify-end ">
             <div className="space-x-8">
                 <CreateBooth/>
-                <CreateBooth/>
             </div>
 		</div>
         <div>

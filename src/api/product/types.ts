@@ -68,6 +68,14 @@ export type ResponseProductDetail = {
   message: [];
 };
 
-export type ResponseCreateProuct ={
+export type ResponseCreateProduct ={
+  statusCode: number,
+}
+
+export type ResponseImportVansProduct ={
+  statusCode: number,
+}
+
+export type ResponseCreateVansProduct ={
   statusCode: number,
 }
