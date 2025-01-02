@@ -610,71 +610,77 @@ export default function Product(){
 
                     </div>
                     <div>
-                    <FormControl>
-                        <FormLabel id="demo-radio-buttons-group-label">Thêm sản phẩm:</FormLabel>
-                            <div className="flex gap-2 mt-2 flex-wrap">
-                                <Button variant="outlined" onClick={handleClickOpen2}>
-                                    Thêm sản phẩm mới
-                                </Button>
-                                <Dialog
-                                    open={open2}
-                                    TransitionComponent={Transition}
-                                    keepMounted
-                                    onClose={handleClose2}
-                                    aria-describedby="alert-dialog-slide-description"
-                                    fullWidth={true}
-                                    component="form"
-                                >
-                                    <div className="flex flex-col p-8 space-y-4">
-                                        <DialogTitle>{"Thêm một sản mới"}</DialogTitle>
-                                        <TextField
-                                        error={invalidCreateVansProduct.title}
-                                        id="outlined-error-helper-text"
-                                        label="Tiêu đề"
-                                        helperText={invalidCreateVansProduct.title === false ? "" : "Bắt buộc có tiêu đề"}
-                                        value={createVansProduct.title}
-                                        onChange={(e)=>{
-                                            setCreateVansProduct({...createVansProduct, title: e.target.value});
-                                            if(e.target.value !== ""){
-                                                setInvalidCreateVansProduct({...invalidCreateVansProduct, title: false});
-                                            }
-                                        }}
-                                        />
-                                        <TextField
-                                        error={invalidCreateVansProduct.description}
-                                        id="outlined-error-helper-text"
-                                        label="Tiêu đề phụ"
-                                        
-                                        helperText={invalidCreateVansProduct.description === false ? "" : "Bắt buộc có mô tả đề phụ"}
-                                        value={createVansProduct.description}
-                                        onChange={(e)=>{
-                                            setCreateVansProduct({...createVansProduct, description: e.target.value});
-                                            if(e.target.value !== ""){
-                                                setInvalidCreateVansProduct({...invalidCreateVansProduct, description: false});
-                                            }
-                                        }}
-                                        />
-                                        <TextField
-                                        error={invalidCreateVansProduct.price}
-                                        type='number'
-                                        placeholder="Mô tả gian hàng"
-                                        helperText={invalidCreateVansProduct.price === false ? "" : "Bắt buộc nhập giá sản phẩm"}
-                                        value={createVansProduct.price}
-                                        onChange={(e)=>{
-                                            setCreateVansProduct({...createVansProduct, price: Number(e.target.value)}); 
-                                            if(e.target.value !== ""){
-                                                setInvalidCreateVansProduct({...invalidCreateVansProduct, price: false});
-                                            }
-                                        }}
-                                        />
-                                    </div>
-                                    <DialogActions>
-                                    <Button onClick={handleClose2}>Hủy bỏ</Button>
-                                    <Button type='submit' onClick={handleSubmitCreateProduct}>Thêm sản phẩm</Button>
-                                    </DialogActions>
-                                </Dialog>
-                            </div>
-                        </FormControl>
+                        {
+                            values.user_id === user.id ?
+                            <FormControl>
+                            <FormLabel id="demo-radio-buttons-group-label">Thêm sản phẩm:</FormLabel>
+                                <div className="flex gap-2 mt-2 flex-wrap">
+                                    <Button variant="outlined" onClick={handleClickOpen2}>
+                                        Thêm sản phẩm mới
+                                    </Button>
+                                    <Dialog
+                                        open={open2}
+                                        TransitionComponent={Transition}
+                                        keepMounted
+                                        onClose={handleClose2}
+                                        aria-describedby="alert-dialog-slide-description"
+                                        fullWidth={true}
+                                        component="form"
+                                    >
+                                        <div className="flex flex-col p-8 space-y-4">
+                                            <DialogTitle>{"Thêm một sản mới"}</DialogTitle>
+                                            <TextField
+                                            error={invalidCreateVansProduct.title}
+                                            id="outlined-error-helper-text"
+                                            label="Tiêu đề"
+                                            helperText={invalidCreateVansProduct.title === false ? "" : "Bắt buộc có tiêu đề"}
+                                            value={createVansProduct.title}
+                                            onChange={(e)=>{
+                                                setCreateVansProduct({...createVansProduct, title: e.target.value});
+                                                if(e.target.value !== ""){
+                                                    setInvalidCreateVansProduct({...invalidCreateVansProduct, title: false});
+                                                }
+                                            }}
+                                            />
+                                            <TextField
+                                            error={invalidCreateVansProduct.description}
+                                            id="outlined-error-helper-text"
+                                            label="Tiêu đề phụ"
+                                            
+                                            helperText={invalidCreateVansProduct.description === false ? "" : "Bắt buộc có mô tả đề phụ"}
+                                            value={createVansProduct.description}
+                                            onChange={(e)=>{
+                                                setCreateVansProduct({...createVansProduct, description: e.target.value});
+                                                if(e.target.value !== ""){
+                                                    setInvalidCreateVansProduct({...invalidCreateVansProduct, description: false});
+                                                }
+                                            }}
+                                            />
+                                            <TextField
+                                            error={invalidCreateVansProduct.price}
+                                            type='number'
+                                            placeholder="Mô tả gian hàng"
+                                            helperText={invalidCreateVansProduct.price === false ? "" : "Bắt buộc nhập giá sản phẩm"}
+                                            value={createVansProduct.price}
+                                            onChange={(e)=>{
+                                                setCreateVansProduct({...createVansProduct, price: Number(e.target.value)}); 
+                                                if(e.target.value !== ""){
+                                                    setInvalidCreateVansProduct({...invalidCreateVansProduct, price: false});
+                                                }
+                                            }}
+                                            />
+                                        </div>
+                                        <DialogActions>
+                                        <Button onClick={handleClose2}>Hủy bỏ</Button>
+                                        <Button type='submit' onClick={handleSubmitCreateProduct}>Thêm sản phẩm</Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                </div>
+                            </FormControl>
+                            :
+                            ""
+                        }
+                    
                     </div>
                 </div>
             </form>
