@@ -70,15 +70,15 @@ function TabLists() {
         {value === 1 ? <ExpandMoreIcon color="primary" /> : <ExpandLessIcon />}
         <div className={value === 1 ? 'absolute top-[64px] left-0 ' : 'absolute top-[64px] left-0 hidden'}>
           <List
-            className="bg-white"
-            sx={{ width: '200px', maxWidth: 360, bgcolor: 'white' }}
+            className="bg-[#7be2b0]"
+            sx={{ width: '200px', maxWidth: 360, bgcolor: 'rgb(33 191 115)' }}
             component="nav"
             aria-labelledby="nested-list-subheader"
           >
             {categoryProduct.length !== 0 ? (
               categoryProduct.map((item, index) => {
                 return (
-                  <ListItem key={index} className="hover:bg-slate-200 bg-white">
+                  <ListItem key={index} className="hover:bg-[#7be2b0] bg-[#21bf73]">
                     <ListItemText primary={item.name}></ListItemText>
                   </ListItem>
                 );
@@ -106,15 +106,15 @@ function TabLists() {
         {value === 2 ? <ExpandMoreIcon color="primary" /> : <ExpandLessIcon />}
         <div className={value === 2 ? 'absolute top-[64px] left-0 ' : 'absolute top-[64px] left-0 hidden'}>
           <List
-            className="bg-white"
-            sx={{ width: '200px', maxWidth: 360, bgcolor: 'white' }}
+            className="bg-[#7be2b0]"
+            sx={{ width: '200px', maxWidth: 360, bgcolor: 'rgb(33 191 115)' }}
             component="nav"
             aria-labelledby="nested-list-subheader"
           >
             {categoryService.length !== 0 ? (
               categoryService.map((item, index) => {
                 return (
-                  <ListItem key={index} className="hover:bg-slate-200 bg-white">
+                  <ListItem key={index} className="hover:bg-[#7be2b0] bg-[#21bf73]">
                     <ListItemText primary={item.name}></ListItemText>
                   </ListItem>
                 );

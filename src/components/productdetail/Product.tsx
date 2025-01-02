@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, forwardRef } from 'react';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Button from '@mui/material/Button';
@@ -10,6 +10,21 @@ import { Bounce, toast } from 'react-toastify';
 import SubProduct from './SubProduct';
 import Skeleton from '@mui/material/Skeleton';
 import { useAppSelector } from '@stores/app/hook';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import { TransitionProps } from '@mui/material/transitions';
+
+const Transition = forwardRef(function Transition(
+    props: TransitionProps & {
+      children: React.ReactElement<any, any>;
+    },
+    ref: React.Ref<unknown>,
+  ) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+
 type productDetail = {
     title: string,
     sub_title: string,
@@ -46,8 +61,33 @@ type vansProduct = {
     price: number
     description : string
 }
-export default function Product() {
+
+type productInvalid = {
+    account: boolean,
+    password: boolean,
+}
+
+type productImport = {
+    account: string,
+    password: string
+}
+
+type createVansProduct = {
+    title: string,
+    description: string,
+    price: number
+}
+
+type invalidCreateVansProduct = {
+    title: boolean,
+    description: boolean,
+    price: boolean
+}
+
+export default function Product(){
     const [ isLoading, setIsLoading ] = useState<boolean>(true)
+    const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
     const { id } = useParams<{ id: string}>()
     const user = useAppSelector((state) => state.user);
     const [values, setValues] = useState<productDetail>({
@@ -77,6 +117,26 @@ export default function Product() {
             }
         ]
     });
+
+    const [invalidCreateVansProduct, setInvalidCreateVansProduct] = useState<invalidCreateVansProduct>({
+        title: false,
+        description: false,
+        price: false,
+    });
+    const [createVansProduct, setCreateVansProduct] = useState<createVansProduct>({
+        title: "",
+        description: "",
+        price: 0,
+    })
+
+    const [invalidProduct, setInvalidProduct] = useState<productInvalid>({
+        account: false,
+        password: false,
+    });
+    const [productImport, setProductImport] = useState<productImport>({
+        account: "",
+        password: ""
+    })
     const [vansProduct, setVansProduct] = useState<vansProduct>({
         vans_product_id: '',
         quantity: 0,
@@ -119,6 +179,20 @@ export default function Product() {
         setTab(newTab);
     };
 
+    const handleClickOpen = () => {
+        setOpen(true);
+      };
+    
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const handleClickOpen2 = () => {
+        setOpen2(true);
+      };
+    
+    const handleClose2 = () => {
+        setOpen2(false);
+    };
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         if(orderValid.vans_product_id && orderValid.quantity){
@@ -151,6 +225,102 @@ export default function Product() {
               }
         }
     }
+    const handleSubmitProduct = async (event: any) => {
+        event.preventDefault();
+        
+        if(!productImport.account || !productImport.password){
+            setInvalidProduct({
+                account: productImport.account ? invalidProduct.account : true,
+                password: productImport.password ? invalidProduct.password : true,
+            })
+        }
+        else{
+            const res = await ProductApi.importVansProduct({
+                dataProducts: [
+                    {
+                        account: productImport.account,
+                        password: productImport.password,
+                    }
+                ], 
+                vans_product_id: vansProduct.vans_product_id,
+            })
+            if (res && res.statusCode === 400) {
+                toast.error('Nhập kho sản phẩm thất bại!', {
+                    position: 'top-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+                
+            }
+            if (res && res.statusCode === 201) {
+                toast.success('Nhập kho sản phẩm thành công', {
+                    position: 'top-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+                handleClose();
+            }
+        }
+    };
+    const handleSubmitCreateProduct = async (event: any) => {
+        event.preventDefault();
+
+        if(!createVansProduct.title || !createVansProduct.description || !createVansProduct.price){
+            setInvalidCreateVansProduct({
+                title: createVansProduct.title ? invalidCreateVansProduct.title : true,
+                description: createVansProduct.description ? invalidCreateVansProduct.description : true,
+                price: createVansProduct.price ? invalidCreateVansProduct.price : true,
+            })
+        }
+        else{
+            const res = await ProductApi.createVansProduct({
+                title: createVansProduct.title,
+                description: createVansProduct.description,
+                price: createVansProduct.price,
+                product_id: values.id
+            })
+            if (res && res.statusCode === 400) {
+                toast.error('Thêm sản phẩm thất bại!', {
+                    position: 'top-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+                
+            }
+            if (res && res.statusCode === 201) {
+                toast.success('Thêm sản phẩm thành công', {
+                    position: 'top-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                    transition: Bounce,
+                });
+                handleClose();
+            }
+        }
+    };
     useEffect(() => {
         const selectedProduct = values.vans_products.find(
             (product) => product.id === order.vans_product_id
@@ -265,7 +435,7 @@ export default function Product() {
                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
                             <p className="text-gray-600 font-bold text-sm ml-1">
-                                <span className="text-gray-500 font-normal">(76 đánh giá)</span>
+                                <span className="text-gray-500 font-normal">(6 đánh giá)</span>
                             </p>
                         </div>
                         <p className="text-gray-600 font-bold text-sm ml-1 flex items-center">
@@ -277,8 +447,9 @@ export default function Product() {
                     </div>
                     <h3 className="font-bold text-gray-800 md:text-3xl text-xl">{values.title}</h3>
                     <p className="md:text-lg text-gray-500 text-base">{values.sub_title}</p>
-                    <p className="md:text-lg text-gray-500 text-base">Người bán: A</p>
-                    <p className="md:text-lg text-gray-500 text-base">Sản phẩm: B</p>
+                    <div className="md:text-lg text-gray-500 text-base flex flex-row">
+                        Người bán: <Link to={`/profile/${values.user_id}`}><p className="md:text-lg text-[#47991f] cursor-pointer text-base">{values.user_id.slice(0, 8)}</p></Link>
+                    </div>
                     <p className="md:text-lg text-gray-500 text-base">Kho: {vansProduct.quantity}</p>
                     <p className="text-3xl font-medium text-gray-800 py-4">
                         {new Intl.NumberFormat('vi-VN').format(vansProduct.price)}
@@ -301,76 +472,209 @@ export default function Product() {
                             }
                         </div>
                     </FormControl>
-                    <div className="w-[250px] max-w-sm mt-4">
-                        <div className="flex flex-col py-4">
-                            <p className="md:text-lg text-gray-500 text-base py-2">Số lượng: </p>
-                            <div className="flex flex-row h-16">
-                                <Button
-                                    onClick={decreaseNumber}
-                                    disabled={order.quantity <= 1}
-                                >
-                                    <svg 
-                                        xmlns="http://www.w3.org/2000/svg" 
-                                        fill="none" 
-                                        viewBox="0 0 24 24" 
-                                        strokeWidth="1.5" 
-                                        stroke="currentColor" 
-                                        className="w-8 h-8"
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
-                                    </svg>
-                                </Button>
-                                <TextField
-                                    error={!orderValid.quantity}
-                                    helperText={!orderValid.quantity? "Số lượng không đủ cho đơn hàng" : ""}
-                                    size="small"
-                                    id="outlined-number"
-                                    value={order.quantity}
-                                    type="number"
-                                    onChange={(e) => {
-                                        const newQuantity = Number(e.target.value);
-                                        setOrder((prevOrder) => ({
-                                            ...prevOrder,
-                                            quantity: newQuantity,
-                                        }));
-                                        
-                                        setOrderValid((prevOrderValid) => ({
-                                            ...prevOrderValid,
-                                            quantity: vansProduct.quantity >= newQuantity && newQuantity > 0,
-                                        }));
-                                    }}
-                                    />
-                                <Button
-                                    onClick={increaseNumber}
-                                    disabled={order.quantity >= vansProduct.quantity}
-                                >
-                                    <svg 
-                                        xmlns="http://www.w3.org/2000/svg" 
-                                        fill="none" 
-                                        viewBox="0 0 24 24" 
-                                        strokeWidth="1.5" 
-                                        stroke="currentColor" 
-                                        className="w-8 h-8"
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-                                </Button>
+                    {
+                        values.user_id !== user.id?
+                        <>
+                            <div className="w-[250px] max-w-sm mt-4">
+                                <div className="flex flex-col py-4">
+                                    <p className="md:text-lg text-gray-500 text-base py-2">Số lượng: </p>
+                                    <div className="flex flex-row h-16">
+                                        <Button
+                                            onClick={decreaseNumber}
+                                            disabled={order.quantity <= 1}
+                                        >
+                                            <svg 
+                                                xmlns="http://www.w3.org/2000/svg" 
+                                                fill="none" 
+                                                viewBox="0 0 24 24" 
+                                                strokeWidth="1.5" 
+                                                stroke="currentColor" 
+                                                className="w-8 h-8"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
+                                            </svg>
+                                        </Button>
+                                        <TextField
+                                            error={!orderValid.quantity}
+                                            helperText={!orderValid.quantity? "Số lượng không đủ cho đơn hàng" : ""}
+                                            size="small"
+                                            id="outlined-number"
+                                            value={order.quantity}
+                                            type="number"
+                                            onChange={(e) => {
+                                                const newQuantity = Number(e.target.value);
+                                                setOrder((prevOrder) => ({
+                                                    ...prevOrder,
+                                                    quantity: newQuantity,
+                                                }));
+                                                
+                                                setOrderValid((prevOrderValid) => ({
+                                                    ...prevOrderValid,
+                                                    quantity: vansProduct.quantity >= newQuantity && newQuantity > 0,
+                                                }));
+                                            }}
+                                            />
+                                        <Button
+                                            onClick={increaseNumber}
+                                            disabled={order.quantity >= vansProduct.quantity}
+                                        >
+                                            <svg 
+                                                xmlns="http://www.w3.org/2000/svg" 
+                                                fill="none" 
+                                                viewBox="0 0 24 24" 
+                                                strokeWidth="1.5" 
+                                                stroke="currentColor" 
+                                                className="w-8 h-8"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+                                        </Button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </>
+                        :
+                        ""
+                    }
                     <div className="flex flex-row gap-2 pt-4">
                         {
                         user.id !== "" ?
                         <>
+                        {
+                            values.user_id === user.id ?
+                            <FormControl className='mr-2'>
+                                <FormLabel id="demo-radio-buttons-group-label">Nhập kho sản phẩm:</FormLabel>
+                                <div className="flex gap-2 mt-2 flex-wrap">
+                                    <Button variant="outlined" onClick={handleClickOpen}>
+                                        Nhập kho
+                                    </Button>
+                                    <Dialog
+                                        open={open}
+                                        TransitionComponent={Transition}
+                                        keepMounted
+                                        onClose={handleClose}
+                                        aria-describedby="alert-dialog-slide-description"
+                                        fullWidth={true}
+                                        component="form"
+                                    >
+                                        <div className="flex flex-col p-8 space-y-4">
+                                        <DialogTitle>{"Nhập kho một sản mới"}</DialogTitle>
+                                            <TextField
+                                            error={invalidProduct.account}
+                                            id="outlined-error-helper-text"
+                                            label="Tài khoản"
+                                            helperText={invalidProduct.account === false ? "" : "Bắt buộc có tài khoản"}
+                                            value={productImport.account}
+                                            onChange={(e)=>{
+                                                setProductImport({...productImport, account: e.target.value});
+                                                if(e.target.value !== ""){
+                                                    setInvalidProduct({...invalidProduct, account: false});
+                                                }
+                                            }}
+                                            />
+                                            <TextField
+                                            error={invalidProduct.password}
+                                            id="outlined-error-helper-text"
+                                            label="Mật khẩu"
+                                            
+                                            helperText={invalidProduct.password === false ? "" : "Bắt buộc có mật khẩu"}
+                                            value={productImport.password}
+                                            onChange={(e)=>{
+                                                setProductImport({...productImport, password: e.target.value});
+                                                if(e.target.value !== ""){
+                                                    setInvalidProduct({...invalidProduct, password: false});
+                                                }
+                                            }}
+                                            />
+                                        </div>
+                                        <DialogActions>
+                                        <Button onClick={handleClose}>Hủy bỏ</Button>
+                                        <Button type='submit' onClick={handleSubmitProduct}>Nhập kho</Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                </div>
+                            </FormControl>
+                            :
+                            <>
                             <Button type="submit" variant="contained">Mua hàng</Button>
                             <Button variant="contained">Đặt trước</Button>
                             <Button variant="outlined">
                                 <Link to={`http://localhost:3000/chat-box?chat_to=e83f1f7e-d278-4e12-9397-53ebdadfed54`}>Nhắn tin</Link>
                             </Button>
+                            </>
+                        }
+
                         </>
                         :
                          <Button type="submit" variant="contained">Đăng nhập</Button>}
 
+                    </div>
+                    <div>
+                    <FormControl>
+                        <FormLabel id="demo-radio-buttons-group-label">Thêm sản phẩm:</FormLabel>
+                            <div className="flex gap-2 mt-2 flex-wrap">
+                                <Button variant="outlined" onClick={handleClickOpen2}>
+                                    Thêm sản phẩm mới
+                                </Button>
+                                <Dialog
+                                    open={open2}
+                                    TransitionComponent={Transition}
+                                    keepMounted
+                                    onClose={handleClose2}
+                                    aria-describedby="alert-dialog-slide-description"
+                                    fullWidth={true}
+                                    component="form"
+                                >
+                                    <div className="flex flex-col p-8 space-y-4">
+                                        <DialogTitle>{"Thêm một sản mới"}</DialogTitle>
+                                        <TextField
+                                        error={invalidCreateVansProduct.title}
+                                        id="outlined-error-helper-text"
+                                        label="Tiêu đề"
+                                        helperText={invalidCreateVansProduct.title === false ? "" : "Bắt buộc có tiêu đề"}
+                                        value={createVansProduct.title}
+                                        onChange={(e)=>{
+                                            setCreateVansProduct({...createVansProduct, title: e.target.value});
+                                            if(e.target.value !== ""){
+                                                setInvalidCreateVansProduct({...invalidCreateVansProduct, title: false});
+                                            }
+                                        }}
+                                        />
+                                        <TextField
+                                        error={invalidCreateVansProduct.description}
+                                        id="outlined-error-helper-text"
+                                        label="Tiêu đề phụ"
+                                        
+                                        helperText={invalidCreateVansProduct.description === false ? "" : "Bắt buộc có mô tả đề phụ"}
+                                        value={createVansProduct.description}
+                                        onChange={(e)=>{
+                                            setCreateVansProduct({...createVansProduct, description: e.target.value});
+                                            if(e.target.value !== ""){
+                                                setInvalidCreateVansProduct({...invalidCreateVansProduct, description: false});
+                                            }
+                                        }}
+                                        />
+                                        <TextField
+                                        error={invalidCreateVansProduct.price}
+                                        type='number'
+                                        placeholder="Mô tả gian hàng"
+                                        helperText={invalidCreateVansProduct.price === false ? "" : "Bắt buộc nhập giá sản phẩm"}
+                                        value={createVansProduct.price}
+                                        onChange={(e)=>{
+                                            setCreateVansProduct({...createVansProduct, price: Number(e.target.value)}); 
+                                            if(e.target.value !== ""){
+                                                setInvalidCreateVansProduct({...invalidCreateVansProduct, price: false});
+                                            }
+                                        }}
+                                        />
+                                    </div>
+                                    <DialogActions>
+                                    <Button onClick={handleClose2}>Hủy bỏ</Button>
+                                    <Button type='submit' onClick={handleSubmitCreateProduct}>Thêm sản phẩm</Button>
+                                    </DialogActions>
+                                </Dialog>
+                            </div>
+                        </FormControl>
                     </div>
                 </div>
             </form>

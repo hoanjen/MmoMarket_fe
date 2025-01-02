@@ -429,7 +429,7 @@ export default function DialogAuth({ setIsLogin }: { setIsLogin: React.Dispatch<
     <React.Fragment>
       <div className="flex gap-4">
         <Button
-          variant="outlined"
+          variant="contained"
           onClick={() => {
             handleClickOpen();
             setValue(1);

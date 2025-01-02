@@ -1,11 +1,13 @@
 import axios from '../index';
-import { ResponseProduct, ResponseProductDetail, ResponseCreateProuct } from './types';
+import { ResponseProduct, ResponseProductDetail, ResponseCreateProduct, ResponseImportVansProduct, ResponseCreateVansProduct } from './types';
+
+
 
 export class ProductApi {
   public static async getProduct({ id }: { id: string }): Promise<ResponseProduct> {
     return axios.get(`/product/categoryType?categorytype_id=${id}&limit=10&page=1`).then((_) => _.data);
   }
-
+  
   public static async getQueryProduct({
     category_type_ids,
     keyword,
@@ -19,7 +21,6 @@ export class ProductApi {
     page?: number;
     sortBy?: string;
   }): Promise<ResponseProduct> {
- 
     return axios
       .get(`product/query-product`, {
         params: {
@@ -50,7 +51,7 @@ export class ProductApi {
     description: string,
     category_type_id: string,
     image: string,
-  }): Promise<ResponseCreateProuct> {
+  }): Promise<ResponseCreateProduct> {
     return axios
     .post(`/product`,
       {
@@ -59,6 +60,28 @@ export class ProductApi {
         description,
         category_type_id,
         image,
+      }
+    )
+    .then((_) => _.data);
+  }
+  public static async importVansProduct({ dataProducts, vans_product_id }: { dataProducts: { account: string; password: string }[]; vans_product_id: string }): Promise<ResponseImportVansProduct> {
+    return axios
+    .post(`/vans-product/data-product`,
+      {
+        dataProducts,
+        vans_product_id,
+      }
+    )
+    .then((_) => _.data);
+  }
+  public static async createVansProduct({ title, description, price, product_id }: { title: string, description: string, price: number, product_id: string }): Promise<ResponseCreateVansProduct> {
+    return axios
+    .post(`/vans-product`,
+      {
+        title,
+        description,
+        price,
+        product_id
       }
     )
     .then((_) => _.data);
