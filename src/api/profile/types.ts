@@ -53,6 +53,15 @@ export type ResponseFileImage = {
   size: number;
 }[];
 
+export type RequestConnectChat = {
+  receiver_id: string;
+};
+
+export type ResponseConectChat = {
+  id: string;
+  statusCode: number;
+};
+
 export type RequestProfile = {
   full_name: string;
   first_name: string;

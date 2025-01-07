@@ -173,17 +173,19 @@ function TabLists() {
       >
         FAQs
       </div>
-      <div
-        className="relative inline p-4 hover:border-b-4 border-sky-500 text-lg"
-        onMouseOver={() => {
-          setValue(6);
-        }}
-        onMouseOut={() => {
-          setValue(-1);
-        }}
-      >
-        Nạp tiền
-      </div>
+      <Link to={`/deposit`} className="flex align-center">
+        <div
+          className="relative inline p-4 hover:border-b-4 border-sky-500 text-lg"
+          onMouseOver={() => {
+            setValue(6);
+          }}
+          onMouseOut={() => {
+            setValue(-1);
+          }}
+        >
+          Nạp tiền
+        </div>
+      </Link>
     </div>
   );
 }

@@ -7,6 +7,7 @@ export class paymentApi {
   }
 
   public static async captureOrder(data: { order_id: string }): Promise<ResponseCaptureOrder> {
-    return axios.post(`/payment/create-order`, data).then((_) => _.data);
+    console.log(data);
+    return axios.post(`/payment/capture-order`, data).then((_) => _.data);
   }
 }
