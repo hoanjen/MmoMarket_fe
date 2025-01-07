@@ -16,7 +16,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import ReportGmailerrorredOutlinedIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 import { useAppSelector } from '@stores/app/hook';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 interface profile {
   id: string;
@@ -123,11 +123,7 @@ function InputFileUpload({ changeImage }: { changeImage: (e: any) => void }) {
   return (
     <Button component="label" role={undefined} tabIndex={-1} sx={{ color: 'white' }}>
       Upload file
-      <VisuallyHiddenInput
-        type="file"
-        accept="image/jpeg image/png image/jpg"
-        onChange={changeImage}
-      />
+      <VisuallyHiddenInput type="file" accept="image/jpeg image/png image/jpg" onChange={changeImage} />
     </Button>
   );
 }
@@ -180,10 +176,11 @@ export default function Profile() {
     updated_at: '',
   });
   const user = useAppSelector((state) => state.user);
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const fectchApi = async () => {
     try {
-      if(id){
+      if (id) {
         const res = await ProfileApi.getProfileById(id);
         setValues(res.data);
       }
@@ -203,12 +200,12 @@ export default function Profile() {
     if (event.target.files && event.target.files.length > 0) {
       try {
         const res = await ProfileApi.uploadImage(event.target.files[0]);
-        setValues({...values, avatar: res[0].url})
+        setValues({ ...values, avatar: res[0].url });
       } catch (error) {
         toast.error('Error uploading image!');
+      }
     }
   };
-  }
   const changeProfile = () => {
     setIsChange(!isChange);
   };
@@ -255,8 +252,18 @@ export default function Profile() {
     setIsChange(!isChange);
   };
   return (
-    <div className='mt-24'>
-      <Card sx={{ minWidth: 400, display: 'flex', flexDirection: 'row', position: 'relative', 'marginLeft': 'auto', 'marginRight': 'auto', 'maxWidth': '1200px'}}>
+    <div className="mt-24">
+      <Card
+        sx={{
+          minWidth: 400,
+          display: 'flex',
+          flexDirection: 'row',
+          position: 'relative',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          maxWidth: '1200px',
+        }}
+      >
         {isChange ? (
           <ButtonBaseDemo handleChangeImage={handleChangeImage} avatar={values.avatar} />
         ) : (
@@ -339,23 +346,21 @@ export default function Profile() {
           </div>
         </div>
         <div className="absolute right-0 bottom-0 flex flex-col items-end w-64">
-            {
-              user.id === id ?
-              (!isChange ? (
-                  <Button onClick={changeProfile} sx={{ margin: 2 }} variant="outlined">
-                    Chỉnh sửa
-                  </Button>
-                ) : (
-                  <Button onClick={onSubmit} sx={{ margin: 2 }} variant="contained">
-                    Lưu lại
-                  </Button>
-                )
-              )
-              :
-              <Button sx={{ margin: 2 }} variant="contained">
-                <Link  to="/">Nhắn tin</Link>
+          {user.id === id ? (
+            !isChange ? (
+              <Button onClick={changeProfile} sx={{ margin: 2 }} variant="outlined">
+                Chỉnh sửa
               </Button>
-            }
+            ) : (
+              <Button onClick={onSubmit} sx={{ margin: 2 }} variant="contained">
+                Lưu lại
+              </Button>
+            )
+          ) : (
+            <Button sx={{ margin: 2 }} variant="contained">
+              <button>Nhắn tin</button>
+            </Button>
+          )}
         </div>
       </Card>
       <section className="text-[#1976d2] body-font max-w-[1200px] mx-auto">
@@ -363,28 +368,28 @@ export default function Profile() {
           <div className="flex flex-wrap -m-4 text-center">
             <div className="p-4 w-1/4">
               <div className="border-2 border-[#1976d2] px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
-                <CategoryOutlinedIcon fontSize={'large'}/>
+                <CategoryOutlinedIcon fontSize={'large'} />
                 <h2 className="title-font font-medium text-2xl text-gray-900">2.7K</h2>
                 <p className="leading-relaxed">Số gian hàng</p>
               </div>
             </div>
             <div className="p-4 w-1/4">
               <div className="border-2 border-[#1976d2] px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
-                <ShoppingCartOutlinedIcon fontSize={'large'}/>
+                <ShoppingCartOutlinedIcon fontSize={'large'} />
                 <h2 className="title-font font-medium text-2xl text-gray-900">1.3K</h2>
                 <p className="leading-relaxed">Mặt hàng đã mua</p>
               </div>
             </div>
             <div className="p-4 w-1/4">
               <div className="border-2 border-[#1976d2] px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
-                <StorefrontOutlinedIcon fontSize={'large'}/>
+                <StorefrontOutlinedIcon fontSize={'large'} />
                 <h2 className="title-font font-medium text-2xl text-gray-900">1.3K</h2>
                 <p className="leading-relaxed">Mặt hàng đã bán</p>
               </div>
             </div>
             <div className="p-4 w-1/4">
               <div className="border-2 border-[#1976d2] px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
-                <ReportGmailerrorredOutlinedIcon fontSize={'large'}/>
+                <ReportGmailerrorredOutlinedIcon fontSize={'large'} />
                 <h2 className="title-font font-medium text-2xl text-gray-900">46</h2>
                 <p className="leading-relaxed">Số lượt khiếu nại </p>
               </div>

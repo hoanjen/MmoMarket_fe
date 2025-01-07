@@ -4,6 +4,7 @@ import { PayPalButtonsComponentProps } from '@paypal/paypal-js/types/components/
 import { Payment } from '@mui/icons-material';
 import { paymentApi } from '@api/payment/payment';
 import { useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const paypalScriptOptions: PayPalScriptOptions = {
   'client-id': 'AdgUiMv0rRXdLD6gmtlVLaicQiBlCnm153DVD7jDcef3eLAYqlELsgiRqEK04H611gqEbzzXajHG9aN0',
@@ -23,37 +24,26 @@ export default function Deposit() {
     const paypalbuttonTransactionProps: PayPalButtonsComponentProps = {
       style: { layout: 'vertical' },
       async createOrder() {
-        if (inputRef.current) {
-          const amount = Math.floor(Number(inputRef.current.value || 300000) / 26000);
-
-          const response = await paymentApi.createOrder({
-            amount,
-            intent: 'CAPTURE',
-          });
-
-          console.log(response);
-          return response.data.id;
+        if (!inputRef.current) {
+          return '';
         }
-        return '';
-      },
-      async onApprove(data) {
-        /**
-         * data: {
-         *   orderID: string;
-         *   payerID: string;
-         *   paymentID: string | null;
-         *   billingToken: string | null;
-         *   facilitatorAccesstoken: string;
-         * }
-         */
+        const amount = inputRef.current.value ? Number(inputRef.current.value) / 25600 : 10;
 
-        const response = await paymentApi.captureOrder({
-          order_id: orderId,
+        const response = await paymentApi.createOrder({
+          amount,
+          intent: 'CAPTURE',
         });
 
-        console.log(response);
-
-        // return actions.order.capture(data).then((data) => console.log(data));
+        if (!(response.statusCode === 201)) {
+          return Promise.reject('');
+        }
+        return Promise.resolve(response.data.id);
+      },
+      async onApprove(data: any) {
+        const response = await paymentApi.captureOrder({
+          order_id: data.orderID,
+        });
+        toast.success('Thanh toán thành công');
       },
     };
     return (

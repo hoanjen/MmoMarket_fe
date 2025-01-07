@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
-  timeout: 5000,
+  timeout: 50000,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
     Accept: 'application/json',
