@@ -15,6 +15,9 @@ import { AnalyticsCurrentSubject } from '../analytics-current-subject';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
 import { useEffect, useState } from 'react';
 import { AdminApi } from '@api/admin/admin';
+import CustomDatePicker from './datePicker';
+import dayjs from 'dayjs';
+// import DateRangePicker from './datePicker';
 
 // ----------------------------------------------------------------------
 export type DashboardOverview = {
@@ -47,7 +50,7 @@ export type ResponseOrderRevenue = {
 };
 export function OverviewAnalyticsView() {
   const endDate = new Date().toISOString();
-  const startDate = new Date(new Date().getTime() - 7 * 24 * 3600 * 1000).toISOString();
+  const startDate = new Date(new Date().getTime() - 1 * 24 * 3600 * 1000).toISOString();
   const [overView, setOverView] = useState<DashboardOverview>({
     revenue: {
       growth: 0,
@@ -67,13 +70,17 @@ export function OverviewAnalyticsView() {
     },
   });
   const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
+  const [dateRange, setDateRange] = useState<{ endDate: string; startDate: string }>({
+    endDate,
+    startDate,
+  });
   const [orderRevenue, setOrderRevenue] = useState<ResponseOrderRevenue>({
     growthRevenue: 0,
     revenue: [{ month: 'Jan', revenue: 0 }],
   });
-  const fetchApi = async () => {
+  const fetchApi = async (start: string, end: string) => {
     try {
-      const res = await AdminApi.dashboardOverview(startDate, endDate);
+      const res = await AdminApi.dashboardOverview(start, end);
       const dataCategory = await AdminApi.categoryStats();
       const dataOrderRevenue = await AdminApi.getOrderRevenueByYear();
       if (res) {
@@ -90,15 +97,29 @@ export function OverviewAnalyticsView() {
     }
   };
   useEffect(() => {
-    fetchApi();
+    fetchApi(startDate, endDate);
   }, []);
+
+  const handleDateApply = async (range: [dayjs.Dayjs, dayjs.Dayjs]) => {
+    console.log('Ngày bắt đầu:', range[0].toDate().toISOString());
+    console.log('Ngày kết thúc:', range[1].toDate().toISOString());
+
+    setDateRange({
+      startDate: range[0].toDate().toISOString(),
+      endDate: range[1].toDate().toISOString(),
+    });
+    await fetchApi(range[0].toDate().toISOString(), range[1].toDate().toISOString());
+  };
 
   return (
     // <div></div>
     <DashboardContent maxWidth="xl">
       <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
-       Xin chào, Chào mừng trở lại 👋
+        Xin chào, Chào mừng trở lại 👋
       </Typography>
+      <div className="w-48 -mt-8 mb-4">
+        <CustomDatePicker onApply={handleDateApply}></CustomDatePicker>
+      </div>
 
       <Grid container spacing={3}>
         <Grid xs={12} sm={6} md={3}>
