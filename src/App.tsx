@@ -8,6 +8,7 @@ import { Footer } from '@components/footer/Footer';
 
 function App() {
   const location = useLocation();
+
   // useEffect(() => {
   //   socket.connect();
   //   return () => {
