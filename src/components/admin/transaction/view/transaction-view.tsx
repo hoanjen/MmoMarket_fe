@@ -12,9 +12,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControl,
-  InputLabel,
-  MenuItem,
   Paper,
   Select,
   Table,
@@ -27,7 +24,7 @@ import {
   TextField,
   Typography,
   Breadcrumbs,
-  Link,
+  Avatar,
 } from '@mui/material';
 import { Add, Delete, Edit, Search, ArrowBack } from '@mui/icons-material';
 import { CategoryApi } from '@api/category/category';
@@ -37,14 +34,23 @@ import { AdminApi } from '@api/admin/admin';
 import { Iconify } from '@components/admin/components/iconify';
 import { Label } from '@components/admin/components/label';
 
+import { Link } from 'react-router-dom';
+
 interface DataItem {
   id: string;
-  name: string;
-  username: string;
-  email: string;
-  phone: string;
-  role: string;
-  isVerified: boolean;
+  title: string;
+  sub_title: string;
+  description: string;
+  quantity_sold: number;
+  image: string;
+  minPrice: string;
+  maxPrice: string;
+  deleted: boolean;
+  user: {
+    id: string;
+    email: string;
+    username: string;
+  };
 }
 
 // Sample detail data structure
@@ -56,33 +62,7 @@ interface DetailItem {
   updated_at: string;
 }
 
-function toastMessage(status: number, message: string) {
-  if (status < 400) {
-    toast.success(message, {
-      position: 'top-right',
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'light',
-    });
-  } else {
-    toast.error('Thất bại.', {
-      position: 'top-right',
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'light',
-    });
-  }
-}
-
-export default function UserView() {
+export default function TransactionViews() {
   // View state
 
   // Main table state
@@ -97,20 +77,8 @@ export default function UserView() {
 
   const fetchApi = async (): Promise<void> => {
     try {
-      const userData = await AdminApi.getListUser({});
-      setData(
-        userData.user.map((item) => {
-          return {
-            id: item.id,
-            email: item.email,
-            isVerified: true,
-            name: item.full_name || item.first_name + ' ' + item.last_name,
-            phone: item.phone_number,
-            role: item.roles[0].name,
-            username: item.username,
-          };
-        }),
-      );
+      const userData = await AdminApi.getListProduct({});
+      setData(userData.product);
     } catch (error) {
       console.log(error);
     }
@@ -122,11 +90,7 @@ export default function UserView() {
 
   // Filter data when search term changes
   useEffect(() => {
-    const filtered = data.filter(
-      (item) =>
-        item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
+    const filtered = data.filter((item) => item.title.toLowerCase().includes(searchTerm.toLowerCase()));
     setFilteredData(filtered);
     setPage(0);
   }, [searchTerm, data]);
@@ -155,12 +119,13 @@ export default function UserView() {
     setOpenDeleteDialog(false);
   };
 
-  const handleDelete = async () => {
+  const deleteProduct = async (): Promise<void> => {
     if (currentItem) {
       try {
-        await AdminApi.kickUser({ id: currentItem.id });
-        if (currentItem.role === 'USER') {
-          toast.success('Kick người dùng thành công', {
+        await AdminApi.deleteProduct({ id: currentItem.id });
+
+        if (!currentItem.deleted) {
+          toast.success('Xóa sản phẩm thành công', {
             position: 'top-right',
             autoClose: 2000,
             hideProgressBar: false,
@@ -169,9 +134,10 @@ export default function UserView() {
             draggable: true,
             progress: undefined,
             theme: 'light',
+            // transition: Bounce,
           });
         } else {
-          toast.success('Khôi phục người dùng thành công', {
+          toast.success('Khôi phục sản phẩm thành công', {
             position: 'top-right',
             autoClose: 2000,
             hideProgressBar: false,
@@ -180,10 +146,10 @@ export default function UserView() {
             draggable: true,
             progress: undefined,
             theme: 'light',
+            // transition: Bounce,
           });
         }
       } catch (error) {
-        console.log(error);
         toast.error('Thất bại', {
           position: 'top-right',
           autoClose: 2000,
@@ -193,15 +159,21 @@ export default function UserView() {
           draggable: true,
           progress: undefined,
           theme: 'light',
+          // transition: Bounce,
         });
+        console.log(error);
       }
+    }
+  };
 
-      // Also delete all detail items associated with this parent
+  const handleDelete = async () => {
+    if (currentItem) {
+      await deleteProduct();
       const updatedData = data.map((item) => {
         if (item.id === currentItem.id) {
           return {
             ...item,
-            role: currentItem.role === 'USER' ? 'KICK' : 'USER',
+            deleted: !currentItem.deleted,
           };
         }
         return item;
@@ -224,7 +196,7 @@ export default function UserView() {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <TextField
-              label="Tìm kiếm theo username và email"
+              label="Tìm kiếm theo tên sản phẩm"
               variant="outlined"
               size="small"
               value={searchTerm}
@@ -240,12 +212,11 @@ export default function UserView() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Tên người dùng</TableCell>
-                <TableCell>Username</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Số điện thoại</TableCell>
-                <TableCell>Quyền</TableCell>
-                <TableCell>Xác minh</TableCell>
+                <TableCell>Tên sàn phẩm</TableCell>
+                <TableCell>Đã bán</TableCell>
+                <TableCell>Email người bán</TableCell>
+                <TableCell>Giá Bán</TableCell>
+                <TableCell>Trạng Thái</TableCell>
                 <TableCell align="center">Thao tác</TableCell>
               </TableRow>
             </TableHead>
@@ -253,50 +224,55 @@ export default function UserView() {
               {paginatedData.length > 0 ? (
                 paginatedData.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.username}</TableCell>
-                    <TableCell>{item.email}</TableCell>
-                    <TableCell>{item.phone}</TableCell>
+                    <Box gap={2} display="flex" alignItems="center" sx={{ m: 1 }}>
+                      <Avatar alt={item.title} src={item.image} />
+                      {item.title}
+                    </Box>
+                    <TableCell>{item.quantity_sold}</TableCell>
+                    <TableCell>{item.user.email}</TableCell>
+                    <TableCell>{`${item.minPrice} - ${item.maxPrice}`}</TableCell>
                     <TableCell>
-                      <Label color={item.role === 'ADMIN' ? 'info' : item.role === 'USER' ? 'success' : 'error'}>
-                        {item.role}
+                      <Label color={item.deleted === true ? 'error' : 'success'}>
+                        {item.deleted === false ? 'Hoạt động' : 'Đã xóa'}
                       </Label>
                     </TableCell>
-                    <TableCell sx={{ pl: 5 }}>
-                      {item.isVerified ? (
-                        <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-                      ) : (
-                        '-'
-                      )}
-                    </TableCell>
+
                     <TableCell align="center">
                       <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-                        {item.role === 'USER' ? (
+                        {item.deleted === false ? (
                           <Button
                             size="small"
                             variant="outlined"
                             color="error"
                             startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
                             onClick={() => handleOpenDeleteDialog(item)}
+                            sx={{ width: 110 }}
                           >
-                            Kick
+                            Xóa
                           </Button>
                         ) : (
-                          <></>
-                        )}
-                        {item.role === 'KICK' ? (
                           <Button
                             size="small"
                             variant="outlined"
                             color="primary"
                             startIcon={<Iconify icon="mingcute:add-line" />}
                             onClick={() => handleOpenDeleteDialog(item)}
+                            sx={{ width: 110 }}
                           >
-                            Un Kick
+                            Khôi phục
                           </Button>
-                        ) : (
-                          <></>
                         )}
+
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          sx={{ width: 110 }}
+                          startIcon={<Iconify icon="solar:share-bold" />}
+                        >
+                          <Link target="_blank" to={`/product-detail/${item.id}`}>
+                            Xem
+                          </Link>
+                        </Button>
                       </Box>
                     </TableCell>
                   </TableRow>
@@ -326,16 +302,20 @@ export default function UserView() {
 
       {/* Delete Dialog */}
       <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-        <DialogTitle>Xác nhận {currentItem?.role === 'USER' ? 'Kick' : 'Un Kick'}</DialogTitle>
+        <DialogTitle>Xác nhận {currentItem?.deleted === false ? 'xóa' : 'khôi phục'} sản phẩm </DialogTitle>
         <DialogContent sx={{ width: 460 }}>
           <DialogContentText>
-            Bạn có chắc chắn muốn {currentItem?.role === 'USER' ? 'Kick' : 'Un Kick'} "{currentItem?.username}"?
+            Bạn có chắc chắn muốn {currentItem?.deleted === false ? 'xóa' : 'khôi phục'} {currentItem?.title} ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
-          <Button onClick={handleDelete} variant="contained" color={currentItem?.role === 'USER' ? 'error' : 'primary'}>
-            {currentItem?.role === 'USER' ? 'Kick' : 'Un Kick'}
+          <Button
+            onClick={handleDelete}
+            variant="contained"
+            color={currentItem?.deleted === false ? 'error' : 'primary'}
+          >
+            {currentItem?.deleted === false ? 'Xóa' : 'Khôi phục'}
           </Button>
         </DialogActions>
       </Dialog>

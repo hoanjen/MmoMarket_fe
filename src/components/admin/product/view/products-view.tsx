@@ -1,60 +1,84 @@
-import { useState, useCallback, useEffect } from 'react';
+'use client';
 
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import TableBody from '@mui/material/TableBody';
-import Typography from '@mui/material/Typography';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
+import type React from 'react';
 
-import { _users } from '../../_mock';
-import { DashboardContent } from '../../layouts/dashboard';
-
-import { Iconify } from '../../components/iconify';
-import { Scrollbar } from '../../components/scrollbar';
-
-import { TableNoData } from '../table-no-data';
-import { UserTableRow } from '../user-table-row';
-import { UserTableHead } from '../user-table-head';
-import { TableEmptyRows } from '../table-empty-rows';
-import { UserTableToolbar } from '../user-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
-
-import type { UserProps } from '../user-table-row';
+import { useState, useEffect } from 'react';
+import {
+  Box,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Paper,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TextField,
+  Typography,
+  Breadcrumbs,
+  Avatar,
+} from '@mui/material';
+import { Add, Delete, Edit, Search, ArrowBack } from '@mui/icons-material';
+import { CategoryApi } from '@api/category/category';
+import { toast } from 'react-toastify';
+import { CategoryTypeApi } from '@api/categorytype/categorytype';
 import { AdminApi } from '@api/admin/admin';
+import { Iconify } from '@components/admin/components/iconify';
+import { Label } from '@components/admin/components/label';
 
-// ----------------------------------------------------------------------
+import { Link } from 'react-router-dom';
 
-export function ProductsView() {
-  const table = useTable();
+interface DataItem {
+  id: string;
+  title: string;
+  sub_title: string;
+  description: string;
+  quantity_sold: number;
+  image: string;
+  minPrice: string;
+  maxPrice: string;
+  deleted: boolean;
+  user: {
+    id: string;
+    email: string;
+    username: string;
+  };
+}
 
-  const [filterName, setFilterName] = useState('');
-  const [isReloadData, setIsReloadData] = useState<boolean>(false);
-  const [users, setUsers] = useState<
-    {
-      id: string;
-      title: string;
-      sub_title: string;
-      description: string;
-      quantity_sold: number;
-      image: string;
-      minPrice: string;
-      maxPrice: string;
-      deleted: boolean;
-      user: {
-        id: string;
-        email: string;
-        username: string;
-      };
-    }[]
-  >([]);
+// Sample detail data structure
+interface DetailItem {
+  id: string;
+  name: string;
+  parentId: string; //category_id
+  created_at: string;
+  updated_at: string;
+}
+
+export default function ProductsView() {
+  // View state
+
+  // Main table state
+  const [data, setData] = useState<DataItem[]>([]);
+  const [detailData, setDetailData] = useState<DetailItem[]>([]);
+  const [filteredData, setFilteredData] = useState<DataItem[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [currentItem, setCurrentItem] = useState<DataItem | null>(null);
 
   const fetchApi = async (): Promise<void> => {
     try {
       const userData = await AdminApi.getListProduct({});
-      setUsers(userData.product);
+      setData(userData.product);
     } catch (error) {
       console.log(error);
     }
@@ -62,146 +86,239 @@ export function ProductsView() {
 
   useEffect(() => {
     fetchApi();
-  }, [isReloadData]);
+  }, []);
 
-  // fetchApi();
+  // Filter data when search term changes
+  useEffect(() => {
+    const filtered = data.filter((item) => item.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    setFilteredData(filtered);
+    setPage(0);
+  }, [searchTerm, data]);
 
-  const dataFiltered: UserProps[] = applyFilter({
-    inputData: users,
-    comparator: getComparator(table.order, table.orderBy),
-    filterName,
-  });
+  // Pagination handlers
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
 
-  const notFound = !dataFiltered.length && !!filterName;
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(Number.parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // Search handler
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleOpenDeleteDialog = (item: DataItem) => {
+    setCurrentItem(item);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const deleteProduct = async (): Promise<void> => {
+    if (currentItem) {
+      try {
+        await AdminApi.deleteProduct({ id: currentItem.id });
+
+        if (!currentItem.deleted) {
+          toast.success('Xóa sản phẩm thành công', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+            // transition: Bounce,
+          });
+        } else {
+          toast.success('Khôi phục sản phẩm thành công', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+            // transition: Bounce,
+          });
+        }
+      } catch (error) {
+        toast.error('Thất bại', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+          // transition: Bounce,
+        });
+        console.log(error);
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    if (currentItem) {
+      await deleteProduct();
+      const updatedData = data.map((item) => {
+        if (item.id === currentItem.id) {
+          return {
+            ...item,
+            deleted: !currentItem.deleted,
+          };
+        }
+        return item;
+      });
+      setData(updatedData);
+      handleCloseDeleteDialog();
+    }
+  };
+
+  // Calculate pagination
+  const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <DashboardContent>
-      <Box display="flex" alignItems="center" mb={5}>
-        <Typography variant="h4" flexGrow={1}>
-          Products
+    <Container maxWidth="xl" sx={{ mt: 1 }}>
+      <>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Danh sách người dùng
         </Typography>
-      </Box>
 
-      <Card>
-        <UserTableToolbar
-          numSelected={table.selected.length}
-          filterName={filterName}
-          onFilterName={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setFilterName(event.target.value);
-            table.onResetPage();
-          }}
-        />
-
-        <TableContainer sx={{ overflow: 'unset' }}>
-          <Table sx={{ minWidth: 800 }}>
-            <UserTableHead
-              order={table.order}
-              orderBy={table.orderBy}
-              rowCount={users.length}
-              onSort={table.onSort}
-              headLabel={[
-                { id: 'title', label: 'Tên sàn phẩm' },
-                { id: 'quantity', label: 'Đã bán' },
-                { id: 'email', label: 'Email Người bán' },
-                { id: 'price', label: 'Giá bán' },
-                { id: 'deleted', label: 'Trạng thái' },
-                { id: '' },
-              ]}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, mt: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <TextField
+              label="Tìm kiếm theo tên sản phẩm"
+              variant="outlined"
+              size="small"
+              value={searchTerm}
+              onChange={handleSearch}
+              InputProps={{
+                startAdornment: <Search color="action" sx={{ mr: 1 }} />,
+              }}
             />
+          </Box>
+        </Box>
+
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Tên sàn phẩm</TableCell>
+                <TableCell>Đã bán</TableCell>
+                <TableCell>Email người bán</TableCell>
+                <TableCell>Giá Bán</TableCell>
+                <TableCell>Trạng Thái</TableCell>
+                <TableCell align="center">Thao tác</TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
-              {dataFiltered
-                .slice(table.page * table.rowsPerPage, table.page * table.rowsPerPage + table.rowsPerPage)
-                .map((row) => (
-                  <UserTableRow key={row.id} row={row} isReloadData={isReloadData} onAction={setIsReloadData} />
-                ))}
+              {paginatedData.length > 0 ? (
+                paginatedData.map((item) => (
+                  <TableRow key={item.id}>
+                    <Box gap={2} display="flex" alignItems="center" sx={{ m: 1 }}>
+                      <Avatar alt={item.title} src={item.image} />
+                      {item.title}
+                    </Box>
+                    <TableCell>{item.quantity_sold}</TableCell>
+                    <TableCell>{item.user.email}</TableCell>
+                    <TableCell>{`${item.minPrice} - ${item.maxPrice}`}</TableCell>
+                    <TableCell>
+                      <Label color={item.deleted === true ? 'error' : 'success'}>
+                        {item.deleted === false ? 'Hoạt động' : 'Đã xóa'}
+                      </Label>
+                    </TableCell>
 
-              <TableEmptyRows height={68} emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)} />
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                        {item.deleted === false ? (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            color="error"
+                            startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
+                            onClick={() => handleOpenDeleteDialog(item)}
+                            sx={{ width: 110 }}
+                          >
+                            Xóa
+                          </Button>
+                        ) : (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            color="primary"
+                            startIcon={<Iconify icon="mingcute:add-line" />}
+                            onClick={() => handleOpenDeleteDialog(item)}
+                            sx={{ width: 110 }}
+                          >
+                            Khôi phục
+                          </Button>
+                        )}
 
-              {notFound && <TableNoData searchQuery={filterName} />}
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          sx={{ width: 110 }}
+                          startIcon={<Iconify icon="solar:share-bold" />}
+                        >
+                          <Link target="_blank" to={`/product-detail/${item.id}`}>
+                            Xem
+                          </Link>
+                        </Button>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    Không có dữ liệu
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={filteredData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Số hàng mỗi trang:"
+            labelDisplayedRows={({ from, to, count }) => `${from}-${to} của ${count}`}
+          />
         </TableContainer>
+      </>
 
-        <TablePagination
-          component="div"
-          page={table.page}
-          count={users.length}
-          rowsPerPage={table.rowsPerPage}
-          onPageChange={table.onChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
-        />
-      </Card>
-    </DashboardContent>
+      {/* Delete Dialog */}
+      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+        <DialogTitle>Xác nhận {currentItem?.deleted === false ? 'xóa' : 'khôi phục'} sản phẩm </DialogTitle>
+        <DialogContent sx={{ width: 460 }}>
+          <DialogContentText>
+            Bạn có chắc chắn muốn {currentItem?.deleted === false ? 'xóa' : 'khôi phục'} {currentItem?.title} ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
+          <Button
+            onClick={handleDelete}
+            variant="contained"
+            color={currentItem?.deleted === false ? 'error' : 'primary'}
+          >
+            {currentItem?.deleted === false ? 'Xóa' : 'Khôi phục'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 }
-
-// ----------------------------------------------------------------------
-
-export function useTable() {
-  const [page, setPage] = useState(0);
-  const [orderBy, setOrderBy] = useState('name');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [selected, setSelected] = useState<string[]>([]);
-  const [order, setOrder] = useState<'asc' | 'desc'>('asc');
-
-  const onSort = useCallback(
-    (id: string) => {
-      const isAsc = orderBy === id && order === 'asc';
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(id);
-    },
-    [order, orderBy],
-  );
-
-  const onSelectAllRows = useCallback((checked: boolean, newSelecteds: string[]) => {
-    if (checked) {
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  }, []);
-
-  const onSelectRow = useCallback(
-    (inputValue: string) => {
-      const newSelected = selected.includes(inputValue)
-        ? selected.filter((value) => value !== inputValue)
-        : [...selected, inputValue];
-
-      setSelected(newSelected);
-    },
-    [selected],
-  );
-
-  const onResetPage = useCallback(() => {
-    setPage(0);
-  }, []);
-
-  const onChangePage = useCallback((event: unknown, newPage: number) => {
-    setPage(newPage);
-  }, []);
-
-  const onChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      onResetPage();
-    },
-    [onResetPage],
-  );
-
-  return {
-    page,
-    order,
-    onSort,
-    orderBy,
-    selected,
-    rowsPerPage,
-    onSelectRow,
-    onResetPage,
-    onChangePage,
-    onSelectAllRows,
-    onChangeRowsPerPage,
-  };
-}
-
-// user-view

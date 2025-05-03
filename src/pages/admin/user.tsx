@@ -1,4 +1,5 @@
-import { UserView } from '@components/admin/user/view/user-view';
+// import { UserView } from '@components/admin/user/view/user-view';
+import UserView from '@components/admin/user/view/user-view';
 import { ToastContainer } from 'react-toastify';
 
 // ----------------------------------------------------------------------
