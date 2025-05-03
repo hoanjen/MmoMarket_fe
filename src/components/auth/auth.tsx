@@ -278,14 +278,33 @@ function FormRegister() {
         username: values.username,
         email: values.email,
         password: values.password,
-        phone_number: '0986666666',
       });
 
       if (data && data.statusCode === 200) {
-        alert('sign up success');
+        toast.success('Đăng ký thành công !!', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+          transition: Bounce,
+        });
       }
       if (data && data.statusCode === 400) {
-        alert('sign up error');
+        toast.error('Email hoặc username đã tồn tại !!', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+          transition: Bounce,
+        });
       }
     }
   };
