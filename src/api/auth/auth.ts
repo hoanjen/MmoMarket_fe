@@ -15,19 +15,16 @@ export class AuthApi {
     username,
     email,
     password,
-    phone_number,
   }: {
     username: string;
     email: string;
     password: string;
-    phone_number: string;
   }): Promise<ResponseSignUp> {
     return axios
       .post('/auth/sign-up', {
         username,
         email,
         password,
-        phone_number,
       })
       .then((_) => _.data);
   }

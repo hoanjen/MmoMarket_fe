@@ -11,7 +11,7 @@ export function Footer() {
     <div className="border-t-[1px] px-60 mt-14  pt-8 text-[#3d464d]">
       <div className="grid grid-cols-3  gap-10">
         <div>
-          <h2 className="font-bold text-[20px] py-4">Liên hệ</h2>
+          <h2 className="font-bold text-[20px] py-4"></h2>
           <p className="mb-3">Liên hệ ngay nếu bạn có khó khăn khi sử dụng dịch vụ hoặc cần hợp tác.</p>
           <div className="flex flex-col space-y-1">
             <a href="#">
@@ -21,12 +21,12 @@ export function Footer() {
             </a>
             <a href="#">
               <span>
-                <FacebookIcon fontSize="small"></FacebookIcon> Tạp hóa MMO
+                <FacebookIcon fontSize="small"></FacebookIcon> MMO MARKET
               </span>
             </a>
             <a href="#">
               <span>
-                <EmailIcon fontSize="small"></EmailIcon> support@taphoammo.net
+                <EmailIcon fontSize="small"></EmailIcon> support@mmomarket.net
               </span>
             </a>
             <a href="#">
@@ -83,7 +83,9 @@ export function Footer() {
       </div>
       <div className="mt-10 h-14 leading-[56px]">
         <hr />
-        <a href='#' className='text-green-500 font-semibold'>All rights reserved: TAPHOAMMO.NET</a>
+        <a href="#" className="text-green-500 font-semibold">
+          All rights reserved: MMOMARKET.NET
+        </a>
       </div>
     </div>
   );
