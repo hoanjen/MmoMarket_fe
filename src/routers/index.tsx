@@ -20,6 +20,8 @@ import ProductDetail from '@pages/productDetail';
 import OrderDetail from '@pages/orderDetail';
 import BoothManage from '@pages/boothManage';
 import Deposit from '@pages/deposit';
+import CataLogPage from '@pages/admin/catalog';
+import TransactionPage from '@pages/admin/transaction';
 const renderFallback = (
   <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
     <LinearProgress
@@ -93,6 +95,8 @@ export const router = createBrowserRouter([
       { element: <AdminHomePage />, index: true },
       { path: '/admin/user', element: <UserPage /> },
       { path: '/admin/product', element: <ProductPage /> },
+      { path: '/admin/catalog', element: <CataLogPage /> },
+      { path: '/admin/transaction', element: <TransactionPage /> },
     ],
   },
 ]);

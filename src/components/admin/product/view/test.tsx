@@ -34,8 +34,6 @@ import { CategoryApi } from '@api/category/category';
 import { toast } from 'react-toastify';
 import { CategoryTypeApi } from '@api/categorytype/categorytype';
 import { AdminApi } from '@api/admin/admin';
-import { Iconify } from '@components/admin/components/iconify';
-import { Label } from '@components/admin/components/label';
 
 interface DataItem {
   id: string;
@@ -155,58 +153,14 @@ export default function UserView() {
     setOpenDeleteDialog(false);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (currentItem) {
-      try {
-        await AdminApi.kickUser({ id: currentItem.id });
-        if (currentItem.role === 'USER') {
-          toast.success('Kick người dùng thành công', {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
-        } else {
-          toast.success('Khôi phục người dùng thành công', {
-            position: 'top-right',
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
-        }
-      } catch (error) {
-        console.log(error);
-        toast.error('Thất bại', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-      }
-
+      const updatedData = data.filter((item) => item.id !== currentItem.id);
       // Also delete all detail items associated with this parent
-      const updatedData = data.map((item) => {
-        if (item.id === currentItem.id) {
-          return {
-            ...item,
-            role: currentItem.role === 'USER' ? 'KICK' : 'USER',
-          };
-        }
-        return item;
-      });
+      const updatedDetailData = detailData.filter((item) => item.parentId !== currentItem.id);
+
       setData(updatedData);
+      setDetailData(updatedDetailData);
       handleCloseDeleteDialog();
     }
   };
@@ -244,7 +198,7 @@ export default function UserView() {
                 <TableCell>Username</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Số điện thoại</TableCell>
-                <TableCell>Quyền</TableCell>
+                <TableCell>Quyển</TableCell>
                 <TableCell>Xác minh</TableCell>
                 <TableCell align="center">Thao tác</TableCell>
               </TableRow>
@@ -257,46 +211,28 @@ export default function UserView() {
                     <TableCell>{item.username}</TableCell>
                     <TableCell>{item.email}</TableCell>
                     <TableCell>{item.phone}</TableCell>
-                    <TableCell>
-                      <Label color={item.role === 'ADMIN' ? 'info' : item.role === 'USER' ? 'success' : 'error'}>
-                        {item.role}
-                      </Label>
-                    </TableCell>
-                    <TableCell sx={{ pl: 5 }}>
-                      {item.isVerified ? (
-                        <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-                      ) : (
-                        '-'
-                      )}
-                    </TableCell>
+                    <TableCell>{item.role}</TableCell>
+                    <TableCell>{item.isVerified}</TableCell>
                     <TableCell align="center">
                       <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-                        {item.role === 'USER' ? (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            color="error"
-                            startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
-                            onClick={() => handleOpenDeleteDialog(item)}
-                          >
-                            Kick
-                          </Button>
-                        ) : (
-                          <></>
-                        )}
-                        {item.role === 'KICK' ? (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            color="primary"
-                            startIcon={<Iconify icon="mingcute:add-line" />}
-                            onClick={() => handleOpenDeleteDialog(item)}
-                          >
-                            Un Kick
-                          </Button>
-                        ) : (
-                          <></>
-                        )}
+                        {/* <Button
+                          size="small"
+                          variant="outlined"
+                          color="primary"
+                          startIcon={<Edit />}
+                          onClick={() => handleOpenEditDialog(item)}
+                        >
+                          Sửa
+                        </Button> */}
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          color="error"
+                          startIcon={<Delete />}
+                          onClick={() => handleOpenDeleteDialog(item)}
+                        >
+                          Xóa
+                        </Button>
                       </Box>
                     </TableCell>
                   </TableRow>
@@ -326,16 +262,14 @@ export default function UserView() {
 
       {/* Delete Dialog */}
       <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-        <DialogTitle>Xác nhận {currentItem?.role === 'USER' ? 'Kick' : 'Un Kick'}</DialogTitle>
+        <DialogTitle>Xác nhận xóa</DialogTitle>
         <DialogContent sx={{ width: 460 }}>
-          <DialogContentText>
-            Bạn có chắc chắn muốn {currentItem?.role === 'USER' ? 'Kick' : 'Un Kick'} "{currentItem?.username}"?
-          </DialogContentText>
+          <DialogContentText>Bạn có chắc chắn muốn xóa "{currentItem?.name}"?</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
-          <Button onClick={handleDelete} variant="contained" color={currentItem?.role === 'USER' ? 'error' : 'primary'}>
-            {currentItem?.role === 'USER' ? 'Kick' : 'Un Kick'}
+          <Button onClick={handleDelete} variant="contained" color="error">
+            Xóa
           </Button>
         </DialogActions>
       </Dialog>
