@@ -37,45 +37,113 @@ export type ResponseProduct = {
   message: [];
 };
 
+export type ProductOwners = {
+  title: string;
+  sub_title: string;
+  description: string;
+  image: string;
+  quantity_sold: number;
+  minPrice: number;
+  maxPrice: number;
+  id: string;
+  deleted: false;
+  is_active: boolean;
+  created_at: string;
+  updated_at: Date;
+}[];
+
 export type ResponseProductDetail = {
   status: string;
   statusCode: number;
   data: {
-    title: string,
-    sub_title: string,
-    description: string,
-    image: string,
-    quantity_sold: number,
-    minPrice: number,
-    maxPrice: number,
-    id: string,
-    category_type_id: string,
-    user_id: string,
-    created_at: string,
-    updated_at: string,
+    title: string;
+    sub_title: string;
+    description: string;
+    image: string;
+    quantity_sold: number;
+    minPrice: number;
+    maxPrice: number;
+    id: string;
+    category_type_id: string;
+    user_id: string;
+    created_at: string;
+    updated_at: string;
     vans_products: {
-      id: string,
-      title: string,
-      description: string,
-      price: number,
-      quantity: number,
-      product_id: string,
-      created_at: string,
-      updated_at: string
-    }[]
+      id: string;
+      title: string;
+      description: string;
+      price: number;
+      quantity: number;
+      product_id: string;
+      created_at: string;
+      updated_at: string;
+    }[];
   };
 
   message: [];
 };
 
-export type ResponseCreateProduct ={
-  statusCode: number,
-}
+export type ResponseCreateProduct = {
+  statusCode: number;
+};
 
-export type ResponseImportVansProduct ={
-  statusCode: number,
-}
+export type ResponseImportVansProduct = {
+  statusCode: number;
+};
 
-export type ResponseCreateVansProduct ={
-  statusCode: number,
-}
+export type ResponseCreateVansProduct = {
+  statusCode: number;
+  data: {
+    newVansProduct: {
+      title: string;
+      description: string;
+      price: number;
+      quantity: number;
+      product_id: string;
+      id: string;
+      is_active: boolean;
+      created_at: string;
+      updated_at: string;
+    };
+  };
+};
+
+export type VanProductData = {
+  id: string;
+  title: string;
+  description?: string;
+  price: number;
+  quantity: number;
+  product_id: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type VanProductDataResponse = {
+  status: string;
+  statusCode: number;
+  data: VanProductData[];
+  message: string[];
+};
+
+export type DataProductResponse = {
+  status: string;
+  statusCode: number;
+  data: {
+    id: string;
+    account: string;
+    password: string;
+    // status: 'NOTSOLD';
+    vans_product_id: string;
+    created_at: string;
+  }[];
+  message: string[];
+};
+
+export type ResponseCreateDataProduct = {
+  statusCode: number;
+  data: {
+    results: { id: string }[];
+  };
+};
