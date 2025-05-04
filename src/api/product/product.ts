@@ -9,7 +9,8 @@ import {
   VanProductDataResponse,
   DataProductResponse,
   ResponseCreateDataProduct,
-  ResponseCreateCommentProduct
+  ResponseCreateCommentProduct,
+  ResponseGetCommentProduct
 } from './types';
 
 export class ProductApi {
@@ -241,6 +242,22 @@ export class ProductApi {
           'Content-Type': 'multipart/form-data',
         },
       })
+      .then((_) => _.data);
+  }
+
+  public static async getCommentByProductId({
+    product_id,
+  }: {
+    product_id: string;
+  }): Promise<ResponseGetCommentProduct> {
+    return axios
+      .get(`/comment`, 
+        {
+          params: {
+            product_id,
+          }
+        }
+      )
       .then((_) => _.data);
   }
 }

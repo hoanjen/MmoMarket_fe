@@ -5,7 +5,16 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Description from './Description';
 import Review from './Review';
-export default function SubProduct ({tab, handleChange} : {tab : string, handleChange: (event: React.SyntheticEvent, value: string) => void}){
+export default function SubProduct (
+    {
+        tab, 
+        handleChange, 
+    } 
+    : 
+    {
+        tab : string, 
+        handleChange: (event: React.SyntheticEvent, value: string) => void,
+    }){
     return (
         <>
             <Box sx={{ width: '100%', mt:4}}>
@@ -21,7 +30,7 @@ export default function SubProduct ({tab, handleChange} : {tab : string, handleC
                         <Description/>
                     </TabPanel>
                     <TabPanel value="review">
-                        <Review/>
+                        <Review />
                     </TabPanel>
                     <TabPanel value="api">api</TabPanel>
                 </TabContext>
