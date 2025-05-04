@@ -230,4 +230,17 @@ export class ProductApi {
       })
       .then((_) => _.data);
   }
+
+  public static async importExcelData({ vans_product_id, file }: { vans_product_id: string; file: File | string }) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('vans_product_id', vans_product_id);
+    return axios
+      .post(`/vans-product/import-excel`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((_) => _.data);
+  }
 }

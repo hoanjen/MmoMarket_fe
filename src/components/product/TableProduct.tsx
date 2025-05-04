@@ -46,6 +46,7 @@ import {
 import { ProductApi } from '@api/product/product';
 import { UploadApi } from '@api/upload/upload';
 import { toast } from 'react-toastify';
+import ExcelImportButton from './ImportExcel';
 
 interface ProductOwners {
   id: string;
@@ -60,7 +61,7 @@ interface ProductOwners {
   image?: string;
 }
 
-interface AccountCredential {
+export interface AccountCredential {
   id: string;
   account: string;
   password: string;
@@ -778,14 +779,20 @@ export default function ProductOwnerTable({ isRefresh }: { isRefresh?: boolean }
             <Typography variant="h6" component="h3">
               Thông tin tài khoản
             </Typography>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleAddCredential}
-              disabled={isAddingCredential}
-            >
-              Thêm mới
-            </Button>
+            <div className="flex space-x-10">
+              <ExcelImportButton
+                setCredentials={setCredentials}
+                vans_product_id={selectedProduct?.id ?? ''}
+              ></ExcelImportButton>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={handleAddCredential}
+                disabled={isAddingCredential}
+              >
+                Thêm mới
+              </Button>
+            </div>
           </Box>
 
           <TableContainer component={Paper} sx={{ mb: 2 }}>
