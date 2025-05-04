@@ -147,3 +147,7 @@ export type ResponseCreateDataProduct = {
     results: { id: string }[];
   };
 };
+
+export type ResponseCreateCommentProduct = {
+  statusCode: number;
+};

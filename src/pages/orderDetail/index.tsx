@@ -49,32 +49,30 @@ export default function OrderHistory() {
         <div>
             <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                 <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-                    <table className="min-w-full leading-normal">
-                        <thead>
-                            <tr>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Thao tác</th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Sản phẩm</th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Giá trị</th>
+                <table className="min-w-full table-fixed leading-normal">
+                    <thead>
+                        <tr>
+                            <th className="w-1/3 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Mã sản phẩm</th>
+                            <th className="w-1/3 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Sản phẩm</th>
+                            <th className="w-1/3 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Giá trị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {values.data_product_orders.map((value) => (
+                            <tr key={value.data_product.id}>
+                                <td className="w-1/3 px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p className="inline-block text-[#47991f] whitespace-normal break-words">{value.data_product.id}</p>
+                                </td>
+                                <td className="w-1/3 px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p className="text-gray-900 cursor-pointer whitespace-no-wrap">{value.data_product.account}</p>
+                                </td>
+                                <td className="w-1/3 px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p className="text-gray-900 whitespace-no-wrap">{value.data_product.password}</p>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                                {values.data_product_orders.map((value)=>{
-                                    return (
-                                    <tr key={value.data_product.id}>
-                                        <td className="px-5 py-5 border-b border-gray-200  bg-white text-sm">
-                                            <div className="flex flex-row">                                    
-                                                <p className='text-red-600 cursor-pointer'><ReportGmailerrorredOutlinedIcon/></p>
-                                            </div>
-                                        </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                            <p className="text-gray-900 cursor-pointer whitespace-no-wrap">{value.data_product.account}</p>
-                                        </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                            <p className="text-gray-900 whitespace-no-wrap">{value.data_product.password}</p>
-                                        </td>
-                                    </tr>)})}
-                        </tbody>
-                    </table>
+                        ))}
+                    </tbody>
+                </table>
                     {/* <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
                         <span className="text-xs xs:text-sm text-gray-900">Trang {values.currentPage} của tổng số {values.totalPages}  Trang</span>
                         <div className="inline-flex mt-2 xs:mt-0">

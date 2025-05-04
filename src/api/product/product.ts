@@ -9,6 +9,7 @@ import {
   VanProductDataResponse,
   DataProductResponse,
   ResponseCreateDataProduct,
+  ResponseCreateCommentProduct
 } from './types';
 
 export class ProductApi {
@@ -204,6 +205,30 @@ export class ProductApi {
       account,
       password,
     });
+  }
+
+    // --------------------------------------------------------------------------------Comment Product ------------------------------------------------------------------
+
+
+  public static async createCommentProduct({
+    product_id,
+    order_id,
+    star,
+    content,
+  }: {
+    product_id: string;
+    order_id: string;
+    star: number;
+    content: string;
+  }): Promise<ResponseCreateCommentProduct> {
+    return axios
+      .post(`/comment`, {
+        product_id,
+        order_id,
+        star,
+        content,
+      })
+      .then((_) => _.data);
   }
 
   public static async importExcelData({ vans_product_id, file }: { vans_product_id: string; file: File | string }) {

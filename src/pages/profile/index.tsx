@@ -311,8 +311,8 @@ export default function Profile() {
                 onChange={handleChange}
                 label="gender"
               >
-                <MenuItem value="MALE">Male</MenuItem>
-                <MenuItem value="FEMALE">Female</MenuItem>
+                <MenuItem value="MALE">Nữ</MenuItem>
+                <MenuItem value="FEMALE">Nam</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -340,7 +340,7 @@ export default function Profile() {
               disabled={!isChange}
               value={`${values.last_name}`}
               onChange={(e) => {
-                setValues({ ...values, first_name: e.target.value });
+                setValues({ ...values, last_name: e.target.value });
               }}
             />
           </div>
