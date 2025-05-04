@@ -1,5 +1,5 @@
 import axios from '../index';
-import { ResponseBuyVansProduct, ResponseOrderHistory, ResponseOrderDetail } from './types'
+import { ResponseBuyVansProduct, ResponseOrderHistory, ResponseOrderDetail, ResponseOrderReport, ResponseCancelOrderReport } from './types'
 
 export class OrderApi {
   public static async buyVansProduct ({
@@ -30,5 +30,36 @@ export class OrderApi {
     )
   }
 
+  public static async reportOrder ({
+    order_id, 
+    merchant_id,
+    reason
+  }:{
+      order_id: string, 
+      merchant_id: string,
+      reason: string
+  }): Promise<ResponseOrderReport>{
+      return axios.post(`/order/report`,
+          {
+            order_id,
+            merchant_id,
+            reason
+          })
+      .then((_)=>(_.data)
+      )
+  }
+
+  public static async cancelReportOrder ({
+    order_id, 
+  }:{
+    order_id: string, 
+  }): Promise<ResponseCancelOrderReport>{
+    return axios.post(`/order/cancel-report`,
+        {
+          order_id
+        })
+    .then((_)=>(_.data)
+    )
+  }
 }
 

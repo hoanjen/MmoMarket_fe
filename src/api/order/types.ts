@@ -42,13 +42,23 @@ export type ResponseOrderHistory = {
       status: string;
       created_at: string;
       vans_product: {
+        title: string;
         price: number;
         quantity: 2;
         product_id: string;
         product: {
           user_id: string;
+          title: string;
+          user: {
+            id: string;
+            username: string;
+          }
         };
       };
+      comments: [],
+      freeze:{
+        return: number
+      }
     }[];
     previousPage: number;
     totalPages: number;
@@ -70,3 +80,15 @@ export type ResponseOrderDetail = {
     }[];
   };
 };
+
+export type ResponseOrderReport = {
+  status: string
+  statusCode: number;
+  data: {}
+}
+
+export type ResponseCancelOrderReport = {
+  status: string
+  statusCode: number;
+  data: {}
+}
