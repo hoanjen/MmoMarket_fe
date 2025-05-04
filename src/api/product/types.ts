@@ -78,6 +78,12 @@ export type ResponseProductDetail = {
       created_at: string;
       updated_at: string;
     }[];
+    user: {
+      id: string;
+      first_name: string;
+      last_name: string;
+      username: string
+    }
   };
 
   message: [];
@@ -150,4 +156,19 @@ export type ResponseCreateDataProduct = {
 
 export type ResponseCreateCommentProduct = {
   statusCode: number;
+};
+
+export type ResponseGetCommentProduct = {
+  statusCode: number;
+  data: {
+    id: string,
+    star: number,
+    content: string,
+    user:{
+        id: string,
+        first_name: string,
+        last_name: string,
+        avatar: string
+    }
+  }[]
 };

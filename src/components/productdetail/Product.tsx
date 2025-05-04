@@ -47,7 +47,13 @@ type productDetail = {
       product_id: string,
       created_at: string,
       updated_at: string
-    }[]
+    }[],
+    user: {
+        id: string;
+        first_name: string;
+        last_name: string;
+        username: string
+      }
 }
 
 type order = {
@@ -115,8 +121,16 @@ export default function Product(){
                 created_at: '',
                 updated_at: ''
             }
-        ]
+        ],
+        user: {
+            id: '',
+            first_name: '',
+            last_name: '',
+            username: ''
+          }
     });
+
+    const [numberRate, setNumberRate] = useState<number>(0)
 
     const [invalidCreateVansProduct, setInvalidCreateVansProduct] = useState<invalidCreateVansProduct>({
         title: false,
@@ -317,6 +331,7 @@ export default function Product(){
                     theme: 'light',
                     transition: Bounce,
                 });
+                fectchApi()
                 handleClose();
             }
         }
@@ -339,31 +354,43 @@ export default function Product(){
             }));
         }
     }, [order.vans_product_id]);
+
+    const fectchApi = async () => {
+        try {
+            if(id){
+            const res = await ProductApi.getProductDetail(id);
+            setValues(res.data);
+            if(res.data.vans_products.length >= 1 && isOrderSet.current === false){
+                setOrder((prevOrder) => ({
+                    ...prevOrder,
+                    vans_product_id: order.vans_product_id || res.data.vans_products[0].id
+                }));
+                setOrderValid({vans_product_id: true, quantity: res.data.vans_products[0].quantity >= 1})
+                isOrderSet.current = true;
+            }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        finally{
+            setIsLoading(false);
+        }
+    };
+
+    const fectchApiComment = async () => {
+        try {
+            if(id){
+                const res = await ProductApi.getCommentByProductId({product_id: id});
+                setNumberRate(res.data.length)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
-        const fectchApi = async () => {
-            try {
-                if(id){
-                const res = await ProductApi.getProductDetail(id);
-                setValues(res.data);
-                if(res.data.vans_products.length >= 1 && isOrderSet.current === false){
-                    setOrder((prevOrder) => ({
-                        ...prevOrder,
-                        vans_product_id: order.vans_product_id || res.data.vans_products[0].id
-                    }));
-                    setOrderValid({vans_product_id: true, quantity: res.data.vans_products[0].quantity >= 1})
-                    isOrderSet.current = true;
-                }
-                }
-            } catch (error) {
-                console.log(error);
-            }
-            finally{
-                setIsLoading(false);
-            }
-        };
-        fectchApi();
-        const interval = setInterval(fectchApi, 5000);
-        return () => clearInterval(interval);
+        fectchApi()
+        fectchApiComment()
     }, []);
 
     return (
@@ -435,7 +462,7 @@ export default function Product(){
                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
                             <p className="text-gray-600 font-bold text-sm ml-1">
-                                <span className="text-gray-500 font-normal">(6 đánh giá)</span>
+                                <span className="text-gray-500 font-normal">({numberRate} đánh giá)</span>
                             </p>
                         </div>
                         <p className="text-gray-600 font-bold text-sm ml-1 flex items-center">
@@ -448,7 +475,7 @@ export default function Product(){
                     <h3 className="font-bold text-gray-800 md:text-3xl text-xl">{values.title}</h3>
                     <p className="md:text-lg text-gray-500 text-base">{values.sub_title}</p>
                     <div className="md:text-lg text-gray-500 text-base flex flex-row">
-                        Người bán: <Link to={`/profile/${values.user_id}`}><p className="md:text-lg text-[#47991f] cursor-pointer text-base">{values.user_id.slice(0, 8)}</p></Link>
+                        Người bán<Link to={`/profile/${values.user.id}`}><p className="md:text-lg text-[#47991f] cursor-pointer text-base">{": " + values.user.username}</p></Link>
                     </div>
                     <p className="md:text-lg text-gray-500 text-base">Kho: {vansProduct.quantity}</p>
                     <p className="text-3xl font-medium text-gray-800 py-4">
