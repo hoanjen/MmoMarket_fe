@@ -10,7 +10,7 @@ import {
   DataProductResponse,
   ResponseCreateDataProduct,
   ResponseCreateCommentProduct,
-  ResponseGetCommentProduct
+  ResponseGetCommentProduct,
 } from './types';
 
 export class ProductApi {
@@ -94,13 +94,13 @@ export class ProductApi {
     description,
     price,
     product_id,
-    quantity,
+    return_percent,
   }: {
     title: string;
     description: string;
     price: number;
     product_id: string;
-    quantity?: number;
+    return_percent?: number;
   }): Promise<ResponseCreateVansProduct> {
     return axios
       .post(`/vans-product`, {
@@ -108,7 +108,7 @@ export class ProductApi {
         description,
         price,
         product_id,
-        quantity,
+        return_percent,
       })
       .then((_) => _.data);
   }
@@ -208,8 +208,7 @@ export class ProductApi {
     });
   }
 
-    // --------------------------------------------------------------------------------Comment Product ------------------------------------------------------------------
-
+  // --------------------------------------------------------------------------------Comment Product ------------------------------------------------------------------
 
   public static async createCommentProduct({
     product_id,
@@ -251,13 +250,11 @@ export class ProductApi {
     product_id: string;
   }): Promise<ResponseGetCommentProduct> {
     return axios
-      .get(`/comment`, 
-        {
-          params: {
-            product_id,
-          }
-        }
-      )
+      .get(`/comment`, {
+        params: {
+          product_id,
+        },
+      })
       .then((_) => _.data);
   }
 }

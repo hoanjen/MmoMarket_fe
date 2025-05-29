@@ -237,10 +237,12 @@ function FormRegister() {
     email: string;
     password: string;
     term: boolean;
+    otp: string;
   }>({
     username: '',
     email: '',
     password: '',
+    otp: '',
     term: false,
   });
 
@@ -249,12 +251,56 @@ function FormRegister() {
     email: boolean;
     password: boolean;
     term: boolean;
+    otp: boolean;
   }>({
     username: false,
     email: false,
     password: false,
     term: false,
+    otp: false,
   });
+  const [otpSent, setOtpSent] = useState(false);
+
+  // Add countdown timer state
+  const [countdown, setCountdown] = useState(0);
+
+  // Function to handle sending OTP
+  const handleSendOtp = async () => {
+    if (!isEmail(values.email)) {
+      setInvalidField({ ...invalidField, email: true });
+      return;
+    }
+
+    // Call API to send OTP
+    await AuthApi.sendMail({ email: values.email });
+
+    toast.success(`Đã gửi mã OTP đến ${values.email}, kiểm tra email của bạn`, {
+      position: 'top-right',
+      autoClose: 2000,
+    });
+
+    setOtpSent(true);
+    // Start countdown from 60 seconds
+    setCountdown(60);
+  };
+
+  // Effect to handle countdown timer
+  React.useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+    } else if (countdown === 0 && otpSent) {
+      // Reset otpSent when countdown reaches 0
+      setOtpSent(false);
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [countdown, otpSent]);
 
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -272,12 +318,14 @@ function FormRegister() {
         email: values.email ? invalidField.email : true,
         username: values.username ? invalidField.username : true,
         term: values.term ? invalidField.term : true,
+        otp: values.term ? invalidField.otp : true,
       });
     } else {
       const data = await AuthApi.signUp({
         username: values.username,
         email: values.email,
         password: values.password,
+        otp: parseInt(values.otp),
       });
 
       if (data && data.statusCode === 200) {
@@ -348,13 +396,50 @@ function FormRegister() {
               setValues({ ...values, email: e.target.value });
               setInvalidField({
                 ...invalidField,
-                email: !isEmail(values.email),
+                email: !isEmail(e.target.value),
               });
             }}
             name="email"
+            endAdornment={
+              <InputAdornment position="end">
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={handleSendOtp}
+                  disabled={countdown > 0 || !values.email || invalidField.email}
+                  sx={{ mr: -1, height: '32px', minWidth: '60px' }}
+                >
+                  {countdown > 0 ? `${countdown}s` : 'Gửi'}
+                </Button>
+              </InputAdornment>
+            }
           />
           <FormHelperText id="outlined-helper-email">
             <span className="text-red-500">{invalidField.email ? 'Email invalid' : ''}</span>
+          </FormHelperText>
+        </FormControl>
+
+        {/* New OTP input field */}
+        <FormControl variant="outlined" size="small">
+          <InputLabel htmlFor="outlined-input-otp">Mã OTP</InputLabel>
+          <OutlinedInput
+            id="outlined-input-otp"
+            required
+            label="Mã OTP"
+            error={invalidField.otp}
+            value={values.otp}
+            onChange={(e) => {
+              setValues({ ...values, otp: e.target.value });
+              setInvalidField({
+                ...invalidField,
+                otp: e.target.value.length < 5,
+              });
+            }}
+            name="otp"
+            placeholder="Nhập mã OTP từ email"
+          />
+          <FormHelperText id="outlined-helper-otp">
+            <span className="text-red-500">{invalidField.otp ? 'OTP invalid' : ''}</span>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">

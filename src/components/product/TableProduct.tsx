@@ -218,7 +218,7 @@ export default function ProductOwnerTable({ isRefresh }: { isRefresh?: boolean }
           title: newProduct.title,
           description: newProduct.description,
           price: newProduct.price,
-          quantity: newProduct.quantity,
+          return_percent: newProduct.quantity,
           product_id: selectedAccount?.id,
         });
         const vanData = createVanProduct.data.newVansProduct;
@@ -1028,7 +1028,7 @@ export default function ProductOwnerTable({ isRefresh }: { isRefresh?: boolean }
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Số lượng"
+                    label="% Hoàn tiền"
                     type="number"
                     value={newProduct.quantity}
                     onChange={(e) => setNewProduct({ ...newProduct, quantity: Number(e.target.value) })}
