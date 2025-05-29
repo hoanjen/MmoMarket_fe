@@ -19,9 +19,10 @@ import ProductPage from '@pages/admin/product';
 import ProductDetail from '@pages/productDetail';
 import OrderDetail from '@pages/orderDetail';
 import BoothManage from '@pages/boothManage';
-import Deposit from '@pages/deposit';
 import CataLogPage from '@pages/admin/catalog';
 import TransactionPage from '@pages/admin/transaction';
+import DepositHistory from '@pages/depositHistory';
+import Payment from '@pages/deposit';
 const renderFallback = (
   <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
     <LinearProgress
@@ -73,8 +74,12 @@ export const router = createBrowserRouter([
         element: <BoothManage />,
       },
       {
-        path: '/deposit',
-        element: <Deposit />,
+        path: '/deposit-history',
+        element: <DepositHistory />,
+      },
+      {
+        path: '/payment',
+        element: <Payment />,
       },
       { path: '/error', element: <Home></Home> },
       { path: '/test', element: <ChatComponent></ChatComponent> },

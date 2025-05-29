@@ -26,6 +26,9 @@ instance.interceptors.response.use(
     if (err.response?.status === 401) {
       console.log('logout');
       window.location.href = 'http://localhost:3000/';
+      Cookies.remove('access_token');
+      Cookies.remove('user_id');
+      Cookies.remove('refresh_token');
     }
 
     return err && err.response;

@@ -93,7 +93,7 @@ function TabLists() {
           </List>
         </div>
       </div>
-      <div
+      {/* <div
         className="relative inline p-4 hover:border-b-4 border-sky-500  text-lg"
         onMouseOver={() => {
           setValue(2);
@@ -128,7 +128,7 @@ function TabLists() {
             )}
           </List>
         </div>
-      </div>
+      </div> */}
       <div
         className="relative inline p-4 hover:border-b-4 border-sky-500  text-lg"
         onMouseOver={() => {
@@ -173,7 +173,7 @@ function TabLists() {
       >
         FAQs
       </div>
-      <Link to={`/deposit`} className="flex align-center">
+      <Link to={`/payment`} className="flex align-center">
         <div
           className="relative inline p-4 hover:border-b-4 border-sky-500 text-lg"
           onMouseOver={() => {
@@ -262,38 +262,40 @@ function NestedList({ handleClose, user }: { handleClose: Function; user: any })
           <Link to={`/admin`}>Trang Quản trị</Link>
         </ListItemButton>
       ) : (
-        ''
+        <div>
+          <ListItemButton
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <LocalGroceryStoreIcon />
+            </ListItemIcon>
+            <Link to={`/order-history/1`}>Đơn hàng đã mua</Link>
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <HistoryIcon />
+            </ListItemIcon>
+            <Link to={`/deposit-history`}>Lịch sử thanh toán</Link>
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <ContentPasteIcon />
+            </ListItemIcon>
+            <Link to={`/booth-manage`}>Quản lý gian hàng</Link>
+          </ListItemButton>
+        </div>
       )}
-      <ListItemButton
-        onClick={() => {
-          handleClose();
-        }}
-      >
-        <ListItemIcon>
-          <LocalGroceryStoreIcon />
-        </ListItemIcon>
-        <Link to={`/order-history/1`}>Đơn hàng đã mua</Link>
-      </ListItemButton>
-      <ListItemButton
-        onClick={() => {
-          handleClose();
-        }}
-      >
-        <ListItemIcon>
-          <HistoryIcon />
-        </ListItemIcon>
-        <ListItemText primary="Lịch sử thanh toán" />
-      </ListItemButton>
-      <ListItemButton
-        onClick={() => {
-          handleClose();
-        }}
-      >
-        <ListItemIcon>
-          <ContentPasteIcon />
-        </ListItemIcon>
-        <Link to={`/booth-manage`}>Quản lý gian hàng</Link>
-      </ListItemButton>
+
       <ListItemButton
         onClick={() => {
           handleClose();
@@ -322,6 +324,7 @@ export default function PageHeader() {
         avatar: userInfor.data.user.avatar,
         phone_number: userInfor.data.user.phone_number,
         role: userInfor.data.user.role,
+        balance: userInfor.data.user.balance.account_balance,
       }),
     );
   };
@@ -335,7 +338,7 @@ export default function PageHeader() {
   }, []);
 
   return (
-    <div className="flex flex-row w-full justify-between items-center h-16 bg-[#21bf73] text-white font-medium">
+    <div className="flex flex-row w-full  items-center h-16 bg-[#21bf73] text-white font-medium">
       <Link to={`/`} className="logo w-32 h-16 overflow-hidden flex justify-center items-center ml-60">
         <img
           className="w-64"
@@ -346,11 +349,10 @@ export default function PageHeader() {
       <TabLists></TabLists>
       {isLogin ? (
         <div className="flex flex-row justify-between w-60">
-          <IconButton color="inherit">
-            <HelpOutlineIcon />
-          </IconButton>
-          <IconButton color="inherit">
-            <MailOutlineIcon />
+          <IconButton color="inherit" className="text-xs max-w-15">
+            <Link to={'/deposit-history'}>
+              <p className="text-xl">{user.balance.toLocaleString('de-DE')} VND </p>
+            </Link>
           </IconButton>
           <IconButton color="inherit">
             <Link to={'/chat-box'}>

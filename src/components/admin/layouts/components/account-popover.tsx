@@ -42,6 +42,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
         avatar: userInfor.data.user.avatar,
         phone_number: userInfor.data.user.phone_number,
         role: userInfor.data.user.role,
+        balance: userInfor.data.user.balance.account_balance,
       }),
     );
   };

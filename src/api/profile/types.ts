@@ -19,6 +19,9 @@ export type ResponseProfile = {
       cover_image: string;
       created_at: string;
       updated_at: string;
+      balance: {
+        account_balance: number;
+      };
     };
   };
   message: [];
