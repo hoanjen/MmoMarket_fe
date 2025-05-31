@@ -176,19 +176,31 @@ export default function Product(){
     const increaseNumber = () =>{
         const newQuantity = Number(order.quantity + 1);
         setOrder({...order, quantity: order.quantity + 1});
-        setOrderValid((prevOrderValid) => ({
-            ...prevOrderValid,
-            quantity: vansProduct.quantity >= newQuantity && newQuantity > 0,
-        }));
     }
     const decreaseNumber = () =>{
         const newQuantity = Number(order.quantity - 1);
         setOrder({...order, quantity: order.quantity - 1});
-        setOrderValid((prevOrderValid) => ({
-            ...prevOrderValid,
-            quantity: vansProduct.quantity >= newQuantity && newQuantity > 0,
-        }));
     }
+
+    useEffect(()=>{
+        if(order.quantity < 1 || order.quantity > vansProduct.quantity){
+            setOrderValid(
+                {
+                    ...orderValid,
+                    quantity: false,
+                }
+            );
+        }
+        else{
+            setOrderValid(
+                {
+                    ...orderValid,
+                    quantity: true,
+                }
+            );
+        }
+    }, [order, vansProduct])
+
     const handleChange = (event: React.SyntheticEvent, newTab: string) => {
         setTab(newTab);
     };
@@ -533,11 +545,6 @@ export default function Product(){
                                                 setOrder((prevOrder) => ({
                                                     ...prevOrder,
                                                     quantity: newQuantity,
-                                                }));
-                                                
-                                                setOrderValid((prevOrderValid) => ({
-                                                    ...prevOrderValid,
-                                                    quantity: vansProduct.quantity >= newQuantity && newQuantity > 0,
                                                 }));
                                             }}
                                             />
