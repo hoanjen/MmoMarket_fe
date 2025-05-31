@@ -5,6 +5,7 @@ import {
   ResponseOrderDetail,
   ResponseOrderReport,
   ResponseCancelOrderReport,
+  ResponseOrderOfClient
 } from './types';
 
 export class OrderApi {
@@ -58,5 +59,9 @@ export class OrderApi {
 
   public static async report({ id }: { id: string }): Promise<ResponseOrderDetail> {
     return axios.get(`/order/${id}`).then((_) => _.data);
+  }
+
+  public static async getOrderOfClient({ page }: { page: number }): Promise<ResponseOrderOfClient> {
+    return axios.get(`/order/orders-merchant?limit=10&page=${page}`).then((_) => _.data);
   }
 }

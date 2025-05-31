@@ -69,3 +69,52 @@ export type ResponseListProduct = {
     };
   }[];
 };
+
+export type ResponseListPayment = {
+  data: {
+    transactions: {
+      id: string;
+      action: string;
+      paypal_id: string;
+      amount: number;
+      status: string;
+      user_id: string;
+      created_at: string;
+    }[];
+    previousPage: number,
+    totalPages: number,
+    nextPage: number,
+    currentPage: number,
+    totalDocs: number
+  }
+}
+
+export type ResponseListReport = {
+  data: {
+    id: string;
+    order_id: string;
+    merchant_id: string;
+    reason: string;
+    user_id: string;
+    created_at: string;
+    user:{
+      username: string
+    },
+    order:{
+      quantity: number,
+      price: number,
+      status: string,
+      unlock_time: string,    
+      vans_product:{
+        product:{
+          user_id: string
+        }
+      }
+    }
+  }[]
+}
+
+export type ResponseApproveRefund = {
+  status: string,
+  statusCode: 200,
+}

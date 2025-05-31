@@ -172,3 +172,13 @@ export type ResponseGetCommentProduct = {
     }
   }[]
 };
+
+export type ResponseAllProduct = {
+  id: string,
+  title: string,
+  image: string,
+  sub_title: string,
+  quantity_sold: number,
+  minPrice: number,
+  maxPrice: number
+}[];

@@ -75,7 +75,7 @@ function OauthButton({ className }: { className?: string }) {
   );
 }
 
-function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boolean>; handleClose: Function }) {
+function FormLogin({ setValue, setIsLogin, handleClose }: { setValue: React.Dispatch<number>, setIsLogin: React.Dispatch<boolean>; handleClose: Function }) {
   const [values, setValues] = useState<{ email: string; password: string }>({
     email: '',
     password: '',
@@ -108,7 +108,7 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
         password: values.password,
       });
       if (!data) {
-        toast.error('email or password invalid!', {
+        toast.error('Email hoặc mật khẩu không chính xác!', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
@@ -121,7 +121,7 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
         });
       }
       if (data && data.statusCode === 400) {
-        toast.error('email or password invalid!', {
+        toast.error('Email hoặc mật khẩu không chính xác!', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
@@ -137,7 +137,7 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
         Cookies.set('access_token', data.data.access_token);
         Cookies.set('refresh_token', data.data.refresh_token);
         Cookies.set('user_id', data.data.user_id);
-        toast.success('Login successfully', {
+        toast.success('Đăng nhập thành công', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
@@ -180,7 +180,7 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
             }}
           />
           <FormHelperText sx={{ marginLeft: '4px' }}>
-            <span className="text-red-500">{invalidField.email ? 'Email invalid' : ''}</span>
+            <span className="text-red-500">{invalidField.email ? 'Email không hợp lệ' : ''}</span>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
@@ -214,8 +214,28 @@ function FormLogin({ setIsLogin, handleClose }: { setIsLogin: React.Dispatch<boo
             label="Password"
           />
           <FormHelperText sx={{ marginLeft: '4px' }}>
-            <span className="text-red-500">{invalidField.password ? 'Password invalid' : ''}</span>
+            <span className="text-red-500">{invalidField.password ? 'Password không hợp lệ' : ''}</span>
           </FormHelperText>
+        </FormControl>
+        <FormControl
+          required
+          component="fieldset"
+          variant="standard"
+        >
+          <Box display="flex" justifyContent="flex-end" width="100%"
+              sx={{
+                cursor: 'pointer',
+                '&:hover': {
+                  textDecoration: 'underline',
+                  color: 'primary.main',
+                },
+              }}
+              onClick={()=>{
+                setValue(3)
+              }}
+          >
+            <span>{'Quên mật khẩu?'}</span>
+          </Box>
         </FormControl>
         <Button
           variant="contained"
@@ -381,7 +401,7 @@ function FormRegister() {
             name="username"
           />
           <FormHelperText id="outlined-helper-username">
-            <span className="text-red-500">{invalidField.username ? 'Username invalid' : ''}</span>
+            <span className="text-red-500">{invalidField.username ? 'Username không hợp lệ' : ''}</span>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
@@ -415,7 +435,7 @@ function FormRegister() {
             }
           />
           <FormHelperText id="outlined-helper-email">
-            <span className="text-red-500">{invalidField.email ? 'Email invalid' : ''}</span>
+            <span className="text-red-500">{invalidField.email ? 'Email không hợp lệ' : ''}</span>
           </FormHelperText>
         </FormControl>
 
@@ -439,7 +459,7 @@ function FormRegister() {
             placeholder="Nhập mã OTP từ email"
           />
           <FormHelperText id="outlined-helper-otp">
-            <span className="text-red-500">{invalidField.otp ? 'OTP invalid' : ''}</span>
+            <span className="text-red-500">{invalidField.otp ? 'OTP không chính xác' : ''}</span>
           </FormHelperText>
         </FormControl>
         <FormControl variant="outlined" size="small">
@@ -472,7 +492,7 @@ function FormRegister() {
             label="Password"
           />
           <FormHelperText id="outlined-helper-password">
-            <span className="text-red-500">{invalidField.password ? 'Password invalid' : ''}</span>
+            <span className="text-red-500">{invalidField.password ? 'Mật khẩu không hợp lệ' : ''}</span>
           </FormHelperText>
         </FormControl>
         <FormControl required component="fieldset" sx={{ maxWidth: 412, m: 3, marginX: 0 }} variant="standard">
@@ -500,12 +520,280 @@ function FormRegister() {
               paddingLeft: 4,
             }}
           >
-            <span className="text-red-500">{invalidField.term ? 'You have not agreed' : ''}</span>
+            <span className="text-red-500">{invalidField.term ? 'Bạn đang không đồng ý?' : ''}</span>
           </FormHelperText>
         </FormControl>
 
         <Button variant="contained" color="primary" type="submit" style={{ textTransform: 'none', fontWeight: 600 }}>
           Đăng ký
+        </Button>
+      </Box>
+    </div>
+  );
+}
+
+function FormForgotPassword({
+    setValue 
+  }:{
+    setValue: React.Dispatch<number>
+  }
+) {
+  const [values, setValues] = useState<{
+    email: string;
+    password: string;
+    confirmPassword: string;
+    otp: string;
+  }>({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    otp: '',
+  });
+
+  const [invalidField, setInvalidField] = useState<{
+    email: boolean;
+    password: boolean;
+    confirmPassword: boolean;
+    otp: boolean;
+  }>({
+    email: false,
+    password: false,
+    confirmPassword: false,
+    otp: false,
+  });
+  const [otpSent, setOtpSent] = useState(false);
+
+  // Add countdown timer state
+  const [countdown, setCountdown] = useState(0);
+
+  React.useEffect(()=>{
+    if ((values.password !== values.confirmPassword)) {
+      setInvalidField({ ...invalidField, confirmPassword: true });
+    } else {
+      setInvalidField({ ...invalidField, confirmPassword: false });
+    }
+  },[values.confirmPassword])
+
+  // Function to handle sending OTP
+  const handleSendOtp = async () => {
+    if (!isEmail(values.email)) {
+      setInvalidField({ ...invalidField, email: true });
+      return;
+    }
+
+    // Call API to send OTP
+    await AuthApi.sendMailNormal({ email: values.email });
+
+    toast.success(`Đã gửi mã OTP đến ${values.email}, kiểm tra email của bạn`, {
+      position: 'top-right',
+      autoClose: 2000,
+    });
+
+    setOtpSent(true);
+    // Start countdown from 60 seconds
+    setCountdown(60);
+  };
+
+  // Effect to handle countdown timer
+  React.useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+    } else if (countdown === 0 && otpSent) {
+      // Reset otpSent when countdown reaches 0
+      setOtpSent(false);
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [countdown, otpSent]);
+
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (!values.email || !values.password || !values.confirmPassword || !values.otp) {
+      setInvalidField({
+        password: values.password ? invalidField.password : true,
+        email: values.email ? invalidField.email : true,
+        confirmPassword: values.confirmPassword ? invalidField.confirmPassword : true,
+        otp: values.otp ? invalidField.otp : true,
+      });
+    } else {
+      const data = await AuthApi.changePassword({
+        email: values.email,
+        password: values.password,
+        otp: parseInt(values.otp),
+      });
+
+      if (data && data.statusCode === 200) {
+        toast.success('Thay đổi mật khẩu thành công !!', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+          transition: Bounce,
+        });
+        setValue(1)
+      }
+      if (data && data.statusCode === 400) {
+        toast.error('Mã OTP không chính xác !!', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+          transition: Bounce,
+        });
+      }
+    }
+  };
+  return (
+    <div className="flex flex-col justify-center space-y-4">
+      <p className="font-bold text-black text-center py-2">Thay đổi mật khẩu</p>
+      <Box className="flex flex-col space-y-4" component="form" noValidate onSubmit={handleSubmit}>
+        <FormControl variant="outlined" size="small">
+          <InputLabel htmlFor="outlined-input-email">Email</InputLabel>
+          <OutlinedInput
+            id="outlined-input-email"
+            required
+            label="Email"
+            error={invalidField.email}
+            value={values.email}
+            onChange={(e) => {
+              setValues({ ...values, email: e.target.value });
+              setInvalidField({
+                ...invalidField,
+                email: !isEmail(e.target.value),
+              });
+            }}
+            name="email"
+            endAdornment={
+              <InputAdornment position="end">
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={handleSendOtp}
+                  disabled={countdown > 0 || !values.email || invalidField.email}
+                  sx={{ mr: -1, height: '32px', minWidth: '60px' }}
+                >
+                  {countdown > 0 ? `${countdown}s` : 'Gửi'}
+                </Button>
+              </InputAdornment>
+            }
+          />
+          <FormHelperText id="outlined-helper-email">
+            <span className="text-red-500">{invalidField.email ? 'Email không hợp lệ' : ''}</span>
+          </FormHelperText>
+        </FormControl>
+
+        {/* New OTP input field */}
+        <FormControl variant="outlined" size="small">
+          <InputLabel htmlFor="outlined-input-otp">Mã OTP</InputLabel>
+          <OutlinedInput
+            id="outlined-input-otp"
+            required
+            label="Mã OTP"
+            error={invalidField.otp}
+            value={values.otp}
+            onChange={(e) => {
+              setValues({ ...values, otp: e.target.value });
+              setInvalidField({
+                ...invalidField,
+                otp: e.target.value.length < 5,
+              });
+            }}
+            name="otp"
+            placeholder="Nhập mã OTP từ email"
+          />
+          <FormHelperText id="outlined-helper-otp">
+            <span className="text-red-500">{invalidField.otp ? 'OTP không chính xác' : ''}</span>
+          </FormHelperText>
+        </FormControl>
+        <FormControl variant="outlined" size="small">
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? 'text' : 'password'}
+            value={values.password}
+            error={invalidField.password}
+            onChange={(e) => {
+              setValues({ ...values, password: e.target.value });
+              if (values.password.length < 2) {
+                setInvalidField({ ...invalidField, password: true });
+              } else {
+                setInvalidField({ ...invalidField, password: false });
+              }
+            }}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+          <FormHelperText id="outlined-helper-password">
+            <span className="text-red-500">{invalidField.password ? 'Mật khẩu không hợp lệ' : ''}</span>
+          </FormHelperText>
+        </FormControl>
+        
+        <FormControl variant="outlined" size="small">
+          <InputLabel htmlFor="outlined-adornment-password">Nhập lại Password</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showConfirmPassword ? 'text' : 'password'}
+            value={values.confirmPassword}
+            error={invalidField.confirmPassword}
+            onChange={(e) => {
+              setValues({ ...values, confirmPassword: e.target.value });
+            }}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowConfirmPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Nhập lại Password"
+          />
+          <FormHelperText id="outlined-helper-password">
+            <span className="text-red-500">{invalidField.confirmPassword ? 'Xác nhận mật khẩu không trùng' : ''}</span>
+          </FormHelperText>
+        </FormControl>
+        <Button variant="contained" color="primary" type="submit" style={{ textTransform: 'none', fontWeight: 600 }}>
+          Đổi mật khẩu
         </Button>
       </Box>
     </div>
@@ -573,7 +861,7 @@ export default function DialogAuth({ setIsLogin }: { setIsLogin: React.Dispatch<
               <Tab
                 label="Đăng Nhập"
                 value={1}
-                className=" w-1/2 h-full "
+                className=" w-1/3 h-full "
                 sx={{
                   ...(value === 1 ? { backgroundColor: 'white' } : { backgroundColor: '#e7e7e7' }),
                   fontWeight: 600,
@@ -582,9 +870,18 @@ export default function DialogAuth({ setIsLogin }: { setIsLogin: React.Dispatch<
               <Tab
                 label="Đăng ký"
                 value={2}
-                className=" w-1/2 h-full"
+                className=" w-1/3 h-full"
                 sx={{
                   backgroundColor: value === 2 ? 'white' : '#e7e7e7',
+                  fontWeight: 600,
+                }}
+              />
+              <Tab
+                label="Quên mật khẩu"
+                value={3}
+                className=" w-1/3 h-full"
+                sx={{
+                  backgroundColor: value === 3 ? 'white' : '#e7e7e7',
                   fontWeight: 600,
                 }}
               />
@@ -594,11 +891,15 @@ export default function DialogAuth({ setIsLogin }: { setIsLogin: React.Dispatch<
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description" className="p-5" component={'span'}>
             <div>
-              {value === 1 ? (
-                <FormLogin setIsLogin={setIsLogin} handleClose={handleClose}></FormLogin>
-              ) : (
-                <FormRegister></FormRegister>
-              )}
+            {value === 1 && (
+              <FormLogin setValue={setValue} setIsLogin={setIsLogin} handleClose={handleClose} />
+            )}
+            {value === 2 && (
+              <FormRegister />
+            )}
+            {value === 3 && (
+              <FormForgotPassword setValue={setValue} />
+            )}
             </div>
           </DialogContentText>
         </DialogContent>

@@ -34,3 +34,8 @@ export type ResponseSignUp = {
   };
   message: string[];
 };
+
+export type ResponseChangePassowrd = {
+  status: string;
+  statusCode: number;
+};

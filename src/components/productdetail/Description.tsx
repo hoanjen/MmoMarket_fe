@@ -1,8 +1,15 @@
 
-export default function Description (){
+export default function Description (
+    {
+        description
+    }
+    :{
+        description: string
+    }
+){
     return (
         <>
-        <div>
+        {/* <div>
             <p className="block font-sans text-base antialiased font-light leading-relaxed text-inherit py-2">
                 Gmail reg bằng iOS, random IP, name US
             </p>
@@ -19,7 +26,10 @@ export default function Description (){
             src="https://img.upanh.tv/2024/03/19/huongdan.png"
             alt=""
             />
-        </div>
+        </div> */}
+            <div>
+            {description}
+            </div>
         </>
     )
 }

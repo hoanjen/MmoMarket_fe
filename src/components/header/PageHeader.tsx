@@ -18,6 +18,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
 import Cookies from 'js-cookie';
 import DialogAuth from '../auth/auth';
 import { CategoryApi } from '../../api/category/category';
@@ -42,6 +43,7 @@ function TabLists() {
   const [value, setValue] = useState(-1);
   const [categoryProduct, setCategoryProduct] = useState<Category[]>([]);
   const [categoryService, setCategoryService] = useState<Category[]>([]);
+  const user = useAppSelector((state) => state.user);
 
   const fectchApi = async () => {
     try {
@@ -173,19 +175,24 @@ function TabLists() {
       >
         FAQs
       </div>
-      <Link to={`/payment`} className="flex align-center">
-        <div
-          className="relative inline p-4 hover:border-b-4 border-sky-500 text-lg"
-          onMouseOver={() => {
-            setValue(6);
-          }}
-          onMouseOut={() => {
-            setValue(-1);
-          }}
-        >
-          Nạp tiền
-        </div>
-      </Link>
+      {
+        user.role !== 'ADMIN' ?
+        <Link to={`/payment`} className="flex align-center">
+          <div
+            className="relative inline p-4 hover:border-b-4 border-sky-500 text-lg"
+            onMouseOver={() => {
+              setValue(6);
+            }}
+            onMouseOut={() => {
+              setValue(-1);
+            }}
+          >
+            Nạp tiền
+          </div>
+        </Link> 
+        :
+        ""
+      }
     </div>
   );
 }
@@ -240,59 +247,81 @@ function NestedList({ handleClose, user }: { handleClose: Function; user: any })
       component="nav"
       aria-labelledby="nested-list-subheader"
     >
-      <ListItemButton
-        onClick={() => {
-          handleClose();
-        }}
-      >
-        <ListItemIcon>
-          <PersonIcon />
-        </ListItemIcon>
-        <Link to={`/profile/${user.id}`}>Thông tin cá nhân</Link>
-      </ListItemButton>
-      {user.role === 'ADMIN' ? (
+      <Link to={`/profile/${user.id}`}>
         <ListItemButton
           onClick={() => {
             handleClose();
           }}
         >
           <ListItemIcon>
-            <SettingsIcon />
+            <PersonIcon />
           </ListItemIcon>
-          <Link to={`/admin`}>Trang Quản trị</Link>
+          Thông tin cá nhân
         </ListItemButton>
+      </Link>
+      {user.role === 'ADMIN' ? (
+        <Link to={`/admin`}>
+          <ListItemButton
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            Trang Quản trị
+          </ListItemButton>
+        </Link>
       ) : (
         <div>
-          <ListItemButton
-            onClick={() => {
-              handleClose();
-            }}
-          >
-            <ListItemIcon>
-              <LocalGroceryStoreIcon />
-            </ListItemIcon>
-            <Link to={`/order-history/1`}>Đơn hàng đã mua</Link>
-          </ListItemButton>
-          <ListItemButton
-            onClick={() => {
-              handleClose();
-            }}
-          >
-            <ListItemIcon>
-              <HistoryIcon />
-            </ListItemIcon>
-            <Link to={`/deposit-history`}>Lịch sử thanh toán</Link>
-          </ListItemButton>
-          <ListItemButton
-            onClick={() => {
-              handleClose();
-            }}
-          >
-            <ListItemIcon>
-              <ContentPasteIcon />
-            </ListItemIcon>
-            <Link to={`/booth-manage`}>Quản lý gian hàng</Link>
-          </ListItemButton>
+          <Link to={`/order-history/1`}>
+            <ListItemButton
+              onClick={() => {
+                handleClose();
+              }}
+            >
+              <ListItemIcon>
+                <LocalGroceryStoreIcon />
+              </ListItemIcon>
+              Đơn hàng đã mua
+            </ListItemButton>
+          </Link>
+          <Link to={`/deposit-history`}>
+            <ListItemButton
+              onClick={() => {
+                handleClose();
+              }}
+            >
+              <ListItemIcon>
+                <HistoryIcon />
+              </ListItemIcon>
+              Lịch sử thanh toán
+            </ListItemButton>
+          </Link>
+          <Link to={`/order-client`}>
+            <ListItemButton
+              onClick={() => {
+                handleClose();
+              }}
+            >
+              <ListItemIcon>
+                <OutlinedFlagIcon />
+              </ListItemIcon>
+              Lịch sử bán hàng
+            </ListItemButton>
+          </Link>
+          <Link to={`/booth-manage`}>
+            <ListItemButton
+              onClick={() => {
+                handleClose();
+              }}
+            >
+              <ListItemIcon>
+                <ContentPasteIcon />
+              </ListItemIcon>
+              Quản lý gian hàng
+            </ListItemButton>
+          </Link>
         </div>
       )}
 
@@ -348,20 +377,25 @@ export default function PageHeader() {
       </Link>
       <TabLists></TabLists>
       {isLogin ? (
-        <div className="flex flex-row justify-between w-60">
-          <IconButton color="inherit" className="text-xs max-w-15">
+        <div className="flex flex-row justify-around w-60">
+          {
+            user.role !== 'ADMIN' ? 
             <Link to={'/deposit-history'}>
-              <p className="text-xl">{user.balance.toLocaleString('de-DE')} VND </p>
+              <IconButton color="inherit" className="text-xs max-w-15">
+                  <p className="text-xl">{user.balance.toLocaleString('de-DE')} VND </p>
+              </IconButton>
             </Link>
-          </IconButton>
+            :
+           ""
+          }
           <IconButton color="inherit">
             <Link to={'/chat-box'}>
               <QuestionAnswerIcon />
             </Link>
           </IconButton>
-          <IconButton color="inherit">
+          {/* <IconButton color="inherit">
             <NotificationsNoneIcon />
-          </IconButton>
+          </IconButton> */}
           <BasicPopover user={user}></BasicPopover>
         </div>
       ) : (

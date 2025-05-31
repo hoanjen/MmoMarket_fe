@@ -500,7 +500,7 @@ export default function Product(){
                         </div>
                     </FormControl>
                     {
-                        values.user_id !== user.id?
+                        values.user_id !== user.id && user.role !== "ADMIN" ?
                         <>
                             <div className="w-[250px] max-w-sm mt-4">
                                 <div className="flex flex-col py-4">
@@ -572,10 +572,12 @@ export default function Product(){
                             <FormControl className='mr-2'>
                                 <FormLabel id="demo-radio-buttons-group-label">Nhập kho sản phẩm:</FormLabel>
                                 <div className="flex gap-2 mt-2 flex-wrap">
-                                    <Button variant="outlined" onClick={handleClickOpen}>
-                                        Nhập kho
-                                    </Button>
-                                    <Dialog
+                                    <Link to={`/booth-manage`} className="flex align-center">
+                                        <Button variant="outlined" onClick={handleClickOpen}>
+                                                Nhập kho
+                                        </Button>
+                                    </Link>
+                                    {/* <Dialog
                                         open={open}
                                         TransitionComponent={Transition}
                                         keepMounted
@@ -618,13 +620,20 @@ export default function Product(){
                                         <Button onClick={handleClose}>Hủy bỏ</Button>
                                         <Button type='submit' onClick={handleSubmitProduct}>Nhập kho</Button>
                                         </DialogActions>
-                                    </Dialog>
+                                    </Dialog> */}
                                 </div>
                             </FormControl>
                             :
                             <>
-                            <Button type="submit" variant="contained">Mua hàng</Button>
-                            <Button variant="contained">Đặt trước</Button>
+                            {user.role !== "ADMIN" ?    
+                                <> 
+                                    <Button type="submit" variant="contained">Mua hàng</Button>
+                                    <Button variant="contained">Đặt trước</Button>
+                                </>              
+                                :
+                                ""
+                            }
+
                             <Button variant="outlined">
                                 <Link to={`http://localhost:3000/chat-box?chat_to=e83f1f7e-d278-4e12-9397-53ebdadfed54`}>Nhắn tin</Link>
                             </Button>
@@ -642,10 +651,12 @@ export default function Product(){
                             <FormControl>
                             <FormLabel id="demo-radio-buttons-group-label">Thêm sản phẩm:</FormLabel>
                                 <div className="flex gap-2 mt-2 flex-wrap">
+                                <Link to={`/booth-manage`} className="flex align-center">
                                     <Button variant="outlined" onClick={handleClickOpen2}>
                                         Thêm sản phẩm mới
                                     </Button>
-                                    <Dialog
+                                </Link>
+                                    {/* <Dialog
                                         open={open2}
                                         TransitionComponent={Transition}
                                         keepMounted
@@ -701,7 +712,7 @@ export default function Product(){
                                         <Button onClick={handleClose2}>Hủy bỏ</Button>
                                         <Button type='submit' onClick={handleSubmitCreateProduct}>Thêm sản phẩm</Button>
                                         </DialogActions>
-                                    </Dialog>
+                                    </Dialog> */}
                                 </div>
                             </FormControl>
                             :
@@ -711,7 +722,7 @@ export default function Product(){
                     </div>
                 </div>
             </form>
-            <SubProduct tab={tab} handleChange={handleChange} />
+            <SubProduct  description={values.description} tab={tab} handleChange={handleChange} />
         </div>
         }
     </>

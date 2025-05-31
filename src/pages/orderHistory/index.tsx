@@ -524,28 +524,28 @@ export default function OrderHistory() {
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <Link to={`/product-detail/${value.vans_product.product_id}`}>
-                          <Tooltip title={value.vans_product.title} arrow>
-                            <p className="text-[#47991f] cursor-pointer  whitespace-no-wrap">
-                              {
-                                value.vans_product.title.length > 8 ?
-                                  `${value.vans_product.title.slice(0, 8)}...`
-                                  :
-                                  value.vans_product.title.slice(0, 8)
+                          <Tooltip title={value.vans_product.product.title} arrow>
+                            <p className="text-[#47991f] whitespace-no-wrap cursor-pointer">
+                            {value.vans_product.product.title.length > 8
+                              ? `${value.vans_product.product.title.slice(0, 8)}...`
+                              : value.vans_product.product.title
                               }
                             </p>
                           </Tooltip>
                         </Link>
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                      <Tooltip title={value.vans_product.product.title} arrow>
-                        <p className="text-[#47991f] whitespace-no-wrap cursor-pointer">
-                        {value.vans_product.product.title.length > 8
-                          ? `${value.vans_product.product.title.slice(0, 8)}...`
-                          : value.vans_product.product.title
-                          }
-                        </p>
-                      </Tooltip>
-                    </td>
+                        <Tooltip title={value.vans_product.title} arrow>
+                          <p className="text-[#47991f] cursor-pointer  whitespace-no-wrap">
+                            {
+                              value.vans_product.title.length > 8 ?
+                                `${value.vans_product.title.slice(0, 8)}...`
+                                :
+                                value.vans_product.title.slice(0, 8)
+                            }
+                          </p>
+                        </Tooltip>
+                      </td>
                       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <Link to={`/profile/${value.vans_product.product.user.id}`}>
                           <Tooltip title={value.vans_product.product.user.username} arrow>
