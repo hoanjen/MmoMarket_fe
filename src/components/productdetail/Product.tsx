@@ -359,11 +359,6 @@ export default function Product(){
                 description: selectedProduct.description,
                 price: selectedProduct.price
             });
-            const newQuantity = Number(1);
-            setOrderValid((prevOrderValid) => ({
-                ...prevOrderValid,
-                quantity: !(vansProduct.quantity >= newQuantity && newQuantity > 0),
-            }));
         }
     }, [order.vans_product_id]);
 
