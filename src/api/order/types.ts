@@ -92,3 +92,35 @@ export type ResponseCancelOrderReport = {
   statusCode: number;
   data: {}
 }
+
+export type ResponseOrderOfClient = {
+  statusCode: number;
+  data: {
+    orders: {
+      title: string;
+      id: string;
+
+      vans_products: {
+        title: string;
+        return_percent: number;
+        orders: {
+          id: string;
+          user_id: string;
+          quantity: number;
+          price: number;
+          status: string;
+          unlock_time: string;
+          created_at: string;
+          reports: {
+            reason: string
+          }[]
+        }[]
+      }[];
+    }[];
+    previousPage: number;
+    totalPages: number;
+    nextPage: number;
+    currentPage: number;
+    totalDocs: number;
+  };
+};

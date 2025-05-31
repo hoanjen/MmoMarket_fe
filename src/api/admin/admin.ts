@@ -5,6 +5,9 @@ import {
   ResponseListProduct,
   ResponseListUser,
   ResponseOrderRevenueByYear,
+  ResponseListPayment,
+  ResponseListReport,
+  ResponseApproveRefund
 } from './type';
 
 export class AdminApi {
@@ -48,5 +51,23 @@ export class AdminApi {
 
   public static async deleteProduct({ id }: { id: string }): Promise<string> {
     return axios.delete(`/admin/products/${id}`).then((_) => _.data);
+  }
+
+  public static async getListPayment({ limit, page }: { limit: number, page: number }): Promise<ResponseListPayment> {
+    return axios
+      .get(`/admin/history-payment?limit=${limit}&page=${page}`)
+      .then((_) => _.data);
+  }
+
+  public static async getListReport(): Promise<ResponseListReport> {
+    return axios
+      .get(`/admin/reports`)
+      .then((_) => _.data);
+  }
+
+  public static async approveRefund({orderId}: {orderId: string}): Promise<ResponseApproveRefund> {
+    return axios
+      .post(`/admin/return-money-for-user?order_id=${orderId}`)
+      .then((_) => _.data);
   }
 }

@@ -22,7 +22,10 @@ import BoothManage from '@pages/boothManage';
 import CataLogPage from '@pages/admin/catalog';
 import TransactionPage from '@pages/admin/transaction';
 import DepositHistory from '@pages/depositHistory';
+import OrderOfClient from '@pages/orderOfClient';
 import Payment from '@pages/deposit';
+import PaymentPage from '@pages/admin/payment';
+import ReportPage from '@pages/admin/report'
 const renderFallback = (
   <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
     <LinearProgress
@@ -78,6 +81,10 @@ export const router = createBrowserRouter([
         element: <DepositHistory />,
       },
       {
+        path: '/order-client',
+        element: <OrderOfClient />,
+      },
+      {
         path: '/payment',
         element: <Payment />,
       },
@@ -102,6 +109,8 @@ export const router = createBrowserRouter([
       { path: '/admin/product', element: <ProductPage /> },
       { path: '/admin/catalog', element: <CataLogPage /> },
       { path: '/admin/transaction', element: <TransactionPage /> },
+      { path: '/admin/payment', element: <PaymentPage /> },
+      { path: '/admin/report', element: <ReportPage/> },
     ],
   },
 ]);

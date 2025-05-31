@@ -42,4 +42,14 @@ export const navData = [
     path: '/admin/transaction',
     icon: icon(`/assets/icons/glass/ic-glass-buy.svg`),
   },
+  {
+    title: 'Lịch sử thanh toán',
+    path: '/admin/payment',
+    icon: icon(`/assets/icons/navbar/ic-blog.svg`),
+  },
+  {
+    title: 'Xử lý báo cáo',
+    path: '/admin/report',
+    icon: icon(`/assets/icons/navbar/ic-disabled.svg`),
+  },
 ];

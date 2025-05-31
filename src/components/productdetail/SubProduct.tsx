@@ -7,11 +7,13 @@ import Description from './Description';
 import Review from './Review';
 export default function SubProduct (
     {
+        description,
         tab, 
         handleChange, 
     } 
     : 
     {
+        description: string
         tab : string, 
         handleChange: (event: React.SyntheticEvent, value: string) => void,
     }){
@@ -27,7 +29,7 @@ export default function SubProduct (
                         </TabList>
                     </Box>
                     <TabPanel value="detail">
-                        <Description/>
+                        <Description description={description}/>
                     </TabPanel>
                     <TabPanel value="review">
                         <Review />
